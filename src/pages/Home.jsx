@@ -2,34 +2,43 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import birdLogo from '../assets/bird_logo.png'
 import { getMyInfo } from '../lib/authApi'
+import { VISA_TYPE_OPTIONS } from '../constants/userEnums'
 
-// TODO: 실제 사용자 데이터(GET /api/users/me)와 체크리스트 API 연동 전까지는
-// 최종 디자인 기준 예시 데이터를 그대로 사용.
-// guideId가 있는 항목은 클릭 시 해당 세부정보(Details) 가이드로 이동.
-const ADMIN_INFO = { visa: 'D-2', alienReg: 'Done', nextDue: '2027.03' }
+// TODO: 체크리스트는 백엔드에 대응하는 API가 아직 없어(스웨거 확인 완료) 예시 데이터를 그대로 사용.
+// guideCategory가 있는 항목은 클릭 시 해당 카테고리의 세부정보(Details) 목록으로 이동.
 const COMMON_CHECKLIST = [
-  { id: 1, title: 'Alien Registration', due: 'Due 2026-08-20', guideId: 'visa' },
+  { id: 1, title: 'Alien Registration', due: 'Due 2026-08-20', guideCategory: 'VISA' },
   { id: 2, title: 'Health Checkup', due: 'Due 2026-08-16', badge: 'D-3' },
   { id: 3, title: 'Health Insurance Enrollment', due: 'Due 2026-09-30' },
 ]
 const MY_CHECKLIST = [
-  { id: 4, title: 'TOPIK Registration', due: 'Due 2026-08-15', badge: 'D-2', guideId: 'topik' },
-  { id: 5, title: 'Visa Renewal Prep', due: 'Due 2027-02-10', guideId: 'visa' },
-  { id: 6, title: 'Midterm Exam Prep', due: 'Due 2026-10-15', guideId: 'schedule' },
+  { id: 4, title: 'TOPIK Registration', due: 'Due 2026-08-15', badge: 'D-2', guideCategory: 'TOPIK' },
+  { id: 5, title: 'Visa Renewal Prep', due: 'Due 2027-02-10', guideCategory: 'VISA' },
+  { id: 6, title: 'Midterm Exam Prep', due: 'Due 2026-10-15', guideCategory: 'ACADEMIC' },
 ]
+
+function formatVisaType(visaType) {
+  return VISA_TYPE_OPTIONS.find((option) => option.value === visaType)?.label ?? visaType ?? '-'
+}
+
+function formatDate(dateString) {
+  if (!dateString) return '-'
+  const [year, month] = dateString.split('-')
+  return `${year}.${month}`
+}
 
 function ChecklistItem({ item, checked, onToggle }) {
   const navigate = useNavigate()
 
   const handleRowClick = () => {
-    if (item.guideId) navigate(`/guide/${item.guideId}`)
+    if (item.guideCategory) navigate(`/details?category=${item.guideCategory}`)
   }
 
   return (
     <div
       onClick={handleRowClick}
       className={`flex items-center gap-3 rounded-2xl border border-background-200 bg-background-50 p-4 transition-colors hover:border-primary-300 hover:bg-primary-50 ${
-        item.guideId ? 'cursor-pointer' : ''
+        item.guideCategory ? 'cursor-pointer' : ''
       }`}
     >
       <button
@@ -65,10 +74,19 @@ function ChecklistItem({ item, checked, onToggle }) {
 function Home() {
   const [checkedIds, setCheckedIds] = useState(new Set())
   const [userName, setUserName] = useState(null)
+  const [adminInfo, setAdminInfo] = useState({ visa: '-', alienReg: '-', nextDue: '-' })
 
   useEffect(() => {
     getMyInfo()
-      .then((response) => setUserName(response.data.data.name))
+      .then((response) => {
+        const user = response.data.data
+        setUserName(user.name)
+        setAdminInfo({
+          visa: formatVisaType(user.visaType),
+          alienReg: user.hasAlienRegistration ? 'Done' : 'Pending',
+          nextDue: formatDate(user.stayExpirationDate),
+        })
+      })
       .catch((error) => console.error('[Home] 내 정보 조회 실패', error))
   }, [])
 
@@ -104,15 +122,15 @@ function Home() {
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="rounded-xl bg-white/70 p-3">
             <p className="text-xs font-semibold text-foreground-600">Visa</p>
-            <p className="text-sm font-semibold text-primary-600">{ADMIN_INFO.visa}</p>
+            <p className="text-sm font-semibold text-primary-600">{adminInfo.visa}</p>
           </div>
           <div className="rounded-xl bg-white/70 p-3">
             <p className="text-xs font-semibold text-foreground-600">Alien Reg.</p>
-            <p className="text-sm font-semibold text-primary-600">{ADMIN_INFO.alienReg}</p>
+            <p className="text-sm font-semibold text-primary-600">{adminInfo.alienReg}</p>
           </div>
           <div className="rounded-xl bg-white/70 p-3">
             <p className="text-xs font-semibold text-foreground-600">Next Due</p>
-            <p className="text-sm font-semibold text-primary-600">{ADMIN_INFO.nextDue}</p>
+            <p className="text-sm font-semibold text-primary-600">{adminInfo.nextDue}</p>
           </div>
         </div>
       </div>

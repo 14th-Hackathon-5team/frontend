@@ -31,7 +31,7 @@ export const HOUSING_TYPE_OPTIONS = [
   { value: 'OTHER', label: 'Other' },
 ]
 
-// 최초 스펙은 NOT_PLANNED, 고재민 공유 예시는 NOT_WORKING으로 표기가 달랐음 — 백엔드 확인 후 고정 필요.
+// 배포된 서버 스웨거(2026-08-14) 기준 enum이 NOT_PLANNED로 확인됨 — 고재민 공유 예시의 NOT_WORKING은 오타였음.
 export const PART_TIME_STATUS_OPTIONS = [
   { value: 'WORKING', label: 'Working' },
   { value: 'SEARCHING', label: 'Searching' },

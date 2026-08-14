@@ -1,4 +1,5 @@
 import axios from 'axios'
+import useAuthStore from '../store/authStore'
 
 // 로컬 개발(vite dev)에서는 vite.config.js의 /api 프록시를 거쳐 같은 origin으로 요청 —
 // 백엔드(EC2)에 CORS 설정이 없어 직접 호출 시 브라우저가 응답을 막기 때문(docs/backend-notes 참고).
@@ -22,7 +23,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // TODO: 401 처리 (예: accessToken 재발급, 로그아웃 처리, 로그인 페이지로 리다이렉트 등)
+      // 스웨거 스펙에 accessToken 재발급(refresh) API가 없어 재시도는 불가 — 로그아웃 후 로그인 페이지로 이동.
+      useAuthStore.getState().logout()
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   },

@@ -1,9 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom'
 import Layout from '../components/Layout'
+import ProtectedRoute from '../components/ProtectedRoute'
 import Home from '../pages/Home'
 import Calendar from '../pages/Calendar'
+import CalendarEventDetail from '../pages/CalendarEventDetail'
 import Details from '../pages/Details'
 import Settings from '../pages/Settings'
+import EditProfile from '../pages/EditProfile'
 import Simulation from '../pages/Simulation'
 import GuideDetail from '../pages/GuideDetail'
 import Login from '../pages/Login'
@@ -13,18 +16,22 @@ import LanguageSelect from '../pages/LanguageSelect'
 
 const router = createBrowserRouter([
   {
-    element: <Layout />,
+    element: <ProtectedRoute />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: '/calendar', element: <Calendar /> },
-      { path: '/details', element: <Details /> },
-      { path: '/settings', element: <Settings /> },
-      { path: '/simulation', element: <Simulation /> },
+      {
+        element: <Layout />,
+        children: [
+          { path: '/', element: <Home /> },
+          { path: '/calendar', element: <Calendar /> },
+          { path: '/details', element: <Details /> },
+          { path: '/settings', element: <Settings /> },
+          { path: '/simulation', element: <Simulation /> },
+        ],
+      },
+      { path: '/guide/:guideId', element: <GuideDetail /> },
+      { path: '/calendar/:eventId', element: <CalendarEventDetail /> },
+      { path: '/settings/edit-profile', element: <EditProfile /> },
     ],
-  },
-  {
-    path: '/guide/:id',
-    element: <GuideDetail />,
   },
   {
     path: '/language',

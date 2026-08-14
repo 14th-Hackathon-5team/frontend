@@ -33,7 +33,7 @@ Request 예시:
 }
 ```
 
-⚠️ **주의**: `partTimeStatus` 예시 값이 `NOT_WORKING`인데, 최초 전달받은 Enum 목록(`WORKING, SEARCHING, NOT_PLANNED`)엔 `NOT_WORKING`이 없음 — 오타인지 Enum이 바뀐 건지 백엔드 확인 필요. FE는 일단 기존 `NOT_PLANNED`로 구현해두고, 확인되면 교체 예정.
+✅ **해결됨 (2026-08-14)**: 배포된 서버 스웨거로 확인한 결과 `partTimeStatus` enum은 `WORKING, SEARCHING, NOT_PLANNED` — 위 예시의 `NOT_WORKING`은 오타였음. FE는 계속 `NOT_PLANNED` 사용.
 
 ## 2. 내 정보 조회 — `GET /api/users/me`
 - 인증: `Authorization: Bearer {ACCESS_TOKEN}`
@@ -57,9 +57,9 @@ Request 예시:
 | English | `ENGLISH` |
 
 ## 6. Swagger
-- 현재는 백엔드 개발자 로컬에서만 접근 가능(`localhost:8080/swagger-ui/index.html`) — FE 팀원 각자 PC에서는 접속 불가
-- 배포 후 공용 Swagger 주소 별도 공유 예정
-- 그전까지는 Notion 문서 + API 명세 기준으로 개발, 애매하면 백엔드에 문의
+- 백엔드 서버 배포 완료, 공용 Swagger 주소 접근 가능: http://13.125.17.105:8080/swagger-ui/index.html (2026-08-14 확인)
+- (기존 로컬 전용 주소 `localhost:8080/swagger-ui/index.html`은 백엔드 개발자 PC에서만 유효했던 값 — 더는 사용 안 함)
+- 애매한 부분은 여전히 백엔드에 문의
 
 ## FE 반영 상태
 - `src/pages/Signup.jsx`, `src/constants/userEnums.js`를 이 스펙 기준으로 다시 맞춤 (디자인 프로토타입의 간소화된 필드 대신 이 문서의 14개 필드 + `language`를 사용).

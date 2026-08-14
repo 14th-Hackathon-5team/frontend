@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import birdLogo from '../assets/bird_logo.png'
+import useLanguageStore from '../store/languageStore'
 
 const LANGUAGES = [
   { code: 'US', name: 'English', locale: 'English (United States)', value: 'ENGLISH' },
@@ -21,6 +22,12 @@ function LanguageSelect() {
   const navigate = useNavigate()
   const [index, setIndex] = useState(0)
   const language = LANGUAGES[index]
+  const setPreferredLanguage = useLanguageStore((state) => state.setPreferredLanguage)
+
+  const handleContinue = () => {
+    setPreferredLanguage(language.value)
+    navigate('/login')
+  }
 
   const goPrev = () => setIndex((current) => (current - 1 + LANGUAGES.length) % LANGUAGES.length)
   const goNext = () => setIndex((current) => (current + 1) % LANGUAGES.length)
@@ -69,7 +76,7 @@ function LanguageSelect() {
       <div className="w-full max-w-xs space-y-3">
         <button
           type="button"
-          onClick={() => navigate('/login')}
+          onClick={handleContinue}
           className="w-full rounded-xl bg-primary-500 py-3 text-sm font-semibold text-white"
         >
           Continue

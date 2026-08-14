@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import useLanguageStore from '../store/languageStore'
 import { getSignupToken, clearSignupToken } from '../lib/signupToken'
 import { signup } from '../lib/authApi'
 import {
@@ -11,6 +12,7 @@ import {
   TOPIK_LEVEL_OPTIONS,
   LANGUAGE_OPTIONS,
 } from '../constants/userEnums'
+import { inputClass, FieldWrapper, SelectField, PillGroup, BOOLEAN_OPTIONS } from '../components/FormFields'
 
 const INITIAL_FORM = {
   name: '',
@@ -32,70 +34,6 @@ const INITIAL_FORM = {
 
 const TOTAL_STEPS = 3
 
-const inputClass =
-  'w-full rounded-xl border border-background-200 bg-background-100 px-4 py-3 text-sm text-foreground-950 placeholder-foreground-400 focus:outline-none focus:ring-2 focus:ring-primary-500'
-const selectClass = `${inputClass} appearance-none pr-8`
-const labelClass = 'mb-1 block text-sm text-foreground-600'
-
-function FieldWrapper({ label, children }) {
-  return (
-    <div>
-      <span className={labelClass}>{label}</span>
-      {children}
-    </div>
-  )
-}
-
-function SelectField({ label, name, value, onChange, options, placeholder = '선택하세요' }) {
-  return (
-    <FieldWrapper label={label}>
-      <div className="relative">
-        <select id={name} name={name} value={value} onChange={onChange} required className={selectClass}>
-          <option value="">{placeholder}</option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-foreground-400">▾</span>
-      </div>
-    </FieldWrapper>
-  )
-}
-
-function PillGroup({ label, value, onChange, options, columns = 2 }) {
-  return (
-    <div>
-      <span className={labelClass}>{label}</span>
-      <div className={`grid gap-2 ${columns === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
-        {options.map((option) => {
-          const selected = value === option.value
-          return (
-            <button
-              key={String(option.value)}
-              type="button"
-              onClick={() => onChange(option.value)}
-              className={`rounded-xl py-3 text-sm font-medium ${
-                selected
-                  ? 'bg-primary-500 text-white'
-                  : 'border border-background-200 bg-background-50 text-foreground-800'
-              }`}
-            >
-              {option.label}
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-const BOOLEAN_OPTIONS = [
-  { value: true, label: 'Yes' },
-  { value: false, label: 'No' },
-]
-
 const STEP_META = [
   { icon: '🙂', title: 'Basic Info', subtitle: 'Let us know who you are' },
   { icon: '✈️', title: 'Visa & Stay', subtitle: 'Tell us about your stay in Korea' },
@@ -107,9 +45,11 @@ const STEP_META = [
 function Signup() {
   const navigate = useNavigate()
   const setAccessToken = useAuthStore((state) => state.setAccessToken)
+  const preferredLanguage = useLanguageStore((state) => state.preferredLanguage)
   const [signupToken, setSignupTokenState] = useState(null)
   const [step, setStep] = useState(1)
-  const [form, setForm] = useState(INITIAL_FORM)
+  // LanguageSelect 화면에서 미리 골라둔 언어가 있으면 기본값으로 채워줌 (수정은 계속 가능).
+  const [form, setForm] = useState(() => ({ ...INITIAL_FORM, language: preferredLanguage ?? '' }))
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
 

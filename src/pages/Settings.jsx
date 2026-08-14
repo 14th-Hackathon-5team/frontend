@@ -1,18 +1,16 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
+import useLanguageStore from '../store/languageStore'
+import { getMyInfo } from '../lib/authApi'
+import { getSettings, updateLanguageSetting, updateAlarmSetting } from '../lib/settingsApi'
 
-// TODO: 프로필 정보는 GET /api/users/me 연동 전까지 예시 데이터 사용.
-const PROFILE = { name: 'Hong Gil-dong', school: 'Sungkonghoe University', visa: 'D-2' }
+const LANGUAGE_LABEL = { KOREAN: '한국어', ENGLISH: 'English' }
+const ALARM_LABEL = { ALL: 'All', ESSENTAL_ONLY: 'Essential Only', NONE: 'None' }
+const ALARM_CYCLE = ['ALL', 'ESSENTAL_ONLY', 'NONE']
 
-const SECTIONS = [
-  {
-    title: 'ACCOUNT',
-    items: [
-      { label: 'Language', value: 'English' },
-      { label: 'Notifications' },
-      { label: 'Edit Profile' },
-    ],
-  },
+// 그 외 섹션(Subscription/Billing/Legal/Support)은 대응하는 API·화면이 아직 없어 클릭해도 동작 안 함.
+const STATIC_SECTIONS = [
   {
     title: 'SUBSCRIPTION & BILLING',
     items: [{ label: 'Subscription' }, { label: 'Billing & Payments' }],
@@ -27,16 +25,47 @@ const SECTIONS = [
   },
 ]
 
-// 설정 화면 — 최종 디자인(tqwhyl.readdy.co/settings) 반영.
-// TODO: 각 항목 클릭 시 상세 화면은 백엔드 API/기획 확정 후 연결.
+// 설정 화면 — 프로필은 GET /api/users/me, 언어/알림은 GET·PATCH /api/settings/me* 연동.
 function Settings() {
   const navigate = useNavigate()
   const logout = useAuthStore((state) => state.logout)
+  const setPreferredLanguage = useLanguageStore((state) => state.setPreferredLanguage)
+
+  const [profile, setProfile] = useState(null)
+  const [settings, setSettings] = useState(null)
+
+  useEffect(() => {
+    getMyInfo()
+      .then((response) => setProfile(response.data.data))
+      .catch((error) => console.error('[Settings] 내 정보 조회 실패', error))
+    getSettings()
+      .then((response) => setSettings(response.data.data))
+      .catch((error) => console.error('[Settings] 설정 조회 실패', error))
+  }, [])
 
   const handleLogout = () => {
-    console.log('[Settings] 로그아웃')
     logout()
     navigate('/login', { replace: true })
+  }
+
+  const cycleLanguage = () => {
+    if (!settings) return
+    const next = settings.preferredLanguage === 'KOREAN' ? 'ENGLISH' : 'KOREAN'
+    updateLanguageSetting(next)
+      .then((response) => {
+        setSettings(response.data.data)
+        setPreferredLanguage(next)
+      })
+      .catch((error) => console.error('[Settings] 언어 설정 변경 실패', error))
+  }
+
+  const cycleAlarm = () => {
+    if (!settings) return
+    const currentIndex = ALARM_CYCLE.indexOf(settings.alarmSetting)
+    const next = ALARM_CYCLE[(currentIndex + 1) % ALARM_CYCLE.length]
+    updateAlarmSetting(next)
+      .then((response) => setSettings(response.data.data))
+      .catch((error) => console.error('[Settings] 알림 설정 변경 실패', error))
   }
 
   return (
@@ -46,13 +75,14 @@ function Settings() {
           🙂
         </div>
         <div className="flex-1">
-          <p className="text-base font-bold text-foreground-950">{PROFILE.name}</p>
+          <p className="text-base font-bold text-foreground-950">{profile?.name ?? '...'}</p>
           <p className="text-sm text-foreground-500">
-            {PROFILE.school} · {PROFILE.visa}
+            {profile ? `${profile.schoolName} · ${profile.visaType}` : ''}
           </p>
         </div>
         <button
           type="button"
+          onClick={() => navigate('/settings/edit-profile')}
           className="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
         >
           Edit Profile
@@ -61,7 +91,43 @@ function Settings() {
 
       <hr className="mb-6 border-background-200" />
 
-      {SECTIONS.map((section) => (
+      <div className="mb-6">
+        <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">ACCOUNT</p>
+        <div className="divide-y divide-background-200 overflow-hidden rounded-2xl border border-background-200 bg-background-50">
+          <button
+            type="button"
+            onClick={cycleLanguage}
+            className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+          >
+            Language
+            <span className="flex items-center gap-2 text-foreground-400">
+              <span className="text-sm">{settings ? LANGUAGE_LABEL[settings.preferredLanguage] : '...'}</span>
+              <span>›</span>
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={cycleAlarm}
+            className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+          >
+            Notifications
+            <span className="flex items-center gap-2 text-foreground-400">
+              <span className="text-sm">{settings ? ALARM_LABEL[settings.alarmSetting] : '...'}</span>
+              <span>›</span>
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/settings/edit-profile')}
+            className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+          >
+            Edit Profile
+            <span className="text-foreground-400">›</span>
+          </button>
+        </div>
+      </div>
+
+      {STATIC_SECTIONS.map((section) => (
         <div key={section.title} className="mb-6">
           <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{section.title}</p>
           <div className="divide-y divide-background-200 overflow-hidden rounded-2xl border border-background-200 bg-background-50">
@@ -92,6 +158,7 @@ function Settings() {
           Log Out
           <span className="text-foreground-400">›</span>
         </button>
+        {/* TODO: 회원 탈퇴 API가 아직 없음 — 백엔드 확정 후 연동 */}
         <button
           type="button"
           className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-red-500 transition-colors hover:bg-red-50"

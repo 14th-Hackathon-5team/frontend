@@ -26,3 +26,8 @@ export function signup(signupToken, payload) {
 export function getMyInfo() {
   return api.get('/api/users/me')
 }
+
+// 내 정보 부분 수정 (docs/backend-notes-2026-08-13.md 3절) — 보낸 필드만 변경됨.
+export function updateMyInfo(payload) {
+  return api.patch('/api/users/me', payload)
+}
