@@ -42,14 +42,7 @@
     "commonChecklist": "COMMON CHECKLIST",
     "myChecklist": "MY CHECKLIST",
     "due": "Due {{date}}",
-    "checklist": {
-      "alienRegistration": "Alien Registration",
-      "healthCheckup": "Health Checkup",
-      "healthInsurance": "Health Insurance Enrollment",
-      "topikRegistration": "TOPIK Registration",
-      "visaRenewal": "Visa Renewal Prep",
-      "midtermExam": "Midterm Exam Prep"
-    }
+    "noUpcoming": "No upcoming items in the next 7 days."
   },
   "calendar": {
     "title": "{{year}} Calendar",

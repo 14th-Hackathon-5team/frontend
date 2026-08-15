@@ -42,14 +42,7 @@
     "commonChecklist": "공통 체크리스트",
     "myChecklist": "내 체크리스트",
     "due": "{{date}}까지",
-    "checklist": {
-      "alienRegistration": "외국인등록증 발급",
-      "healthCheckup": "보건증 발급",
-      "healthInsurance": "건강보험 가입",
-      "topikRegistration": "TOPIK 접수",
-      "visaRenewal": "비자 연장 준비",
-      "midtermExam": "중간고사 준비"
-    }
+    "noUpcoming": "앞으로 7일 이내 예정된 일정이 없어요."
   },
   "calendar": {
     "title": "{{year}}년 캘린더",

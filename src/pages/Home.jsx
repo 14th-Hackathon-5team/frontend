@@ -3,20 +3,30 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import birdLogo from '../assets/bird_logo.png'
 import { getMyInfo } from '../lib/authApi'
+import { getUpcomingEvents } from '../lib/calendarApi'
 import { VISA_TYPE_OPTIONS } from '../constants/userEnums'
 
-// TODO: 체크리스트는 백엔드에 대응하는 API가 아직 없어(스웨거 확인 완료) 예시 데이터를 그대로 사용.
-// guideCategory가 있는 항목은 클릭 시 해당 카테고리의 세부정보(Details) 목록으로 이동.
-const COMMON_CHECKLIST = [
-  { id: 1, titleKey: 'home.checklist.alienRegistration', dueDate: '2026-08-20', guideCategory: 'VISA' },
-  { id: 2, titleKey: 'home.checklist.healthCheckup', dueDate: '2026-08-16', badge: 'D-3' },
-  { id: 3, titleKey: 'home.checklist.healthInsurance', dueDate: '2026-09-30' },
-]
-const MY_CHECKLIST = [
-  { id: 4, titleKey: 'home.checklist.topikRegistration', dueDate: '2026-08-15', badge: 'D-2', guideCategory: 'TOPIK' },
-  { id: 5, titleKey: 'home.checklist.visaRenewal', dueDate: '2027-02-10', guideCategory: 'VISA' },
-  { id: 6, titleKey: 'home.checklist.midtermExam', dueDate: '2026-10-15', guideCategory: 'ACADEMIC' },
-]
+// 체크리스트 전용 API는 없음(스웨거 확인 완료). 대신 GET /api/calendar/events/upcoming(7일 이내 임박 일정)를
+// isGlobal 기준으로 공통/개인으로 나눠서 체크리스트처럼 보여줌 — docs/backend-notes-2026-08-13.md 참고.
+// 항목 클릭 시 해당 일정 상세(CalendarEventDetail)로 이동. 체크 상태는 저장되지 않고 새로고침하면 초기화됨(기존 더미 데이터도 동일했음).
+function daysUntil(dateString) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const target = new Date(dateString)
+  target.setHours(0, 0, 0, 0)
+  return Math.round((target - today) / 86400000)
+}
+
+function toChecklistItem(event) {
+  const diff = daysUntil(event.startDate)
+  return {
+    id: event.eventId,
+    eventId: event.eventId,
+    title: event.title,
+    dueDate: event.startDate === event.endDate ? event.startDate : `${event.startDate} ~ ${event.endDate}`,
+    badge: diff >= 0 && diff <= 3 ? (diff === 0 ? 'D-day' : `D-${diff}`) : null,
+  }
+}
 
 function formatVisaType(visaType) {
   return VISA_TYPE_OPTIONS.find((option) => option.value === visaType)?.label ?? visaType ?? '-'
@@ -43,15 +53,13 @@ function ChecklistItem({ item, checked, onToggle }) {
   const { t } = useTranslation()
 
   const handleRowClick = () => {
-    if (item.guideCategory) navigate(`/details?category=${item.guideCategory}`)
+    navigate(`/calendar/${item.eventId}`)
   }
 
   return (
     <div
       onClick={handleRowClick}
-      className={`flex items-center gap-3 rounded-2xl border border-background-200 bg-background-50 p-4 transition-colors hover:border-primary-300 hover:bg-primary-50 ${
-        item.guideCategory ? 'cursor-pointer' : ''
-      }`}
+      className="flex cursor-pointer items-center gap-3 rounded-2xl border border-background-200 bg-background-50 p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
     >
       <button
         type="button"
@@ -68,7 +76,7 @@ function ChecklistItem({ item, checked, onToggle }) {
       </button>
       <div className="flex-1">
         <p className={`text-sm font-semibold ${checked ? 'text-foreground-400 line-through' : 'text-foreground-900'}`}>
-          {t(item.titleKey)}
+          {item.title}
         </p>
         <p className="text-xs font-semibold text-foreground-500">{t('home.due', { date: item.dueDate })}</p>
       </div>
@@ -88,6 +96,8 @@ function Home() {
   const [checkedIds, setCheckedIds] = useState(new Set())
   const [userName, setUserName] = useState(null)
   const [adminInfo, setAdminInfo] = useState({ visa: '-', alienReg: '-', nextDue: '-' })
+  const [commonChecklist, setCommonChecklist] = useState([])
+  const [myChecklist, setMyChecklist] = useState([])
 
   useEffect(() => {
     getMyInfo()
@@ -102,6 +112,16 @@ function Home() {
       })
       .catch((error) => console.error('[Home] 내 정보 조회 실패', error))
   }, [t])
+
+  useEffect(() => {
+    getUpcomingEvents()
+      .then((response) => {
+        const events = response.data.data
+        setCommonChecklist(events.filter((event) => event.isGlobal).map(toChecklistItem))
+        setMyChecklist(events.filter((event) => !event.isGlobal).map(toChecklistItem))
+      })
+      .catch((error) => console.error('[Home] 임박 일정 조회 실패', error))
+  }, [])
 
   const toggleChecked = (id) => {
     setCheckedIds((prev) => {
@@ -164,7 +184,8 @@ function Home() {
 
       <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.commonChecklist')}</p>
       <div className="space-y-3">
-        {COMMON_CHECKLIST.map((item) => (
+        {commonChecklist.length === 0 && <p className="text-sm text-foreground-400">{t('home.noUpcoming')}</p>}
+        {commonChecklist.map((item) => (
           <ChecklistItem
             key={item.id}
             item={item}
@@ -176,7 +197,8 @@ function Home() {
 
       <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.myChecklist')}</p>
       <div className="space-y-3">
-        {MY_CHECKLIST.map((item) => (
+        {myChecklist.length === 0 && <p className="text-sm text-foreground-400">{t('home.noUpcoming')}</p>}
+        {myChecklist.map((item) => (
           <ChecklistItem
             key={item.id}
             item={item}
