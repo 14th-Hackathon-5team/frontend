@@ -1,0 +1,285 @@
+{
+  "common": {
+    "loading": "불러오는 중...",
+    "select": "선택하세요",
+    "copyright": "© 2026 K-Buddy. All rights reserved."
+  },
+  "nav": {
+    "home": "홈",
+    "calendar": "캘린더",
+    "details": "세부정보",
+    "settings": "설정"
+  },
+  "languageSelect": {
+    "title": "언어를 선택해주세요",
+    "subtitle": "계속하려면 언어를 선택하세요",
+    "previous": "이전 언어",
+    "next": "다음 언어",
+    "swipeHint": "좌우로 넘겨서 언어를 선택하세요",
+    "continue": "계속하기"
+  },
+  "login": {
+    "tagline": "한국 생활, 혼자가 아니에요",
+    "kakao": "카카오톡으로 로그인",
+    "google": "구글로 계속하기"
+  },
+  "oauth": {
+    "processing": "로그인 처리 중...",
+    "emailDuplicated": "이미 다른 방법으로 가입된 이메일입니다. 기존 로그인 방법을 이용해주세요."
+  },
+  "home": {
+    "adminInfo": "내 행정 정보",
+    "seeAll": "전체 보기",
+    "greeting": "{{name}}님, 안녕하세요! 최근 행정 상태를 알려드릴게요.",
+    "greetingFallback": "회원",
+    "visa": "비자",
+    "alienReg": "외국인등록",
+    "nextDue": "다음 기한",
+    "done": "완료",
+    "pending": "미완료",
+    "simulatorTitle": "생활비 계산기",
+    "simulatorDescription": "한국에서의 한 달 예산을 예상해보세요",
+    "commonChecklist": "공통 체크리스트",
+    "myChecklist": "내 체크리스트",
+    "due": "{{date}}까지",
+    "checklist": {
+      "alienRegistration": "외국인등록증 발급",
+      "healthCheckup": "보건증 발급",
+      "healthInsurance": "건강보험 가입",
+      "topikRegistration": "TOPIK 접수",
+      "visaRenewal": "비자 연장 준비",
+      "midtermExam": "중간고사 준비"
+    }
+  },
+  "calendar": {
+    "title": "{{year}}년 캘린더",
+    "monthLabel": "{{year}}년 {{month}}",
+    "loadError": "일정을 불러오지 못했습니다.",
+    "noEvents": "이번 달 일정이 없습니다.",
+    "weekdays": ["일", "월", "화", "수", "목", "금", "토"],
+    "months": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+  },
+  "calendarDetail": {
+    "notFound": "일정을 찾을 수 없습니다.",
+    "common": "공통",
+    "relatedLink": "관련 링크"
+  },
+  "details": {
+    "noGuides": "아직 등록된 가이드가 없습니다."
+  },
+  "guideDetail": {
+    "notFound": "가이드를 찾을 수 없습니다.",
+    "referenceLink": "참고 링크"
+  },
+  "settings": {
+    "editProfile": "프로필 수정",
+    "account": "계정",
+    "language": "언어",
+    "notifications": "알림",
+    "subscriptionBilling": "구독 및 결제",
+    "subscription": "구독",
+    "billing": "결제 수단",
+    "legalInformation": "법적 정보",
+    "terms": "약관 및 개인정보 동의",
+    "privacyPolicy": "개인정보 처리방침",
+    "legalOther": "기타 법적 정보",
+    "support": "고객지원",
+    "supportItem": "문의하기",
+    "version": "버전",
+    "accountManagement": "계정 관리",
+    "logout": "로그아웃",
+    "deleteAccount": "회원 탈퇴"
+  },
+  "signup": {
+    "steps": {
+      "basic": { "title": "기본 정보", "subtitle": "어떤 분인지 알려주세요" },
+      "visa": { "title": "비자와 체류", "subtitle": "한국 체류 정보를 알려주세요" },
+      "life": { "title": "생활과 목표", "subtitle": "주거, 아르바이트, TOPIK 목표" }
+    },
+    "next": "다음",
+    "back": "이전",
+    "submit": "K-Buddy 시작하기",
+    "submitting": "제출 중...",
+    "error": "회원가입에 실패했습니다. 다시 시도해주세요."
+  },
+  "editProfile": {
+    "title": "프로필 수정",
+    "save": "변경사항 저장",
+    "saving": "저장 중...",
+    "error": "프로필 수정에 실패했습니다. 다시 시도해주세요."
+  },
+  "profileFields": {
+    "name": "이름",
+    "nationality": "국적",
+    "birthYear": "출생연도",
+    "userStatus": "현재 신분",
+    "language": "사용 언어",
+    "schoolName": "학교명",
+    "entryDate": "입국일",
+    "visaType": "비자 종류",
+    "hasAlienRegistration": "외국인등록 여부",
+    "stayExpirationDate": "체류 만료일",
+    "housingType": "거주 형태",
+    "isParentSupported": "부모 지원 여부",
+    "partTimeStatus": "알바 상태",
+    "currentTopikLevel": "현재 토픽",
+    "targetTopikLevel": "목표 토픽"
+  },
+  "simulation": {
+    "title": "생활비 시뮬레이션",
+    "subtitle": "항목을 조정해 한 달 비용을 예상해보세요",
+    "resultSubtitle": "예상 월 생활비",
+    "reset": "초기화",
+    "estimatedMonthly": "예상 월 비용: {{amount}}",
+    "adjustTitle": "선택을 조정해보세요",
+    "adjustHint": "\"{{title}}\"에 가장 가까운 항목을 선택하세요",
+    "confirm": "확인 후 다음",
+    "skip": "건너뛰기",
+    "resultTitle": "나의 한 달 생활비",
+    "resultDescription": "선택하신 내용을 바탕으로 예상 비용을 정리했어요.",
+    "resultLabel": "예상 월 생활비",
+    "perMonth": "한 달 기준",
+    "totalExpenses": "총 지출",
+    "partTimeIncome": "아르바이트 수입",
+    "disclaimer": "* 예상치입니다. 실제 비용은 학교, 지역, 생활 방식에 따라 달라집니다.",
+    "backToHome": "홈으로 돌아가기",
+    "steps": {
+      "housing": {
+        "title": "거주 형태",
+        "description": "월세는 생활비에서 가장 큰 비중을 차지합니다. 계획에 가장 가까운 항목을 골라주세요.",
+        "options": ["기숙사", "원룸", "고시원", "하숙"]
+      },
+      "area": {
+        "title": "거주 지역",
+        "description": "서울과 지방은 비용 차이가 큽니다. 거주할 지역을 골라주세요.",
+        "options": ["서울", "수도권", "지방 도시"]
+      },
+      "partTime": {
+        "title": "아르바이트",
+        "description": "D-2 비자는 주 28시간까지 일할 수 있습니다. 예상 근무 시간을 골라주세요.",
+        "options": ["주 0시간", "주 10시간", "주 28시간"],
+        "note": "2026년 최저임금은 시간당 10,320원입니다."
+      },
+      "meal": {
+        "title": "식사 패턴",
+        "description": "식비는 두 번째로 큰 지출입니다. 평소 어떻게 식사할 계획인가요?",
+        "options": ["학식 위주", "혼합", "외식 위주", "직접 요리"]
+      }
+    },
+    "breakdown": {
+      "housing": "주거비",
+      "meals": "식비",
+      "transport": "교통·통신비"
+    }
+  },
+  "enums": {
+    "boolean": { "true": "예", "false": "아니오" },
+    "userStatus": {
+      "BEFORE_ENTRY": "입국 예정",
+      "HIGH_SCHOOL": "고등학교 유학생",
+      "LANGUAGE_STUDENT": "어학연수생",
+      "UNDERGRADUATE": "학부 유학생",
+      "GRADUATE": "대학원 유학생",
+      "EXCHANGE_STUDENT": "교환학생",
+      "OTHER": "기타"
+    },
+    "visaType": {
+      "D2": "D-2 (유학)",
+      "D4": "D-4 (일반연수)",
+      "H1": "H-1 (워킹홀리데이)",
+      "F2": "F-2 (거주)",
+      "F5": "F-5 (영주)",
+      "F6": "F-6 (결혼이민)",
+      "OTHER": "기타"
+    },
+    "housingType": {
+      "DORMITORY": "기숙사",
+      "RENT": "자취",
+      "HOMESTAY": "홈스테이",
+      "GOSIWON": "고시원",
+      "SHARE_HOUSE": "쉐어하우스",
+      "OTHER": "기타"
+    },
+    "partTimeStatus": {
+      "WORKING": "아르바이트 중",
+      "SEARCHING": "구직 중",
+      "NOT_PLANNED": "계획 없음"
+    },
+    "topikLevel": {
+      "NONE": "응시 경험 없음",
+      "LEVEL_1": "TOPIK 1급",
+      "LEVEL_2": "TOPIK 2급",
+      "LEVEL_3": "TOPIK 3급",
+      "LEVEL_4": "TOPIK 4급",
+      "LEVEL_5": "TOPIK 5급",
+      "LEVEL_6": "TOPIK 6급"
+    },
+    "language": {
+      "KOREAN": "한국어",
+      "ENGLISH": "English"
+    },
+    "alarm": {
+      "ALL": "모든 알림",
+      "ESSENTAL_ONLY": "필수 알림만",
+      "NONE": "알림 끄기"
+    },
+    "guideCategory": {
+      "VISA": "비자",
+      "TOPIK": "토픽",
+      "LEGAL": "법·행정",
+      "ACADEMIC": "대입 정보"
+    },
+    "eventCategory": {
+      "VISA": "비자",
+      "TOPIK": "토픽",
+      "LEGAL": "법·행정",
+      "ACADEMIC": "학사"
+    },
+    "nationality": {
+      "AU": "호주",
+      "BD": "방글라데시",
+      "BR": "브라질",
+      "CA": "캐나다",
+      "CN": "중국",
+      "DE": "독일",
+      "EG": "이집트",
+      "ES": "스페인",
+      "FR": "프랑스",
+      "GB": "영국",
+      "HK": "홍콩",
+      "ID": "인도네시아",
+      "IN": "인도",
+      "IR": "이란",
+      "IT": "이탈리아",
+      "JP": "일본",
+      "KG": "키르기스스탄",
+      "KH": "캄보디아",
+      "KR": "대한민국",
+      "KZ": "카자흐스탄",
+      "LA": "라오스",
+      "LK": "스리랑카",
+      "MM": "미얀마",
+      "MN": "몽골",
+      "MX": "멕시코",
+      "MY": "말레이시아",
+      "NG": "나이지리아",
+      "NL": "네덜란드",
+      "NP": "네팔",
+      "NZ": "뉴질랜드",
+      "PH": "필리핀",
+      "PK": "파키스탄",
+      "PL": "폴란드",
+      "RU": "러시아",
+      "SA": "사우디아라비아",
+      "SG": "싱가포르",
+      "TH": "태국",
+      "TR": "튀르키예",
+      "TW": "대만",
+      "UA": "우크라이나",
+      "US": "미국",
+      "UZ": "우즈베키스탄",
+      "VN": "베트남",
+      "ZA": "남아프리카공화국"
+    }
+  }
+}

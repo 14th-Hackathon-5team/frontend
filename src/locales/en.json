@@ -1,0 +1,285 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "select": "Select",
+    "copyright": "© 2026 K-Buddy. All rights reserved."
+  },
+  "nav": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "details": "Details",
+    "settings": "Settings"
+  },
+  "languageSelect": {
+    "title": "Choose your language",
+    "subtitle": "Choose a language to continue",
+    "previous": "Previous language",
+    "next": "Next language",
+    "swipeHint": "Swipe sideways to choose a language",
+    "continue": "Continue"
+  },
+  "login": {
+    "tagline": "Life in Korea, you're not alone",
+    "kakao": "Log in with KakaoTalk",
+    "google": "Continue with Google"
+  },
+  "oauth": {
+    "processing": "Signing you in...",
+    "emailDuplicated": "This email is already registered with another login method. Please use your original login method."
+  },
+  "home": {
+    "adminInfo": "MY ADMIN INFO",
+    "seeAll": "See all",
+    "greeting": "Hi {{name}}! Here is your latest admin status:",
+    "greetingFallback": "there",
+    "visa": "Visa",
+    "alienReg": "Alien Reg.",
+    "nextDue": "Next Due",
+    "done": "Done",
+    "pending": "Pending",
+    "simulatorTitle": "Living Cost Simulator",
+    "simulatorDescription": "Estimate your monthly budget in Korea",
+    "commonChecklist": "COMMON CHECKLIST",
+    "myChecklist": "MY CHECKLIST",
+    "due": "Due {{date}}",
+    "checklist": {
+      "alienRegistration": "Alien Registration",
+      "healthCheckup": "Health Checkup",
+      "healthInsurance": "Health Insurance Enrollment",
+      "topikRegistration": "TOPIK Registration",
+      "visaRenewal": "Visa Renewal Prep",
+      "midtermExam": "Midterm Exam Prep"
+    }
+  },
+  "calendar": {
+    "title": "{{year}} Calendar",
+    "monthLabel": "{{month}}, {{year}}",
+    "loadError": "Failed to load events.",
+    "noEvents": "No events this month.",
+    "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+    "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  },
+  "calendarDetail": {
+    "notFound": "Event not found.",
+    "common": "Common",
+    "relatedLink": "Related Link"
+  },
+  "details": {
+    "noGuides": "No guides yet."
+  },
+  "guideDetail": {
+    "notFound": "Guide not found.",
+    "referenceLink": "Reference Link"
+  },
+  "settings": {
+    "editProfile": "Edit Profile",
+    "account": "ACCOUNT",
+    "language": "Language",
+    "notifications": "Notifications",
+    "subscriptionBilling": "SUBSCRIPTION & BILLING",
+    "subscription": "Subscription",
+    "billing": "Billing & Payments",
+    "legalInformation": "LEGAL INFORMATION",
+    "terms": "Terms & Privacy Consent",
+    "privacyPolicy": "Privacy Policy",
+    "legalOther": "Legal & Other Information",
+    "support": "SUPPORT",
+    "supportItem": "Support",
+    "version": "Version",
+    "accountManagement": "ACCOUNT MANAGEMENT",
+    "logout": "Log Out",
+    "deleteAccount": "Delete Account"
+  },
+  "signup": {
+    "steps": {
+      "basic": { "title": "Basic Info", "subtitle": "Let us know who you are" },
+      "visa": { "title": "Visa & Stay", "subtitle": "Tell us about your stay in Korea" },
+      "life": { "title": "Life & Goals", "subtitle": "Housing, work, and TOPIK goals" }
+    },
+    "next": "Next",
+    "back": "Back",
+    "submit": "Start with K-Buddy",
+    "submitting": "Submitting...",
+    "error": "Sign-up failed. Please try again."
+  },
+  "editProfile": {
+    "title": "Edit Profile",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "error": "Failed to update your profile. Please try again."
+  },
+  "profileFields": {
+    "name": "Name",
+    "nationality": "Nationality",
+    "birthYear": "Birth Year",
+    "userStatus": "Current Status",
+    "language": "Language",
+    "schoolName": "School Name",
+    "entryDate": "Entry Date",
+    "visaType": "Visa Type",
+    "hasAlienRegistration": "Alien Registration",
+    "stayExpirationDate": "Stay Expiration Date",
+    "housingType": "Housing Type",
+    "isParentSupported": "Parental Support",
+    "partTimeStatus": "Part-time Status",
+    "currentTopikLevel": "Current TOPIK",
+    "targetTopikLevel": "Target TOPIK"
+  },
+  "simulation": {
+    "title": "Budget Simulation",
+    "subtitle": "Adjust each item to estimate your monthly cost",
+    "resultSubtitle": "Your estimated monthly budget",
+    "reset": "Reset",
+    "estimatedMonthly": "Est. monthly: {{amount}}",
+    "adjustTitle": "Adjust your choice",
+    "adjustHint": "Select the option closest to \"{{title}}\"",
+    "confirm": "Confirm & next",
+    "skip": "Skip",
+    "resultTitle": "Your Monthly Budget",
+    "resultDescription": "Here is the estimated cost breakdown based on your selections.",
+    "resultLabel": "Estimated monthly budget",
+    "perMonth": "per month",
+    "totalExpenses": "Total expenses",
+    "partTimeIncome": "Part-time income",
+    "disclaimer": "* This is an estimate. Actual costs vary by school, district, and lifestyle.",
+    "backToHome": "Back to Home",
+    "steps": {
+      "housing": {
+        "title": "Housing Type",
+        "description": "Your monthly housing cost is the biggest factor in your budget. Choose the option closest to your plan.",
+        "options": ["Dormitory", "One-room", "Goshiwon", "Hasuk"]
+      },
+      "area": {
+        "title": "Living Area",
+        "description": "Costs vary a lot between Seoul and regional cities. Pick where you will live.",
+        "options": ["Seoul", "Metro area", "Regional city"]
+      },
+      "partTime": {
+        "title": "Part-time Work",
+        "description": "D-2 visa holders can work up to 28 hours a week. Enter your expected weekly hours.",
+        "options": ["0h/week", "10h/week", "28h/week"],
+        "note": "The 2026 minimum wage is 10,320 KRW per hour."
+      },
+      "meal": {
+        "title": "Meal Pattern",
+        "description": "Food is the second largest expense. How do you plan to eat most days?",
+        "options": ["School cafeteria", "Mixed", "Eat out often", "Cook at home"]
+      }
+    },
+    "breakdown": {
+      "housing": "Housing",
+      "meals": "Meals",
+      "transport": "Transport & comms"
+    }
+  },
+  "enums": {
+    "boolean": { "true": "Yes", "false": "No" },
+    "userStatus": {
+      "BEFORE_ENTRY": "Before Entry",
+      "HIGH_SCHOOL": "High School",
+      "LANGUAGE_STUDENT": "Language Student",
+      "UNDERGRADUATE": "Undergraduate",
+      "GRADUATE": "Graduate",
+      "EXCHANGE_STUDENT": "Exchange Student",
+      "OTHER": "Other"
+    },
+    "visaType": {
+      "D2": "D-2",
+      "D4": "D-4",
+      "H1": "H-1",
+      "F2": "F-2",
+      "F5": "F-5",
+      "F6": "F-6",
+      "OTHER": "Other"
+    },
+    "housingType": {
+      "DORMITORY": "Dormitory",
+      "RENT": "Rent",
+      "HOMESTAY": "Homestay",
+      "GOSIWON": "Goshiwon",
+      "SHARE_HOUSE": "Share House",
+      "OTHER": "Other"
+    },
+    "partTimeStatus": {
+      "WORKING": "Working",
+      "SEARCHING": "Searching",
+      "NOT_PLANNED": "Not Planned"
+    },
+    "topikLevel": {
+      "NONE": "None",
+      "LEVEL_1": "Level 1",
+      "LEVEL_2": "Level 2",
+      "LEVEL_3": "Level 3",
+      "LEVEL_4": "Level 4",
+      "LEVEL_5": "Level 5",
+      "LEVEL_6": "Level 6"
+    },
+    "language": {
+      "KOREAN": "Korean",
+      "ENGLISH": "English"
+    },
+    "alarm": {
+      "ALL": "All",
+      "ESSENTAL_ONLY": "Essential Only",
+      "NONE": "None"
+    },
+    "guideCategory": {
+      "VISA": "Visa",
+      "TOPIK": "TOPIK",
+      "LEGAL": "Law & Regulations",
+      "ACADEMIC": "Academic"
+    },
+    "eventCategory": {
+      "VISA": "Visa",
+      "TOPIK": "TOPIK",
+      "LEGAL": "Legal",
+      "ACADEMIC": "Academic"
+    },
+    "nationality": {
+      "AU": "Australia",
+      "BD": "Bangladesh",
+      "BR": "Brazil",
+      "CA": "Canada",
+      "CN": "China",
+      "DE": "Germany",
+      "EG": "Egypt",
+      "ES": "Spain",
+      "FR": "France",
+      "GB": "United Kingdom",
+      "HK": "Hong Kong",
+      "ID": "Indonesia",
+      "IN": "India",
+      "IR": "Iran",
+      "IT": "Italy",
+      "JP": "Japan",
+      "KG": "Kyrgyzstan",
+      "KH": "Cambodia",
+      "KR": "South Korea",
+      "KZ": "Kazakhstan",
+      "LA": "Laos",
+      "LK": "Sri Lanka",
+      "MM": "Myanmar",
+      "MN": "Mongolia",
+      "MX": "Mexico",
+      "MY": "Malaysia",
+      "NG": "Nigeria",
+      "NL": "Netherlands",
+      "NP": "Nepal",
+      "NZ": "New Zealand",
+      "PH": "Philippines",
+      "PK": "Pakistan",
+      "PL": "Poland",
+      "RU": "Russia",
+      "SA": "Saudi Arabia",
+      "SG": "Singapore",
+      "TH": "Thailand",
+      "TR": "Türkiye",
+      "TW": "Taiwan",
+      "UA": "Ukraine",
+      "US": "United States",
+      "UZ": "Uzbekistan",
+      "VN": "Vietnam",
+      "ZA": "South Africa"
+    }
+  }
+}

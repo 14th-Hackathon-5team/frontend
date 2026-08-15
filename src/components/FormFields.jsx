@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 // Signup.jsx / EditProfile.jsx가 함께 쓰는 폼 프리미티브 (동일한 사용자 프로필 필드셋을 다룸).
 export const inputClass =
   'w-full rounded-xl border border-background-200 bg-background-100 px-4 py-3 text-sm text-foreground-950 placeholder-foreground-400 focus:outline-none focus:ring-2 focus:ring-primary-500'
@@ -18,12 +20,13 @@ export function FieldWrapper({ label, children }) {
   )
 }
 
-export function SelectField({ label, name, value, onChange, options, placeholder = '선택하세요' }) {
+export function SelectField({ label, name, value, onChange, options, placeholder }) {
+  const { t } = useTranslation()
   return (
     <FieldWrapper label={label}>
       <div className="relative">
         <select id={name} name={name} value={value} onChange={onChange} required className={selectClass}>
-          <option value="">{placeholder}</option>
+          <option value="">{placeholder ?? t('common.select')}</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

@@ -8,6 +8,7 @@ import {
   PART_TIME_STATUS_OPTIONS,
   TOPIK_LEVEL_OPTIONS,
   LANGUAGE_OPTIONS,
+  NATIONALITY_OPTIONS,
 } from '../constants/userEnums'
 import { inputClass, FieldWrapper, SelectField, PillGroup, BOOLEAN_OPTIONS } from '../components/FormFields'
 
@@ -87,17 +88,13 @@ function EditProfile() {
         <FieldWrapper label="이름">
           <input id="name" name="name" type="text" value={form.name} onChange={handleChange} required className={inputClass} />
         </FieldWrapper>
-        <FieldWrapper label="국적">
-          <input
-            id="nationality"
-            name="nationality"
-            type="text"
-            value={form.nationality}
-            onChange={handleChange}
-            required
-            className={inputClass}
-          />
-        </FieldWrapper>
+        <SelectField
+          label="국적"
+          name="nationality"
+          value={form.nationality}
+          onChange={handleChange}
+          options={NATIONALITY_OPTIONS}
+        />
         <FieldWrapper label="출생연도">
           <input
             id="birthYear"
