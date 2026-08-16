@@ -151,20 +151,27 @@ function Calendar() {
         <p className="py-4 text-center text-sm text-foreground-400">{t('calendar.noEvents')}</p>
       )}
       <ul className="divide-y divide-background-200">
-        {events.map((event) => (
-          <li key={event.eventId}>
-            <button
-              type="button"
-              onClick={() => navigate(`/calendar/${event.eventId}`)}
-              className="flex w-full items-center gap-2 py-3 text-left transition-colors hover:bg-primary-50"
-            >
-              <span className={`h-2 w-2 rounded-full ${CATEGORY_COLOR[event.category]}`} />
-              <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
-              <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
-              <span className="text-foreground-400">›</span>
-            </button>
-          </li>
-        ))}
+        {events.map((event) => {
+          // eventId === -1은 실제 저장된 일정이 아니라 조회 시점에 계산해서 끼워 넣는 가상 일정
+          // (예: 체류기간 만료 D-30 안내) — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
+          const isNavigable = event.eventId !== -1
+          return (
+            <li key={event.eventId === -1 ? 'stay-expiration-alert' : event.eventId}>
+              <button
+                type="button"
+                onClick={() => isNavigable && navigate(`/calendar/${event.eventId}`)}
+                className={`flex w-full items-center gap-2 py-3 text-left transition-colors ${
+                  isNavigable ? 'hover:bg-primary-50' : 'cursor-default'
+                }`}
+              >
+                <span className={`h-2 w-2 rounded-full ${CATEGORY_COLOR[event.category]}`} />
+                <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
+                <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
+                {isNavigable && <span className="text-foreground-400">›</span>}
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

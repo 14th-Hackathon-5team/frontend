@@ -51,15 +51,21 @@ function CalculatorIcon() {
 function ChecklistItem({ item, checked, onToggle }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  // eventId === -1은 실제 저장된 일정이 아니라 조회 시점에 계산해서 끼워 넣는 가상 일정(예: 체류기간 만료 D-30 안내)
+  // — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
+  const isNavigable = item.eventId !== -1
 
   const handleRowClick = () => {
+    if (!isNavigable) return
     navigate(`/calendar/${item.eventId}`)
   }
 
   return (
     <div
       onClick={handleRowClick}
-      className="flex cursor-pointer items-center gap-3 rounded-2xl border border-background-200 bg-background-50 p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
+      className={`flex items-center gap-3 rounded-2xl border border-background-200 bg-background-50 p-4 transition-colors ${
+        isNavigable ? 'cursor-pointer hover:border-primary-300 hover:bg-primary-50' : ''
+      }`}
     >
       <button
         type="button"
@@ -85,7 +91,7 @@ function ChecklistItem({ item, checked, onToggle }) {
           {item.badge}
         </span>
       )}
-      <span className="text-foreground-400">›</span>
+      {isNavigable && <span className="text-foreground-400">›</span>}
     </div>
   )
 }
