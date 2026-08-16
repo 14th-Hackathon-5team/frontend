@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 import useLanguageStore from '../store/languageStore'
-import { getMyInfo } from '../lib/authApi'
+import { getMyInfo, deleteAccount } from '../lib/authApi'
 import { getSettings, updateLanguageSetting, updateAlarmSetting } from '../lib/settingsApi'
 
 const LANGUAGE_LABEL = { KOREAN: '한국어', ENGLISH: 'English' }
@@ -46,6 +46,19 @@ function Settings() {
   const handleLogout = () => {
     logout()
     navigate('/login', { replace: true })
+  }
+
+  const handleDeleteAccount = () => {
+    if (!window.confirm('정말 탈퇴하시겠어요? 이 작업은 되돌릴 수 없습니다.')) return
+    deleteAccount()
+      .then(() => {
+        logout()
+        navigate('/login', { replace: true })
+      })
+      .catch((error) => {
+        console.error('[Settings] 회원 탈퇴 실패', error)
+        window.alert('탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+      })
   }
 
   const cycleLanguage = () => {
@@ -158,9 +171,9 @@ function Settings() {
           Log Out
           <span className="text-foreground-400">›</span>
         </button>
-        {/* TODO: 회원 탈퇴 API가 아직 없음 — 백엔드 확정 후 연동 */}
         <button
           type="button"
+          onClick={handleDeleteAccount}
           className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
         >
           Delete Account

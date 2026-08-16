@@ -31,3 +31,8 @@ export function getMyInfo() {
 export function updateMyInfo(payload) {
   return api.patch('/api/users/me', payload)
 }
+
+// 회원 탈퇴
+export function deleteAccount() {
+  return api.delete('/api/users/me')
+}
