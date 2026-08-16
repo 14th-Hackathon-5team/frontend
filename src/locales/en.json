@@ -205,7 +205,7 @@
     },
     "alarm": {
       "ALL": "All",
-      "ESSENTAL_ONLY": "Essential Only",
+      "ESSENTIAL_ONLY": "Essential Only",
       "NONE": "None"
     },
     "guideCategory": {

@@ -6,7 +6,7 @@ import useLanguageStore from '../store/languageStore'
 import { getMyInfo, deleteAccount } from '../lib/authApi'
 import { getSettings, updateLanguageSetting, updateAlarmSetting } from '../lib/settingsApi'
 
-const ALARM_CYCLE = ['ALL', 'ESSENTAL_ONLY', 'NONE']
+const ALARM_CYCLE = ['ALL', 'ESSENTIAL_ONLY', 'NONE']
 
 // 설정 화면 — 프로필은 GET /api/users/me, 언어/알림은 GET·PATCH /api/settings/me* 연동.
 function Settings() {
@@ -47,7 +47,7 @@ function Settings() {
 
   const cycleLanguage = () => {
     if (!settings) return
-    const next = settings.preferredLanguage === 'KOREAN' ? 'ENGLISH' : 'KOREAN'
+    const next = settings.language === 'KOREAN' ? 'ENGLISH' : 'KOREAN'
     updateLanguageSetting(next)
       .then((response) => {
         setSettings(response.data.data)
@@ -98,7 +98,7 @@ function Settings() {
           >
             {t('settings.language')}
             <span className="flex items-center gap-2 text-foreground-400">
-              <span className="text-sm">{settings ? t(`enums.language.${settings.preferredLanguage}`) : '...'}</span>
+              <span className="text-sm">{settings ? t(`enums.language.${settings.language}`) : '...'}</span>
               <span>›</span>
             </span>
           </button>

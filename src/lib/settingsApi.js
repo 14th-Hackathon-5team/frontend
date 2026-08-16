@@ -6,9 +6,9 @@ export function getSettings() {
 }
 
 // 앱 표시 언어 변경 — PATCH /api/settings/me/language
-// 주의: 요청 필드명은 language가 아니라 preferredLanguage.
-export function updateLanguageSetting(preferredLanguage) {
-  return api.patch('/api/settings/me/language', { preferredLanguage })
+// 요청/응답 필드명 모두 language (스웨거 2026-08-16 재확인 — 예전 주석의 preferredLanguage는 오기였음).
+export function updateLanguageSetting(language) {
+  return api.patch('/api/settings/me/language', { language })
 }
 
 // 푸시 알림 수신 설정 변경 — PATCH /api/settings/me/alarm
