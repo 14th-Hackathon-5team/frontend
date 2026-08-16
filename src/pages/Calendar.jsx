@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getMonthlyEvents } from '../lib/calendarApi'
 
-// 백엔드 카테고리는 VISA / TOPIK / LEGAL / ACADEMIC 4종 (GET /api/calendar/events 응답 기준).
+// 백엔드 카테고리는 VISA / TOPIK_APPLICATION / TOPIK_EXAM / LEGAL / ACADEMIC 5종 (GET /api/calendar/events 응답 기준).
 const CATEGORY_COLOR = {
   VISA: 'bg-primary-500',
-  TOPIK: 'bg-accent-500',
+  TOPIK_APPLICATION: 'bg-accent-500',
+  TOPIK_EXAM: 'bg-accent-400',
   LEGAL: 'bg-foreground-500',
   ACADEMIC: 'bg-foreground-700',
 }

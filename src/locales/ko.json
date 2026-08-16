@@ -210,13 +210,15 @@
     },
     "guideCategory": {
       "VISA": "비자",
-      "TOPIK": "토픽",
+      "TOPIK_APPLICATION": "토픽 접수",
+      "TOPIK_EXAM": "토픽 시험",
       "LEGAL": "법·행정",
       "ACADEMIC": "대입 정보"
     },
     "eventCategory": {
       "VISA": "비자",
-      "TOPIK": "토픽",
+      "TOPIK_APPLICATION": "토픽 접수",
+      "TOPIK_EXAM": "토픽 시험",
       "LEGAL": "법·행정",
       "ACADEMIC": "학사"
     },

@@ -210,13 +210,15 @@
     },
     "guideCategory": {
       "VISA": "Visa",
-      "TOPIK": "TOPIK",
+      "TOPIK_APPLICATION": "TOPIK Application",
+      "TOPIK_EXAM": "TOPIK Exam",
       "LEGAL": "Law & Regulations",
       "ACADEMIC": "Academic"
     },
     "eventCategory": {
       "VISA": "Visa",
-      "TOPIK": "TOPIK",
+      "TOPIK_APPLICATION": "TOPIK Application",
+      "TOPIK_EXAM": "TOPIK Exam",
       "LEGAL": "Legal",
       "ACADEMIC": "Academic"
     },

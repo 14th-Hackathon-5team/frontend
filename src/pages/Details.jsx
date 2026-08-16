@@ -5,7 +5,8 @@ import { getGuidesByCategory } from '../lib/guidesApi'
 
 const CATEGORIES = [
   { value: 'VISA', icon: '🛂' },
-  { value: 'TOPIK', icon: '📝' },
+  { value: 'TOPIK_APPLICATION', icon: '📝' },
+  { value: 'TOPIK_EXAM', icon: '✏️' },
   { value: 'LEGAL', icon: '⚖️' },
   { value: 'ACADEMIC', icon: '🎓' },
 ]
