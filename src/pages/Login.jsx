@@ -13,6 +13,8 @@ function GoogleIcon() {
 }
 
 // 로그인 화면 — 최종 디자인(tqwhyl.readdy.co/login) 반영.
+// 백엔드 OAuth2LoginFailureHandler가 실패 시 ?error=true로 이 화면에 리다이렉트함 —
+// 별도 안내 문구 없이 카카오/구글 버튼이 있는 이 화면으로만 돌아오면 되므로 error 파라미터는 그냥 무시함.
 function Login() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-between bg-background-50 px-6 py-12">
