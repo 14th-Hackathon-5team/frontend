@@ -9,22 +9,6 @@ const LANGUAGE_LABEL = { KOREAN: '한국어', ENGLISH: 'English' }
 const ALARM_LABEL = { ALL: 'All', ESSENTAL_ONLY: 'Essential Only', NONE: 'None' }
 const ALARM_CYCLE = ['ALL', 'ESSENTAL_ONLY', 'NONE']
 
-// 그 외 섹션(Subscription/Billing/Legal/Support)은 대응하는 API·화면이 아직 없어 클릭해도 동작 안 함.
-const STATIC_SECTIONS = [
-  {
-    title: 'SUBSCRIPTION & BILLING',
-    items: [{ label: 'Subscription' }, { label: 'Billing & Payments' }],
-  },
-  {
-    title: 'LEGAL INFORMATION',
-    items: [{ label: 'Terms & Privacy Consent' }, { label: 'Privacy Policy' }, { label: 'Legal & Other Information' }],
-  },
-  {
-    title: 'SUPPORT',
-    items: [{ label: 'Support' }, { label: 'Version', value: '1.0.0' }],
-  },
-]
-
 // 설정 화면 — 프로필은 GET /api/users/me, 언어/알림은 GET·PATCH /api/settings/me* 연동.
 function Settings() {
   const navigate = useNavigate()
@@ -139,27 +123,6 @@ function Settings() {
           </button>
         </div>
       </div>
-
-      {STATIC_SECTIONS.map((section) => (
-        <div key={section.title} className="mb-6">
-          <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{section.title}</p>
-          <div className="divide-y divide-background-200 overflow-hidden rounded-2xl border border-background-200 bg-background-50">
-            {section.items.map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
-              >
-                {item.label}
-                <span className="flex items-center gap-2 text-foreground-400">
-                  {item.value && <span className="text-sm">{item.value}</span>}
-                  <span>›</span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      ))}
 
       <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">ACCOUNT MANAGEMENT</p>
       <div className="divide-y divide-background-200 rounded-2xl border border-background-200 bg-background-50">
