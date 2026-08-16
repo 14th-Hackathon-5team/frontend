@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { setSignupToken } from '../lib/signupToken'
 
 function OAuthCallback() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const setAccessToken = useAuthStore((state) => state.setAccessToken)
   const [duplicatedMessage, setDuplicatedMessage] = useState(null)
@@ -39,20 +41,18 @@ function OAuthCallback() {
 
     if (status === 'EMAIL_DUPLICATED') {
       console.log('[OAuthCallback] 이메일 중복 감지')
-      setDuplicatedMessage(
-        '이미 다른 방법으로 가입된 이메일입니다. 기존 로그인 방법을 이용해주세요.',
-      )
+      setDuplicatedMessage(t('oauth.emailDuplicated'))
       return
     }
 
     console.warn('[OAuthCallback] 알 수 없는 status', status)
-  }, [navigate, setAccessToken])
+  }, [navigate, setAccessToken, t])
 
   if (duplicatedMessage) {
     return <div>{duplicatedMessage}</div>
   }
 
-  return <div>로그인 처리 중...</div>
+  return <div>{t('oauth.processing')}</div>
 }
 
 export default OAuthCallback

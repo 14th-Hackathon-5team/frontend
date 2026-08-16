@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import useLanguageStore from '../store/languageStore'
 import { getMyInfo, deleteAccount } from '../lib/authApi'
 import { getSettings, updateLanguageSetting, updateAlarmSetting } from '../lib/settingsApi'
 
-const LANGUAGE_LABEL = { KOREAN: '한국어', ENGLISH: 'English' }
-const ALARM_LABEL = { ALL: 'All', ESSENTAL_ONLY: 'Essential Only', NONE: 'None' }
 const ALARM_CYCLE = ['ALL', 'ESSENTAL_ONLY', 'NONE']
 
 // 설정 화면 — 프로필은 GET /api/users/me, 언어/알림은 GET·PATCH /api/settings/me* 연동.
 function Settings() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const logout = useAuthStore((state) => state.logout)
   const setPreferredLanguage = useLanguageStore((state) => state.setPreferredLanguage)
@@ -33,7 +33,7 @@ function Settings() {
   }
 
   const handleDeleteAccount = () => {
-    if (!window.confirm('정말 탈퇴하시겠어요? 이 작업은 되돌릴 수 없습니다.')) return
+    if (!window.confirm(t('settings.deleteConfirm'))) return
     deleteAccount()
       .then(() => {
         logout()
@@ -41,7 +41,7 @@ function Settings() {
       })
       .catch((error) => {
         console.error('[Settings] 회원 탈퇴 실패', error)
-        window.alert('탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+        window.alert(t('settings.deleteError'))
       })
   }
 
@@ -82,23 +82,23 @@ function Settings() {
           onClick={() => navigate('/settings/edit-profile')}
           className="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
         >
-          Edit Profile
+          {t('settings.editProfile')}
         </button>
       </div>
 
       <hr className="mb-6 border-background-200" />
 
       <div className="mb-6">
-        <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">ACCOUNT</p>
+        <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{t('settings.account')}</p>
         <div className="divide-y divide-background-200 overflow-hidden rounded-2xl border border-background-200 bg-background-50">
           <button
             type="button"
             onClick={cycleLanguage}
             className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
           >
-            Language
+            {t('settings.language')}
             <span className="flex items-center gap-2 text-foreground-400">
-              <span className="text-sm">{settings ? LANGUAGE_LABEL[settings.preferredLanguage] : '...'}</span>
+              <span className="text-sm">{settings ? t(`enums.language.${settings.preferredLanguage}`) : '...'}</span>
               <span>›</span>
             </span>
           </button>
@@ -107,9 +107,9 @@ function Settings() {
             onClick={cycleAlarm}
             className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
           >
-            Notifications
+            {t('settings.notifications')}
             <span className="flex items-center gap-2 text-foreground-400">
-              <span className="text-sm">{settings ? ALARM_LABEL[settings.alarmSetting] : '...'}</span>
+              <span className="text-sm">{settings ? t(`enums.alarm.${settings.alarmSetting}`) : '...'}</span>
               <span>›</span>
             </span>
           </button>
@@ -118,20 +118,20 @@ function Settings() {
             onClick={() => navigate('/settings/edit-profile')}
             className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
           >
-            Edit Profile
+            {t('settings.editProfile')}
             <span className="text-foreground-400">›</span>
           </button>
         </div>
       </div>
 
-      <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">ACCOUNT MANAGEMENT</p>
+      <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{t('settings.accountManagement')}</p>
       <div className="divide-y divide-background-200 rounded-2xl border border-background-200 bg-background-50">
         <button
           type="button"
           onClick={handleLogout}
           className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
         >
-          Log Out
+          {t('settings.logout')}
           <span className="text-foreground-400">›</span>
         </button>
         <button
@@ -139,7 +139,7 @@ function Settings() {
           onClick={handleDeleteAccount}
           className="flex w-full items-center justify-between px-4 py-3 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
         >
-          Delete Account
+          {t('settings.deleteAccount')}
           <span className="text-foreground-400">›</span>
         </button>
       </div>

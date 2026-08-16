@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getEventDetail } from '../lib/calendarApi'
-
-const CATEGORY_LABEL = {
-  VISA: 'Visa',
-  TOPIK: 'TOPIK',
-  LEGAL: 'Legal',
-  ACADEMIC: 'Academic',
-}
 
 // 일정 상세 화면 — GuideDetail.jsx와 같은 톤(하단 탭 없이 단독 화면). GET /api/calendar/events/{eventId} 연동.
 function CalendarEventDetail() {
+  const { t } = useTranslation()
   const { eventId } = useParams()
   const navigate = useNavigate()
   const [event, setEvent] = useState(null)
@@ -31,7 +26,7 @@ function CalendarEventDetail() {
         <button type="button" onClick={() => navigate(-1)} className="mb-4 text-xl text-foreground-700">
           ‹
         </button>
-        <p className="text-foreground-600">일정을 찾을 수 없습니다.</p>
+        <p className="text-foreground-600">{t('calendarDetail.notFound')}</p>
       </div>
     )
   }
@@ -42,7 +37,7 @@ function CalendarEventDetail() {
         <button type="button" onClick={() => navigate(-1)} className="mb-4 text-xl text-foreground-700">
           ‹
         </button>
-        <p className="text-foreground-400">Loading...</p>
+        <p className="text-foreground-400">{t('common.loading')}</p>
       </div>
     )
   }
@@ -59,11 +54,11 @@ function CalendarEventDetail() {
       <div className="px-6 py-6">
         <div className="rounded-2xl bg-gradient-to-br from-accent-200 to-accent-100 p-5">
           <span className="inline-flex items-center gap-1 rounded-full bg-primary-500 px-3 py-1 text-xs font-semibold text-white">
-            {CATEGORY_LABEL[event.category] ?? event.category}
+            {t(`enums.eventCategory.${event.category}`, { defaultValue: event.category })}
           </span>
           {event.isGlobal && (
             <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-foreground-700">
-              Common
+              {t('calendarDetail.common')}
             </span>
           )}
           <h2 className="mt-3 text-xl font-bold text-foreground-950">{event.title}</h2>
@@ -83,7 +78,7 @@ function CalendarEventDetail() {
             rel="noreferrer"
             className="mt-6 flex items-center justify-center rounded-xl bg-primary-500 py-3 text-sm font-semibold text-white"
           >
-            Related Link
+            {t('calendarDetail.relatedLink')}
           </a>
         )}
       </div>

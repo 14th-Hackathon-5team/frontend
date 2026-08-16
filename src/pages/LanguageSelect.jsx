@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import birdLogo from '../assets/bird_logo.png'
 import useLanguageStore from '../store/languageStore'
 
@@ -19,6 +20,7 @@ function ChevronIcon({ direction }) {
 
 // 언어선택 화면 — 최종 디자인(tqwhyl.readdy.co/) 반영.
 function LanguageSelect() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [index, setIndex] = useState(0)
   const language = LANGUAGES[index]
@@ -38,14 +40,14 @@ function LanguageSelect() {
 
       <div className="flex flex-col items-center">
         <img src={birdLogo} alt="K-Buddy" className="h-28 w-28 object-contain" />
-        <h1 className="mt-6 text-2xl font-extrabold tracking-tight text-foreground-950">Choose your language</h1>
-        <p className="mt-2 text-sm text-foreground-500">Choose a language to continue</p>
+        <h1 className="mt-6 text-2xl font-extrabold tracking-tight text-foreground-950">{t('languageSelect.title')}</h1>
+        <p className="mt-2 text-sm text-foreground-500">{t('languageSelect.subtitle')}</p>
 
         <div className="mt-12 flex items-center gap-6">
           <button
             type="button"
             onClick={goPrev}
-            aria-label="Previous language"
+            aria-label={t('languageSelect.previous')}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-background-100 text-foreground-600"
           >
             <ChevronIcon direction="left" />
@@ -60,7 +62,7 @@ function LanguageSelect() {
           <button
             type="button"
             onClick={goNext}
-            aria-label="Next language"
+            aria-label={t('languageSelect.next')}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-background-100 text-foreground-600"
           >
             <ChevronIcon direction="right" />
@@ -69,7 +71,7 @@ function LanguageSelect() {
 
         <p className="mt-10 flex items-center gap-2 text-xs text-foreground-400">
           <span aria-hidden="true">⇄</span>
-          Swipe sideways to choose a language
+          {t('languageSelect.swipeHint')}
         </p>
       </div>
 
@@ -79,12 +81,10 @@ function LanguageSelect() {
           onClick={handleContinue}
           className="w-full rounded-xl bg-primary-500 py-3 text-sm font-semibold text-white"
         >
-          Continue
+          {t('languageSelect.continue')}
         </button>
 
-        <p className="pt-4 text-center text-xs text-foreground-400">
-          © 2026 K-Buddy. All rights reserved.
-        </p>
+        <p className="pt-4 text-center text-xs text-foreground-400">{t('common.copyright')}</p>
       </div>
     </div>
   )

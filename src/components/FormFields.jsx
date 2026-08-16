@@ -6,10 +6,13 @@ export const inputClass =
 export const selectClass = `${inputClass} appearance-none pr-8`
 export const labelClass = 'mb-1 block text-sm text-foreground-600'
 
-export const BOOLEAN_OPTIONS = [
-  { value: true, label: 'Yes' },
-  { value: false, label: 'No' },
-]
+export function useBooleanOptions() {
+  const { t } = useTranslation()
+  return [
+    { value: true, label: t('enums.boolean.true') },
+    { value: false, label: t('enums.boolean.false') },
+  ]
+}
 
 export function FieldWrapper({ label, children }) {
   return (

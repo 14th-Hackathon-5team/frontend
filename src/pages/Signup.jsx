@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import useLanguageStore from '../store/languageStore'
 import { getSignupToken, clearSignupToken } from '../lib/signupToken'
 import { signup } from '../lib/authApi'
 import {
-  USER_STATUS_OPTIONS,
-  VISA_TYPE_OPTIONS,
-  HOUSING_TYPE_OPTIONS,
-  PART_TIME_STATUS_OPTIONS,
-  TOPIK_LEVEL_OPTIONS,
-  LANGUAGE_OPTIONS,
-  NATIONALITY_OPTIONS,
+  USER_STATUS_VALUES,
+  VISA_TYPE_VALUES,
+  HOUSING_TYPE_VALUES,
+  PART_TIME_STATUS_VALUES,
+  TOPIK_LEVEL_VALUES,
+  LANGUAGE_VALUES,
+  NATIONALITY_VALUES,
+  translateOptions,
 } from '../constants/userEnums'
-import { inputClass, FieldWrapper, SelectField, PillGroup, BOOLEAN_OPTIONS } from '../components/FormFields'
+import { inputClass, FieldWrapper, SelectField, PillGroup, useBooleanOptions } from '../components/FormFields'
 
 const INITIAL_FORM = {
   name: '',
@@ -36,14 +38,16 @@ const INITIAL_FORM = {
 const TOTAL_STEPS = 3
 
 const STEP_META = [
-  { icon: '🙂', title: 'Basic Info', subtitle: 'Let us know who you are' },
-  { icon: '✈️', title: 'Visa & Stay', subtitle: 'Tell us about your stay in Korea' },
-  { icon: '🏠', title: 'Life & Goals', subtitle: 'Housing, work, and TOPIK goals' },
+  { icon: '🙂', key: 'basic' },
+  { icon: '✈️', key: 'visa' },
+  { icon: '🏠', key: 'life' },
 ]
 
 // 회원가입 화면 — 디자인의 3단계 UI 스타일은 유지하되, 필드 구성은 백엔드 확정 스펙(고재민 공유, 2026-08-13) 기준.
 // docs/backend-signup-fieldset-diff.md 에서 요청했던 간소화 방향은 백엔드가 채택하지 않음 — 원래 14개 필드 + language 신규 필수.
 function Signup() {
+  const { t } = useTranslation()
+  const booleanOptions = useBooleanOptions()
   const navigate = useNavigate()
   const setAccessToken = useAuthStore((state) => state.setAccessToken)
   const preferredLanguage = useLanguageStore((state) => state.preferredLanguage)
@@ -103,7 +107,7 @@ function Signup() {
       navigate('/', { replace: true })
     } catch (error) {
       console.error('[Signup] 회원가입 실패', error)
-      setErrorMessage('회원가입에 실패했습니다. 다시 시도해주세요.')
+      setErrorMessage(t('signup.error'))
     } finally {
       setSubmitting(false)
     }
@@ -120,6 +124,7 @@ function Signup() {
   }
 
   const meta = STEP_META[step - 1]
+  const stepText = t(`signup.steps.${meta.key}`, { returnObjects: true })
 
   return (
     <div className="min-h-screen bg-background-50 px-6 py-6">
@@ -145,15 +150,15 @@ function Signup() {
           {meta.icon}
         </div>
         <div>
-          <h1 className="text-lg font-bold text-foreground-950">{meta.title}</h1>
-          <p className="text-sm text-foreground-500">{meta.subtitle}</p>
+          <h1 className="text-lg font-bold text-foreground-950">{stepText.title}</h1>
+          <p className="text-sm text-foreground-500">{stepText.subtitle}</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {step === 1 && (
           <>
-            <FieldWrapper label="이름">
+            <FieldWrapper label={t('profileFields.name')}>
               <input
                 id="name"
                 name="name"
@@ -165,13 +170,13 @@ function Signup() {
               />
             </FieldWrapper>
             <SelectField
-              label="국적"
+              label={t('profileFields.nationality')}
               name="nationality"
               value={form.nationality}
               onChange={handleChange}
-              options={NATIONALITY_OPTIONS}
+              options={translateOptions(t, 'nationality', NATIONALITY_VALUES)}
             />
-            <FieldWrapper label="출생연도">
+            <FieldWrapper label={t('profileFields.birthYear')}>
               <input
                 id="birthYear"
                 name="birthYear"
@@ -182,14 +187,26 @@ function Signup() {
                 className={inputClass}
               />
             </FieldWrapper>
-            <SelectField label="현재 신분" name="userStatus" value={form.userStatus} onChange={handleChange} options={USER_STATUS_OPTIONS} />
-            <SelectField label="사용 언어" name="language" value={form.language} onChange={handleChange} options={LANGUAGE_OPTIONS} />
+            <SelectField
+              label={t('profileFields.userStatus')}
+              name="userStatus"
+              value={form.userStatus}
+              onChange={handleChange}
+              options={translateOptions(t, 'userStatus', USER_STATUS_VALUES)}
+            />
+            <SelectField
+              label={t('profileFields.language')}
+              name="language"
+              value={form.language}
+              onChange={handleChange}
+              options={translateOptions(t, 'language', LANGUAGE_VALUES)}
+            />
           </>
         )}
 
         {step === 2 && (
           <>
-            <FieldWrapper label="학교명">
+            <FieldWrapper label={t('profileFields.schoolName')}>
               <input
                 id="schoolName"
                 name="schoolName"
@@ -200,7 +217,7 @@ function Signup() {
                 className={inputClass}
               />
             </FieldWrapper>
-            <FieldWrapper label="입국일">
+            <FieldWrapper label={t('profileFields.entryDate')}>
               <input
                 id="entryDate"
                 name="entryDate"
@@ -211,14 +228,20 @@ function Signup() {
                 className={inputClass}
               />
             </FieldWrapper>
-            <SelectField label="비자 종류" name="visaType" value={form.visaType} onChange={handleChange} options={VISA_TYPE_OPTIONS} />
+            <SelectField
+              label={t('profileFields.visaType')}
+              name="visaType"
+              value={form.visaType}
+              onChange={handleChange}
+              options={translateOptions(t, 'visaType', VISA_TYPE_VALUES)}
+            />
             <PillGroup
-              label="외국인등록 여부"
+              label={t('profileFields.hasAlienRegistration')}
               value={form.hasAlienRegistration}
               onChange={(value) => setField('hasAlienRegistration', value)}
-              options={BOOLEAN_OPTIONS}
+              options={booleanOptions}
             />
-            <FieldWrapper label="체류 만료일">
+            <FieldWrapper label={t('profileFields.stayExpirationDate')}>
               <input
                 id="stayExpirationDate"
                 name="stayExpirationDate"
@@ -234,33 +257,39 @@ function Signup() {
 
         {step === 3 && (
           <>
-            <SelectField label="거주 형태" name="housingType" value={form.housingType} onChange={handleChange} options={HOUSING_TYPE_OPTIONS} />
-            <PillGroup
-              label="부모 지원 여부"
-              value={form.isParentSupported}
-              onChange={(value) => setField('isParentSupported', value)}
-              options={BOOLEAN_OPTIONS}
+            <SelectField
+              label={t('profileFields.housingType')}
+              name="housingType"
+              value={form.housingType}
+              onChange={handleChange}
+              options={translateOptions(t, 'housingType', HOUSING_TYPE_VALUES)}
             />
             <PillGroup
-              label="알바 상태"
+              label={t('profileFields.isParentSupported')}
+              value={form.isParentSupported}
+              onChange={(value) => setField('isParentSupported', value)}
+              options={booleanOptions}
+            />
+            <PillGroup
+              label={t('profileFields.partTimeStatus')}
               value={form.partTimeStatus}
               onChange={(value) => setField('partTimeStatus', value)}
-              options={PART_TIME_STATUS_OPTIONS}
+              options={translateOptions(t, 'partTimeStatus', PART_TIME_STATUS_VALUES)}
               columns={3}
             />
             <SelectField
-              label="현재 토픽"
+              label={t('profileFields.currentTopikLevel')}
               name="currentTopikLevel"
               value={form.currentTopikLevel}
               onChange={handleChange}
-              options={TOPIK_LEVEL_OPTIONS}
+              options={translateOptions(t, 'topikLevel', TOPIK_LEVEL_VALUES)}
             />
             <SelectField
-              label="목표 토픽"
+              label={t('profileFields.targetTopikLevel')}
               name="targetTopikLevel"
               value={form.targetTopikLevel}
               onChange={handleChange}
-              options={TOPIK_LEVEL_OPTIONS}
+              options={translateOptions(t, 'topikLevel', TOPIK_LEVEL_VALUES)}
             />
           </>
         )}
@@ -274,7 +303,7 @@ function Signup() {
               onClick={goToPreviousStep}
               className="rounded-xl border border-background-300 px-6 py-3 text-sm font-semibold text-foreground-700"
             >
-              Back
+              {t('signup.back')}
             </button>
           )}
           <button
@@ -282,7 +311,7 @@ function Signup() {
             disabled={submitting}
             className="flex-1 rounded-xl bg-primary-600 py-3 text-sm font-semibold text-white disabled:opacity-60"
           >
-            {step < TOTAL_STEPS ? 'Next' : submitting ? 'Submitting...' : 'Start with K-Buddy'}
+            {step < TOTAL_STEPS ? t('signup.next') : submitting ? t('signup.submitting') : t('signup.submit')}
           </button>
         </div>
       </form>

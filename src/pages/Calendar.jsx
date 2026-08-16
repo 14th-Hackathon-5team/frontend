@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getMonthlyEvents } from '../lib/calendarApi'
-
-const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 // 백엔드 카테고리는 VISA / TOPIK / LEGAL / ACADEMIC 4종 (GET /api/calendar/events 응답 기준).
 const CATEGORY_COLOR = {
@@ -48,7 +46,10 @@ function formatRange(event) {
 
 // 캘린더 화면 — 최종 디자인(tqwhyl.readdy.co/calendar) 반영. 일정은 GET /api/calendar/events 연동.
 function Calendar() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
+  const weekdays = t('calendar.weekdays', { returnObjects: true })
+  const months = t('calendar.months', { returnObjects: true })
   const today = useMemo(() => new Date(), [])
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
@@ -71,15 +72,15 @@ function Calendar() {
       })
       .catch((error) => {
         console.error('[Calendar] 일정 조회 실패', error)
-        setErrorMessage('일정을 불러오지 못했습니다.')
+        setErrorMessage(t('calendar.loadError'))
         setEvents([])
       })
       .finally(() => setLoading(false))
-  }, [year, month])
+  }, [year, month, t])
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-center text-lg font-semibold text-foreground-950">{year} Calendar</h1>
+      <h1 className="mb-4 text-center text-lg font-semibold text-foreground-950">{t('calendar.title', { year })}</h1>
 
       <div className="mb-4 flex justify-start gap-2">
         <select
@@ -87,7 +88,7 @@ function Calendar() {
           onChange={(event) => setMonth(Number(event.target.value))}
           className="rounded-xl border border-background-200 bg-white px-3 py-2 text-sm font-semibold text-foreground-900"
         >
-          {MONTHS.map((label, index) => (
+          {months.map((label, index) => (
             <option key={label} value={index}>
               {label}
             </option>
@@ -107,7 +108,7 @@ function Calendar() {
       </div>
 
       <div className="grid grid-cols-7 gap-y-2 text-center text-xs">
-        {WEEKDAYS.map((day) => (
+        {weekdays.map((day) => (
           <div key={day} className="font-semibold text-foreground-400">
             {day}
           </div>
@@ -142,12 +143,12 @@ function Calendar() {
       </div>
 
       <p className="mb-2 mt-6 text-sm font-semibold text-foreground-900">
-        {MONTHS[month]}, {year}
+        {t('calendar.monthLabel', { month: months[month], year })}
       </p>
-      {loading && <p className="py-4 text-center text-sm text-foreground-400">Loading...</p>}
+      {loading && <p className="py-4 text-center text-sm text-foreground-400">{t('common.loading')}</p>}
       {errorMessage && <p className="py-4 text-center text-sm text-red-500">{errorMessage}</p>}
       {!loading && !errorMessage && events.length === 0 && (
-        <p className="py-4 text-center text-sm text-foreground-400">No events this month.</p>
+        <p className="py-4 text-center text-sm text-foreground-400">{t('calendar.noEvents')}</p>
       )}
       <ul className="divide-y divide-background-200">
         {events.map((event) => (

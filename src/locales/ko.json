@@ -69,19 +69,11 @@
     "account": "계정",
     "language": "언어",
     "notifications": "알림",
-    "subscriptionBilling": "구독 및 결제",
-    "subscription": "구독",
-    "billing": "결제 수단",
-    "legalInformation": "법적 정보",
-    "terms": "약관 및 개인정보 동의",
-    "privacyPolicy": "개인정보 처리방침",
-    "legalOther": "기타 법적 정보",
-    "support": "고객지원",
-    "supportItem": "문의하기",
-    "version": "버전",
     "accountManagement": "계정 관리",
     "logout": "로그아웃",
-    "deleteAccount": "회원 탈퇴"
+    "deleteAccount": "회원 탈퇴",
+    "deleteConfirm": "정말 탈퇴하시겠어요? 이 작업은 되돌릴 수 없습니다.",
+    "deleteError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
   },
   "signup": {
     "steps": {

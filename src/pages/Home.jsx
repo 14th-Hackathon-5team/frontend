@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import birdLogo from '../assets/bird_logo.png'
 import { getMyInfo } from '../lib/authApi'
 import { getUpcomingEvents } from '../lib/calendarApi'
-import { VISA_TYPE_OPTIONS } from '../constants/userEnums'
 
 // 체크리스트 전용 API는 없음(스웨거 확인 완료). 대신 GET /api/calendar/events/upcoming(7일 이내 임박 일정)를
 // isGlobal 기준으로 공통/개인으로 나눠서 체크리스트처럼 보여줌 — docs/backend-notes-2026-08-13.md 참고.
@@ -28,8 +27,9 @@ function toChecklistItem(event) {
   }
 }
 
-function formatVisaType(visaType) {
-  return VISA_TYPE_OPTIONS.find((option) => option.value === visaType)?.label ?? visaType ?? '-'
+function formatVisaType(t, visaType) {
+  if (!visaType) return '-'
+  return t(`enums.visaType.${visaType}`, { defaultValue: visaType })
 }
 
 function formatDate(dateString) {
@@ -105,7 +105,7 @@ function Home() {
         const user = response.data.data
         setUserName(user.name)
         setAdminInfo({
-          visa: formatVisaType(user.visaType),
+          visa: formatVisaType(t, user.visaType),
           alienReg: user.hasAlienRegistration ? t('home.done') : t('home.pending'),
           nextDue: formatDate(user.stayExpirationDate),
         })

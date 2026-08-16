@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { startGoogleLogin, startKakaoLogin } from '../lib/authApi'
 import kBuddyLogo from '../assets/k-buddy_logo.png'
 
@@ -16,13 +17,14 @@ function GoogleIcon() {
 // 백엔드 OAuth2LoginFailureHandler가 실패 시 ?error=true로 이 화면에 리다이렉트함 —
 // 별도 안내 문구 없이 카카오/구글 버튼이 있는 이 화면으로만 돌아오면 되므로 error 파라미터는 그냥 무시함.
 function Login() {
+  const { t } = useTranslation()
   return (
     <div className="flex min-h-screen flex-col items-center justify-between bg-background-50 px-6 py-12">
       <div />
 
       <div className="flex flex-col items-center">
         <img src={kBuddyLogo} alt="K-Buddy" className="h-auto w-64 object-contain" />
-        <p className="mt-2 text-sm text-foreground-500">Life in Korea, you&apos;re not alone</p>
+        <p className="mt-2 text-sm text-foreground-500">{t('login.tagline')}</p>
       </div>
 
       <div className="w-full max-w-xs space-y-3">
@@ -32,7 +34,7 @@ function Login() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] py-3 text-sm font-semibold text-black"
         >
           <span>💬</span>
-          Log in with KakaoTalk
+          {t('login.kakao')}
         </button>
 
         <button
@@ -41,12 +43,10 @@ function Login() {
           className="flex w-full items-center justify-center gap-2 rounded-xl border border-background-300 bg-white py-3 text-sm font-semibold text-foreground-800"
         >
           <GoogleIcon />
-          Continue with Google
+          {t('login.google')}
         </button>
 
-        <p className="pt-4 text-center text-xs text-foreground-400">
-          © 2026 K-Buddy. All rights reserved.
-        </p>
+        <p className="pt-4 text-center text-xs text-foreground-400">{t('common.copyright')}</p>
       </div>
     </div>
   )

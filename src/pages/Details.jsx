@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getGuidesByCategory } from '../lib/guidesApi'
 
 const CATEGORIES = [
-  { value: 'VISA', title: 'Visa', icon: '🛂' },
-  { value: 'TOPIK', title: 'TOPIK', icon: '📝' },
-  { value: 'LEGAL', title: 'Law & Regulations', icon: '⚖️' },
-  { value: 'ACADEMIC', title: 'Academic', icon: '🎓' },
+  { value: 'VISA', icon: '🛂' },
+  { value: 'TOPIK', icon: '📝' },
+  { value: 'LEGAL', icon: '⚖️' },
+  { value: 'ACADEMIC', icon: '🎓' },
 ]
 
 // 세부정보 화면 — GET /api/guides?category= 연동. 카테고리별로 가이드 목록을 불러와 보여줌.
 function Details() {
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const highlightCategory = searchParams.get('category')
   const [guidesByCategory, setGuidesByCategory] = useState({})
@@ -38,19 +40,20 @@ function Details() {
   }, [highlightCategory, loading])
 
   if (loading) {
-    return <p className="p-4 text-center text-sm text-foreground-400">Loading...</p>
+    return <p className="p-4 text-center text-sm text-foreground-400">{t('common.loading')}</p>
   }
 
   return (
     <div className="p-4">
       {CATEGORIES.map((category) => {
         const guides = guidesByCategory[category.value] ?? []
+        const categoryTitle = t(`enums.guideCategory.${category.value}`)
         return (
           <div key={category.value} id={`category-${category.value}`} className="mb-6 scroll-mt-4">
-            <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{category.title.toUpperCase()}</p>
+            <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{categoryTitle.toUpperCase()}</p>
             {guides.length === 0 ? (
               <p className="rounded-2xl border border-background-200 bg-background-50 p-4 text-sm text-foreground-400">
-                No guides yet.
+                {t('details.noGuides')}
               </p>
             ) : (
               <div className="space-y-3">

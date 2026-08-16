@@ -69,19 +69,11 @@
     "account": "ACCOUNT",
     "language": "Language",
     "notifications": "Notifications",
-    "subscriptionBilling": "SUBSCRIPTION & BILLING",
-    "subscription": "Subscription",
-    "billing": "Billing & Payments",
-    "legalInformation": "LEGAL INFORMATION",
-    "terms": "Terms & Privacy Consent",
-    "privacyPolicy": "Privacy Policy",
-    "legalOther": "Legal & Other Information",
-    "support": "SUPPORT",
-    "supportItem": "Support",
-    "version": "Version",
     "accountManagement": "ACCOUNT MANAGEMENT",
     "logout": "Log Out",
-    "deleteAccount": "Delete Account"
+    "deleteAccount": "Delete Account",
+    "deleteConfirm": "Are you sure you want to delete your account? This cannot be undone.",
+    "deleteError": "Something went wrong while deleting your account. Please try again."
   },
   "signup": {
     "steps": {
