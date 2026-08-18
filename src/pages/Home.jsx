@@ -158,8 +158,8 @@ function Home() {
         <div className="mb-3 pl-32">
           <p className="text-sm font-semibold tracking-wide text-foreground-700">{t('home.adminInfo')}</p>
         </div>
-        <div className="glass-surface relative mb-4 mt-[50px] rounded-xl p-3 text-sm font-semibold text-foreground-800">
-          <span className="absolute -top-2 left-6 h-0 w-0 border-x-[9px] border-x-transparent border-b-[9px] border-b-background-100" />
+        <div className="relative mb-4 mt-[50px] rounded-xl bg-white/70 p-3 text-sm font-semibold text-foreground-800">
+          <span className="absolute -top-2 left-6 h-0 w-0 border-x-[9px] border-x-transparent border-b-[9px] border-b-white/70" />
           {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
         </div>
         <div className="grid grid-cols-3 gap-2 text-center">
