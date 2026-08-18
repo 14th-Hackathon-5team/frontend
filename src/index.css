@@ -32,9 +32,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* 앱 전체 배경 — 화면에 고정(스크롤해도 카드만 그 위를 지나감)돼서 반투명 유리 카드들이 실제로 비쳐 보이도록 함.
-   크림~연한 탄색까지 톤 범위를 넓혀서(기존엔 색차가 너무 작아 카드에 거의 안 비쳤음) 블러로 드러날 색 정보를 확보. */
+/* 앱 전체 배경 — 맨 처음 크림색 단색으로 복귀 (그라데이션이 너무 진하다는 피드백). */
 .app-background {
-  background: linear-gradient(160deg, #fffbf4 0%, #fff2da 45%, #f5ecd9 75%, #ecdfc4 100%);
-  background-attachment: fixed;
+  background-color: #fffbf4;
 }
