@@ -90,7 +90,7 @@ function Settings() {
 
       <div className="mb-6">
         <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{t('settings.account')}</p>
-        <div className="divide-y divide-background-200 overflow-hidden rounded-2xl border-2 border-background-200 bg-background-50">
+        <div className="divide-y divide-background-200">
           <button
             type="button"
             onClick={cycleLanguage}
@@ -125,7 +125,7 @@ function Settings() {
       </div>
 
       <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{t('settings.accountManagement')}</p>
-      <div className="divide-y divide-background-200 rounded-2xl border-2 border-background-200 bg-background-50">
+      <div className="divide-y divide-background-200">
         <button
           type="button"
           onClick={handleLogout}
