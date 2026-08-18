@@ -51,7 +51,7 @@ function Details() {
         const categoryTitle = t(`enums.guideCategory.${category.value}`)
         return (
           <div key={category.value} id={`category-${category.value}`} className="mb-6 scroll-mt-4">
-            <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{categoryTitle.toUpperCase()}</p>
+            <p className="mb-2 text-sm font-semibold tracking-wide text-foreground-500">{categoryTitle.toUpperCase()}</p>
             {guides.length === 0 ? (
               <p className="rounded-2xl border-2 border-gray-300 bg-background-50 p-4 text-sm text-foreground-400">
                 {t('details.noGuides')}
