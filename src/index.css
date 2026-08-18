@@ -29,7 +29,7 @@
   background-color: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(22px) saturate(1.7);
   -webkit-backdrop-filter: blur(22px) saturate(1.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-top: 1px solid #e5e7eb;
 }
 
 /* 앱 전체 배경 — 맨 처음 크림색 단색으로 복귀 (그라데이션이 너무 진하다는 피드백). */
