@@ -11,25 +11,30 @@
   display: none;
 }
 
-/* 리퀴드 글래스(라이트 버전) — backdrop-filter만 사용, SVG 왜곡 필터는 저사양/모바일 성능 부담 때문에 제외. */
+/* 리퀴드 글래스(라이트 버전) — backdrop-filter만 사용, SVG 왜곡 필터는 저사양/모바일 성능 부담 때문에 제외.
+   투명도를 낮추고(배경이 더 비치게) 좌상단에 은은한 하이라이트를 얹어서 빛이 유리 위쪽에 맺히는 느낌을 줌. */
 .glass-surface {
-  background-color: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(16px) saturate(1.4) brightness(1.05);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4) brightness(1.05);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.15));
+  background-color: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(18px) saturate(1.7) brightness(1.05);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7) brightness(1.05);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7);
 }
 
 .glass-nav {
-  background-color: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.35));
+  background-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(22px) saturate(1.7);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* 앱 전체 배경 — 은은한 크림 그라데이션, 화면에 고정(스크롤해도 카드만 그 위를 지나감)돼서
-   반투명 유리 카드들이 실제로 비쳐 보이도록 함. */
+/* 앱 전체 배경 — 화면에 고정(스크롤해도 카드만 그 위를 지나감)돼서 반투명 유리 카드들이 실제로 비쳐 보이도록 함.
+   크림~연한 탄색까지 톤 범위를 넓혀서(기존엔 색차가 너무 작아 카드에 거의 안 비쳤음) 블러로 드러날 색 정보를 확보. */
 .app-background {
-  background: linear-gradient(135deg, #fffbf4, #fff7ea);
+  background: linear-gradient(160deg, #fffbf4 0%, #fff2da 45%, #f5ecd9 75%, #ecdfc4 100%);
   background-attachment: fixed;
 }
