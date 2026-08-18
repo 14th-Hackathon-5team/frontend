@@ -6,6 +6,7 @@ import useLanguageStore from '../store/languageStore'
 import { getMyInfo, deleteAccount } from '../lib/authApi'
 import { getSettings, updateLanguageSetting, updateAlarmSetting } from '../lib/settingsApi'
 import LanguageModal from '../components/LanguageModal'
+import ConfirmModal from '../components/ConfirmModal'
 
 const ALARM_CYCLE = ['ALL', 'ESSENTIAL_ONLY', 'NONE']
 
@@ -19,6 +20,7 @@ function Settings() {
   const [profile, setProfile] = useState(null)
   const [settings, setSettings] = useState(null)
   const [languageModalOpen, setLanguageModalOpen] = useState(false)
+  const [confirmType, setConfirmType] = useState(null) // null | 'logout' | 'delete'
 
   useEffect(() => {
     getMyInfo()
@@ -29,14 +31,14 @@ function Settings() {
       .catch((error) => console.error('[Settings] 설정 조회 실패', error))
   }, [])
 
-  const handleLogout = () => {
-    if (!window.confirm(t('settings.logoutConfirm'))) return
+  const confirmLogout = () => {
+    setConfirmType(null)
     logout()
     navigate('/login', { replace: true })
   }
 
-  const handleDeleteAccount = () => {
-    if (!window.confirm(t('settings.deleteConfirm'))) return
+  const confirmDeleteAccount = () => {
+    setConfirmType(null)
     deleteAccount()
       .then(() => {
         logout()
@@ -130,7 +132,7 @@ function Settings() {
       <div className="divide-y divide-background-200">
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={() => setConfirmType('logout')}
           className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
         >
           {t('settings.logout')}
@@ -138,7 +140,7 @@ function Settings() {
         </button>
         <button
           type="button"
-          onClick={handleDeleteAccount}
+          onClick={() => setConfirmType('delete')}
           className="flex w-full items-center justify-between py-3 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
         >
           {t('settings.deleteAccount')}
@@ -151,6 +153,27 @@ function Settings() {
           current={settings?.language}
           onSelect={handleSelectLanguage}
           onClose={() => setLanguageModalOpen(false)}
+        />
+      )}
+
+      {confirmType === 'logout' && (
+        <ConfirmModal
+          title={t('settings.logoutConfirm')}
+          cancelLabel={t('common.cancel')}
+          confirmLabel={t('settings.logout')}
+          onConfirm={confirmLogout}
+          onCancel={() => setConfirmType(null)}
+        />
+      )}
+
+      {confirmType === 'delete' && (
+        <ConfirmModal
+          title={t('settings.deleteConfirm')}
+          cancelLabel={t('common.cancel')}
+          confirmLabel={t('settings.deleteAccount')}
+          danger
+          onConfirm={confirmDeleteAccount}
+          onCancel={() => setConfirmType(null)}
         />
       )}
     </div>

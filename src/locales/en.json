@@ -2,7 +2,9 @@
   "common": {
     "loading": "Loading...",
     "select": "Select",
-    "copyright": "© 2026 K-Buddy. All rights reserved."
+    "copyright": "© 2026 K-Buddy. All rights reserved.",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "nav": {
     "home": "Home",
