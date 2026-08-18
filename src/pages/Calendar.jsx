@@ -11,13 +11,16 @@ import { getMonthlyEvents } from '../lib/calendarApi'
 // 서로 다른 달에서 각각 계산되다 보니 우연히 같은 색을 받는 문제가 있었음(실사용에서 확인됨).
 // 지금은 eventId 기준 고정 색 — 어떤 달을 보고 있든 같은 일정은 항상 같은 색이고,
 // eventId가 순차 발급되는 한 인접한 일정끼리도 대부분 다른 색이 나옴.
+// 빨주노초파남보 — 채도 높은 색만 써서 팔레트 안에서 서로 비슷한 색끼리(예전엔 회색 계열 3개가
+// 다 비슷해 보였음) 헷갈리는 일이 없게 함.
 const EVENT_COLOR_PALETTE = [
-  'bg-primary-500',
-  'bg-foreground-700',
-  'bg-accent-500',
-  'bg-foreground-400',
-  'bg-primary-300',
-  'bg-foreground-600',
+  'bg-red-500',
+  'bg-orange-500',
+  'bg-yellow-600',
+  'bg-green-500',
+  'bg-blue-500',
+  'bg-indigo-600',
+  'bg-purple-500',
 ]
 
 function eventColor(event) {
