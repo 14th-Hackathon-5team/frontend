@@ -154,7 +154,7 @@ function Home() {
           <img src={birdLogo} alt="" className="absolute left-[4px] top-[9px] h-[103px] w-[103px] object-contain" />
         </div>
         <div className="mb-3 flex items-center justify-between pl-32">
-          <p className="text-xs font-semibold tracking-wide text-foreground-700">{t('home.adminInfo')}</p>
+          <p className="text-sm font-semibold tracking-wide text-foreground-700">{t('home.adminInfo')}</p>
           <Link to="/details" className="text-xs font-semibold text-primary-600">
             {t('home.seeAll')}
           </Link>
