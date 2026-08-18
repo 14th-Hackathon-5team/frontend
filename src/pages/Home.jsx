@@ -157,7 +157,7 @@ function Home() {
           <p className="text-sm font-semibold tracking-wide text-foreground-700">{t('home.adminInfo')}</p>
         </div>
         <div className="glass-surface relative mb-4 mt-[50px] rounded-xl p-3 text-sm font-semibold text-foreground-800">
-          <span className="absolute -top-[7px] left-6 h-3 w-3 rotate-45 rounded-[2px] border border-white bg-background-100" />
+          <span className="absolute -top-2 left-6 h-0 w-0 border-x-[9px] border-x-transparent border-b-[9px] border-b-background-100" />
           {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
         </div>
         <div className="grid grid-cols-3 gap-2 text-center">
