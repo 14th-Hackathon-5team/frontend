@@ -153,11 +153,8 @@ function Home() {
           <div className="absolute left-0 top-[5px] h-28 w-28 rounded-full bg-gradient-to-br from-accent-200 to-accent-100" />
           <img src={birdLogo} alt="" className="absolute left-[4px] top-[9px] h-[103px] w-[103px] object-contain" />
         </div>
-        <div className="mb-3 flex items-center justify-between pl-32">
+        <div className="mb-3 pl-32">
           <p className="text-sm font-semibold tracking-wide text-foreground-700">{t('home.adminInfo')}</p>
-          <Link to="/details" className="text-xs font-semibold text-primary-600">
-            {t('home.seeAll')}
-          </Link>
         </div>
         <div className="relative mb-4 mt-[50px] rounded-xl bg-white p-3 text-sm font-semibold text-foreground-800">
           <span className="absolute -top-1.5 left-6 h-3 w-3 rotate-45 rounded-sm bg-white" />
