@@ -148,7 +148,7 @@ function Home() {
 
   return (
     <div className="p-4 pt-14">
-      <div className="glass-surface relative rounded-2xl p-5">
+      <div className="glass-surface-accent relative rounded-2xl p-5">
         <div className="absolute -top-10 left-4 h-28 w-28 animate-float">
           <div className="absolute left-0 top-[5px] h-28 w-28 rounded-full bg-gradient-to-br from-accent-200 to-accent-100" />
           <img src={birdLogo} alt="" className="absolute left-[4px] top-[9px] h-[103px] w-[103px] object-contain" />
@@ -178,7 +178,7 @@ function Home() {
 
       <Link
         to="/simulation"
-        className="glass-surface mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors"
+        className="glass-surface-accent mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors"
       >
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-500 text-white">
           <CalculatorIcon />
