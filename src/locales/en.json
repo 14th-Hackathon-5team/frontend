@@ -49,6 +49,8 @@
   "calendar": {
     "title": "{{year}} Calendar",
     "monthLabel": "{{month}}, {{year}}",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
     "loadError": "Failed to load events.",
     "noEvents": "No events this month.",
     "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],

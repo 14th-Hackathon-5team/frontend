@@ -49,6 +49,8 @@
   "calendar": {
     "title": "{{year}}년 캘린더",
     "monthLabel": "{{year}}년 {{month}}",
+    "prevMonth": "이전 달",
+    "nextMonth": "다음 달",
     "loadError": "일정을 불러오지 못했습니다.",
     "noEvents": "이번 달 일정이 없습니다.",
     "weekdays": ["일", "월", "화", "수", "목", "금", "토"],
