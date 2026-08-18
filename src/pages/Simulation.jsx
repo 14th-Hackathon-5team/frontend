@@ -174,10 +174,9 @@ function Simulation() {
                   inputMode="numeric"
                   value={costs[field.key] ?? ''}
                   onChange={(event) => handleCostChange(field.key, event.target.value)}
-                  placeholder={fieldDefault(field, answers.area).toLocaleString('ko-KR')}
-                  className="w-full bg-transparent text-right text-sm text-foreground-900 outline-none"
+                  className="w-full min-w-0 bg-transparent text-right text-sm text-foreground-900 outline-none"
                 />
-                <span className="text-xs text-foreground-500">
+                <span className="shrink-0 whitespace-nowrap text-xs text-foreground-500">
                   {field.unit === 'hour' ? t('simulation.hourUnit') : t('simulation.unit')}
                 </span>
               </span>
