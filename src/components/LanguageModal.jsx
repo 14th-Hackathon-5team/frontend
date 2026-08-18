@@ -26,7 +26,7 @@ function LanguageModal({ current, onSelect, onClose }) {
                 key={language.value}
                 type="button"
                 onClick={() => onSelect(language.value)}
-                className={`flex w-full items-center justify-between rounded-2xl border-2 px-4 py-3 text-left text-sm font-semibold transition-colors ${
+                className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition-colors ${
                   selected
                     ? 'border-primary-500 bg-primary-50 text-primary-600'
                     : 'border-background-200 bg-background-50 text-foreground-800'
