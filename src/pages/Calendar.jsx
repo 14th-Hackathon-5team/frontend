@@ -6,10 +6,11 @@ import { getMonthlyEvents } from '../lib/calendarApi'
 // 카테고리(VISA/TOPIK_APPLICATION/TOPIK_EXAM/LEGAL/ACADEMIC)만으로 색을 정하면 같은 카테고리 안의
 // 서로 다른 일정(예: TOPIK 108회 PBT vs 109회 PBT vs 16회 IBT)이 같은 색으로 겹쳐 보여서 혼동됨.
 // 제목 해시 방식은 우연히 같은 색이 나오면(해시 충돌) 날짜가 가까운 일정끼리 겹칠 수 있어서 폐기.
-// 대신 "이번 달 일정을 날짜순으로 정렬한 뒤 순서대로 색을 순환 배정" — 인접한 두 일정은
-// 배열 인덱스가 항상 1씩 차이 나므로(파레트 길이가 2 이상이면) 절대 같은 색이 될 수 없음.
-// 인접한 인덱스(0-1, 1-2, ...)끼리 색이 뚜렷이 구분되도록 오렌지 계열과 그레이 계열을 번갈아 배치.
-// 가장 흔한 케이스(가까운 일정 2개)가 바로 옆 인덱스를 받으므로 이 순서가 중요함.
+// "이번 달 일정을 날짜순 정렬 후 인덱스로 순환 배정"하는 방식도 폐기 — 달이 바뀔 때마다 인덱스가
+// 0부터 다시 시작해서, 예를 들어 8월 마지막 일정과 9월 첫 일정처럼 날짜상 바로 붙어있는 일정이
+// 서로 다른 달에서 각각 계산되다 보니 우연히 같은 색을 받는 문제가 있었음(실사용에서 확인됨).
+// 지금은 eventId 기준 고정 색 — 어떤 달을 보고 있든 같은 일정은 항상 같은 색이고,
+// eventId가 순차 발급되는 한 인접한 일정끼리도 대부분 다른 색이 나옴.
 const EVENT_COLOR_PALETTE = [
   'bg-primary-500',
   'bg-foreground-700',
@@ -19,12 +20,9 @@ const EVENT_COLOR_PALETTE = [
   'bg-foreground-600',
 ]
 
-function assignEventColors(events) {
-  const sorted = [...events].sort((a, b) => a.startDate.localeCompare(b.startDate))
-  const colorByEventId = new Map(
-    sorted.map((event, index) => [event.eventId, EVENT_COLOR_PALETTE[index % EVENT_COLOR_PALETTE.length]]),
-  )
-  return events.map((event) => ({ ...event, color: colorByEventId.get(event.eventId) }))
+function eventColor(event) {
+  // eventId === -1인 가상 일정(체류기간 만료 D-30 안내)도 안전하게 처리.
+  return EVENT_COLOR_PALETTE[Math.abs(event.eventId) % EVENT_COLOR_PALETTE.length]
 }
 
 function buildMonthGrid(year, month) {
@@ -96,7 +94,7 @@ function Calendar() {
           ...event,
           ...toDayRange(event, year, month),
         }))
-        setEvents(assignEventColors(withDayRange))
+        setEvents(withDayRange)
       })
       .catch((error) => {
         console.error('[Calendar] 일정 조회 실패', error)
@@ -173,7 +171,7 @@ function Calendar() {
                 <span
                   className={`flex h-8 items-center justify-center text-sm ${roundedClass} ${
                     isRange ? 'w-full' : 'w-8'
-                  } ${event ? `${event.color} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
+                  } ${event ? `${eventColor(event)} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
                 >
                   {date}
                 </span>
@@ -205,7 +203,7 @@ function Calendar() {
                   isNavigable ? 'hover:bg-primary-50' : 'cursor-default'
                 }`}
               >
-                <span className={`h-2 w-2 rounded-full ${event.color}`} />
+                <span className={`h-2 w-2 rounded-full ${eventColor(event)}`} />
                 <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
                 <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
                 {isNavigable && <span className="text-foreground-400">›</span>}
