@@ -178,7 +178,7 @@ function Home() {
 
       <Link
         to="/simulation"
-        className="glass-surface-accent mt-4 flex items-center gap-4 rounded-2xl p-4 transition-all hover:-translate-y-0.5 hover:brightness-105"
+        className="glass-surface-accent mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
       >
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-500 text-white">
           <CalculatorIcon />
