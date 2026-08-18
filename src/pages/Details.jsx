@@ -53,7 +53,7 @@ function Details() {
           <div key={category.value} id={`category-${category.value}`} className="mb-6 scroll-mt-4">
             <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{categoryTitle.toUpperCase()}</p>
             {guides.length === 0 ? (
-              <p className="rounded-2xl border border-background-200 bg-background-50 p-4 text-sm text-foreground-400">
+              <p className="rounded-2xl border-2 border-gray-400 bg-background-50 p-4 text-sm text-foreground-400">
                 {t('details.noGuides')}
               </p>
             ) : (
@@ -62,7 +62,7 @@ function Details() {
                   <Link
                     key={guide.guideId}
                     to={`/guide/${guide.guideId}`}
-                    className="flex items-center gap-3 rounded-2xl border border-background-200 bg-background-50 p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
+                    className="flex items-center gap-3 rounded-2xl border-2 border-gray-400 bg-background-50 p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
                   >
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-100/50 text-xl">
                       {category.icon}
