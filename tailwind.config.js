@@ -7,7 +7,7 @@ export default {
       // getComputedStyle + 픽셀 추출로 확인한 정확한 값이고, 나머지 단계는 보간값.
       colors: {
         background: {
-          50: '#fffbf4',
+          50: '#ffffff',
           100: '#fff7ea',
           200: '#f5ecd9',
           300: '#ecdfc4',
