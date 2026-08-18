@@ -131,7 +131,7 @@ function Calendar() {
           type="button"
           onClick={goPrevMonth}
           aria-label={t('calendar.prevMonth')}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-background-100 text-foreground-600"
+          className="flex h-11 w-11 items-center justify-center text-foreground-600"
         >
           <ChevronIcon direction="left" />
         </button>
@@ -142,7 +142,7 @@ function Calendar() {
           type="button"
           onClick={goNextMonth}
           aria-label={t('calendar.nextMonth')}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-background-100 text-foreground-600"
+          className="flex h-11 w-11 items-center justify-center text-foreground-600"
         >
           <ChevronIcon direction="right" />
         </button>
