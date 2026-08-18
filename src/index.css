@@ -36,14 +36,6 @@
     inset 0 1px 1px rgba(255, 255, 255, 0.7);
 }
 
-/* 말풍선 꼬리표 전용 — backdrop-filter는 이 크기(12px)에선 사실상 안 먹혀서 카드와 색이 달라 보였음.
-   블러 없이 카드(.glass-surface)와 동일한 배경 색 조합만 그대로 써서 톤을 맞춤. */
-.glass-tail {
-  background-color: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
 .glass-nav {
   background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.35));
   background-color: rgba(255, 255, 255, 0.35);
