@@ -5,6 +5,7 @@ import useAuthStore from '../store/authStore'
 import useLanguageStore from '../store/languageStore'
 import { getMyInfo, deleteAccount } from '../lib/authApi'
 import { getSettings, updateLanguageSetting, updateAlarmSetting } from '../lib/settingsApi'
+import LanguageModal from '../components/LanguageModal'
 
 const ALARM_CYCLE = ['ALL', 'ESSENTIAL_ONLY', 'NONE']
 
@@ -17,6 +18,7 @@ function Settings() {
 
   const [profile, setProfile] = useState(null)
   const [settings, setSettings] = useState(null)
+  const [languageModalOpen, setLanguageModalOpen] = useState(false)
 
   useEffect(() => {
     getMyInfo()
@@ -45,13 +47,12 @@ function Settings() {
       })
   }
 
-  const cycleLanguage = () => {
-    if (!settings) return
-    const next = settings.language === 'KOREAN' ? 'ENGLISH' : 'KOREAN'
+  const handleSelectLanguage = (next) => {
     updateLanguageSetting(next)
       .then((response) => {
         setSettings(response.data.data)
         setPreferredLanguage(next)
+        setLanguageModalOpen(false)
       })
       .catch((error) => console.error('[Settings] 언어 설정 변경 실패', error))
   }
@@ -93,7 +94,7 @@ function Settings() {
         <div className="divide-y divide-background-200">
           <button
             type="button"
-            onClick={cycleLanguage}
+            onClick={() => setLanguageModalOpen(true)}
             className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
           >
             {t('settings.language')}
@@ -143,6 +144,14 @@ function Settings() {
           <span className="text-foreground-400">›</span>
         </button>
       </div>
+
+      {languageModalOpen && (
+        <LanguageModal
+          current={settings?.language}
+          onSelect={handleSelectLanguage}
+          onClose={() => setLanguageModalOpen(false)}
+        />
+      )}
     </div>
   )
 }
