@@ -51,8 +51,29 @@
     "monthLabel": "{{month}}, {{year}}",
     "loadError": "Failed to load events.",
     "noEvents": "No events this month.",
-    "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-    "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    "weekdays": [
+      "Su",
+      "Mo",
+      "Tu",
+      "We",
+      "Th",
+      "Fr",
+      "Sa"
+    ],
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ]
   },
   "calendarDetail": {
     "notFound": "Event not found.",
@@ -80,9 +101,18 @@
   },
   "signup": {
     "steps": {
-      "basic": { "title": "Basic Info", "subtitle": "Let us know who you are" },
-      "visa": { "title": "Visa & Stay", "subtitle": "Tell us about your stay in Korea" },
-      "life": { "title": "Life & Goals", "subtitle": "Housing, work, and TOPIK goals" }
+      "basic": {
+        "title": "Basic Info",
+        "subtitle": "Let us know who you are"
+      },
+      "visa": {
+        "title": "Visa & Stay",
+        "subtitle": "Tell us about your stay in Korea"
+      },
+      "life": {
+        "title": "Life & Goals",
+        "subtitle": "Housing, work, and TOPIK goals"
+      }
     },
     "next": "Next",
     "back": "Back",
@@ -115,12 +145,17 @@
   },
   "simulation": {
     "title": "Budget Simulation",
-    "subtitle": "Adjust each item to estimate your monthly cost",
+    "subtitle": "Pick your options and enter the amounts you know",
     "resultSubtitle": "Your estimated monthly budget",
     "reset": "Reset",
     "estimatedMonthly": "Est. monthly: {{amount}}",
     "adjustTitle": "Adjust your choice",
     "adjustHint": "Select the option closest to \"{{title}}\"",
+    "inputTitle": "Enter the amounts",
+    "inputHint": "Leave a field empty to use the average value",
+    "monthlyGroup": "Monthly housing costs",
+    "oneTimeGroup": "One-time costs",
+    "unit": "KRW",
     "confirm": "Confirm & next",
     "skip": "Skip",
     "resultTitle": "Your Monthly Budget",
@@ -131,37 +166,131 @@
     "partTimeIncome": "Part-time income",
     "disclaimer": "* This is an estimate. Actual costs vary by school, district, and lifestyle.",
     "backToHome": "Back to Home",
+    "depositNote": "The deposit ({{amount}}) is refunded when you move out, so it is excluded from the monthly budget.",
+    "suppliesNote": "Household supplies (detergent, tissue, toiletries) vary too much per person to estimate, so they are not included. Setting aside 30,000-70,000 KRW a month is a good rule of thumb.",
     "steps": {
       "housing": {
         "title": "Housing Type",
-        "description": "Your monthly housing cost is the biggest factor in your budget. Choose the option closest to your plan.",
-        "options": ["Dormitory", "One-room", "Goshiwon", "Hasuk"]
+        "description": "Housing is the biggest part of your budget. Choose the option closest to your plan.",
+        "options": {
+          "oneroom": "One-room (self-rent)",
+          "dorm": "Dormitory",
+          "goshiwon": "Goshiwon",
+          "hasuk": "Hasuk"
+        }
+      },
+      "housingCost": {
+        "title": "Housing Costs",
+        "description": "Enter the amounts you know. Empty fields use average values.",
+        "fields": {
+          "rent": "Monthly rent",
+          "maintenance": "Maintenance fee",
+          "electricity": "Electricity",
+          "gas": "Gas",
+          "water": "Water",
+          "appliances": "Appliances",
+          "furniture": "Furniture",
+          "brokerFee": "Agent fee",
+          "deposit": "Deposit",
+          "monthlyFee": "Monthly fee",
+          "etc": "Other costs"
+        },
+        "oneTimeNote": "One-time costs are spread over 12 months and added to the monthly total."
       },
       "area": {
         "title": "Living Area",
         "description": "Costs vary a lot between Seoul and regional cities. Pick where you will live.",
-        "options": ["Seoul", "Metro area", "Regional city"]
-      },
-      "partTime": {
-        "title": "Part-time Work",
-        "description": "D-2 visa holders can work up to 28 hours a week. Enter your expected weekly hours.",
-        "options": ["0h/week", "10h/week", "28h/week"],
-        "note": "The 2026 minimum wage is 10,320 KRW per hour."
+        "options": {
+          "seoul": "Seoul",
+          "metro": "Metro area",
+          "region": "Regional city"
+        }
       },
       "meal": {
         "title": "Meal Pattern",
         "description": "Food is the second largest expense. How do you plan to eat most days?",
-        "options": ["School cafeteria", "Mixed", "Eat out often", "Cook at home"]
+        "options": {
+          "cafeteria": "Cafeteria",
+          "cook": "Cook at home",
+          "mixed": "Mixed",
+          "eatout": "Eating out"
+        }
+      },
+      "transport": {
+        "title": "Transport",
+        "description": "Choose how you commute. K-Pass refunds part of what you spend.",
+        "options": {
+          "walk": "Walk",
+          "kpass": "K-Pass",
+          "card": "Regular transit card"
+        },
+        "kpassPromo": "K-Pass refunds part of your fare when you take public transit 15+ times a month — 20% for everyone, up to 30% if you are aged 19-34. Well worth applying for if you commute often."
+      },
+      "telecom": {
+        "title": "Mobile Plan",
+        "description": "Before you receive your ARC, only prepaid plans are available.",
+        "options": {
+          "mvno": "MVNO (budget)",
+          "major": "Big 3 carriers",
+          "prepaid": "Prepaid"
+        },
+        "note": "Only prepaid plans are available before the ARC is issued."
+      },
+      "visa": {
+        "title": "Visa & ARC",
+        "description": "Immigration fees. The first year differs from later years.",
+        "options": {
+          "first": "First year (35,000 KRW)",
+          "next": "2nd year onward (95,000 KRW)"
+        },
+        "note": "The yearly fee is divided by 12 months in the monthly budget."
+      },
+      "partTime": {
+        "title": "Part-time Work",
+        "description": "Enter your expected weekly hours and hourly wage. Empty fields use the minimum wage.",
+        "fields": {
+          "weeklyHours": "Hours / week",
+          "hourlyWage": "Hourly wage"
+        },
+        "note": "The 2026 minimum wage is 10,320 KRW per hour.",
+        "limitWarning": "D-2 visa holders may work up to 28 hours a week."
+      },
+      "income": {
+        "title": "Fixed Income",
+        "description": "Enter the money you receive every month. Leave blank if none.",
+        "fields": {
+          "allowance": "Allowance",
+          "scholarship": "Scholarship",
+          "otherIncome": "Other income"
+        }
       }
     },
     "breakdown": {
       "housing": "Housing",
+      "utilities": "Utilities",
+      "oneTime": "One-time costs (monthly)",
       "meals": "Meals",
-      "transport": "Transport & comms"
-    }
+      "transport": "Transport",
+      "telecom": "Mobile",
+      "insurance": "Health insurance",
+      "visa": "Visa & ARC",
+      "partTime": "Part-time work",
+      "allowance": "Allowance",
+      "scholarship": "Scholarship",
+      "otherIncome": "Other income"
+    },
+    "incomeGroup": "Monthly income",
+    "totalIncome": "Total income",
+    "surplusLabel": "Estimated monthly surplus",
+    "surplusTitle": "Money Left Each Month",
+    "hourUnit": "hrs",
+    "selectHousingFirst": "Please choose a housing type in the previous step first."
   },
   "enums": {
-    "boolean": { "true": "Yes", "false": "No" },
+    "boolean": {
+      "true": "Yes",
+      "false": "No"
+    },
     "userStatus": {
       "BEFORE_ENTRY": "Before Entry",
       "HIGH_SCHOOL": "High School",
