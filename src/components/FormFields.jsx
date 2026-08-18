@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 export const inputClass =
   'w-full rounded-xl border border-background-200 bg-background-50 px-4 py-3 text-sm text-foreground-950 placeholder-foreground-400 focus:outline-none focus:ring-2 focus:ring-primary-500'
 export const selectClass = `${inputClass} appearance-none pr-8`
-export const labelClass = 'mb-1 block text-sm font-semibold text-foreground-950'
+export const labelClass = 'mb-1 block text-sm text-foreground-950'
 
 export function useBooleanOptions() {
   const { t } = useTranslation()
