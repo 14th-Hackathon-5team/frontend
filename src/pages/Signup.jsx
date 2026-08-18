@@ -127,7 +127,7 @@ function Signup() {
   const stepText = t(`signup.steps.${meta.key}`, { returnObjects: true })
 
   return (
-    <div className="min-h-screen bg-background-50 px-6 py-6">
+    <div className="min-h-screen px-6 py-6">
       <div className="mb-6 flex items-center gap-3">
         <button type="button" onClick={goToPreviousStep} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹

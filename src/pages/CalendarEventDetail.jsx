@@ -22,7 +22,7 @@ function CalendarEventDetail() {
 
   if (notFound) {
     return (
-      <div className="min-h-screen bg-background-50 p-6">
+      <div className="min-h-screen p-6">
         <button type="button" onClick={() => navigate(-1)} className="mb-4 flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
@@ -33,7 +33,7 @@ function CalendarEventDetail() {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-background-50 p-6">
+      <div className="min-h-screen p-6">
         <button type="button" onClick={() => navigate(-1)} className="mb-4 flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
@@ -43,7 +43,7 @@ function CalendarEventDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-background-50 pb-10">
+    <div className="min-h-screen pb-10">
       <div className="flex items-center gap-3 border-b border-background-200 px-6 py-4">
         <button type="button" onClick={() => navigate(-1)} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹

@@ -26,3 +26,10 @@
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
   border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
+
+/* 앱 전체 배경 — 은은한 크림 그라데이션, 화면에 고정(스크롤해도 카드만 그 위를 지나감)돼서
+   반투명 유리 카드들이 실제로 비쳐 보이도록 함. */
+.app-background {
+  background: linear-gradient(135deg, #fffbf4, #fff7ea);
+  background-attachment: fixed;
+}

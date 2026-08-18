@@ -19,7 +19,7 @@ function GoogleIcon() {
 function Login() {
   const { t } = useTranslation()
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between bg-background-50 px-6 py-12">
+    <div className="flex min-h-screen flex-col items-center justify-between px-6 py-12">
       <div />
 
       <div className="flex flex-col items-center">
