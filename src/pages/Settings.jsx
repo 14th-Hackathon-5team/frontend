@@ -90,7 +90,7 @@ function Settings() {
       <hr className="mb-6 border-background-200" />
 
       <div className="mb-6">
-        <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{t('settings.account')}</p>
+        <p className="mb-2 text-xs font-semibold tracking-wide text-black">{t('settings.account')}</p>
         <div className="divide-y divide-background-200">
           <button
             type="button"
@@ -125,7 +125,7 @@ function Settings() {
         </div>
       </div>
 
-      <p className="mb-2 text-xs font-semibold tracking-wide text-foreground-500">{t('settings.accountManagement')}</p>
+      <p className="mb-2 text-xs font-semibold tracking-wide text-black">{t('settings.accountManagement')}</p>
       <div className="divide-y divide-background-200">
         <button
           type="button"
