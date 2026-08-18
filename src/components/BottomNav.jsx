@@ -44,16 +44,21 @@ const NAV_ITEMS = [
 ]
 
 // 최종 디자인 기준 라이트 테마 하단 네비게이션 (4탭: Home/Calendar/Details/Settings — 검색 탭 없음)
+// 탭 영역은 60px 고정, 홈 인디케이터가 있는 기기는 safe-area만큼 아래로 더 여백을 줌.
+// max-w-[430px]/mx-auto는 App.jsx의 앱 폭과 맞춰서, 넓은 화면에서도 네비가 콘텐츠 아래 중앙에 오도록 함.
 function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 flex items-center justify-around border-t border-background-200 bg-background-50 py-3">
+    <nav
+      className="fixed inset-x-0 bottom-0 z-10 mx-auto flex w-full max-w-[430px] items-stretch justify-around border-t border-background-200 bg-background-50"
+      style={{ height: 'calc(60px + env(safe-area-inset-bottom))', paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       {NAV_ITEMS.map(({ to, label, icon }) => (
         <NavLink
           key={to}
           to={to}
           end={to === '/'}
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 transition-colors ${
+            `flex flex-1 flex-col items-center justify-center gap-1 transition-colors ${
               isActive ? 'text-primary-500' : 'text-foreground-400 hover:text-primary-400'
             }`
           }

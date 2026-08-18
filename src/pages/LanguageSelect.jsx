@@ -48,7 +48,7 @@ function LanguageSelect() {
             type="button"
             onClick={goPrev}
             aria-label={t('languageSelect.previous')}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-background-100 text-foreground-600"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-background-100 text-foreground-600"
           >
             <ChevronIcon direction="left" />
           </button>
@@ -63,7 +63,7 @@ function LanguageSelect() {
             type="button"
             onClick={goNext}
             aria-label={t('languageSelect.next')}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-background-100 text-foreground-600"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-background-100 text-foreground-600"
           >
             <ChevronIcon direction="right" />
           </button>

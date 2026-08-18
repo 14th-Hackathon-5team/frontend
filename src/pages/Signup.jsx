@@ -129,7 +129,7 @@ function Signup() {
   return (
     <div className="min-h-screen bg-background-50 px-6 py-6">
       <div className="mb-6 flex items-center gap-3">
-        <button type="button" onClick={goToPreviousStep} className="text-xl text-foreground-700">
+        <button type="button" onClick={goToPreviousStep} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
         <div className="flex flex-1 gap-2">

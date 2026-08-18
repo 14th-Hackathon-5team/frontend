@@ -74,11 +74,16 @@ function ChecklistItem({ item, checked, onToggle }) {
           onToggle()
         }}
         aria-pressed={checked}
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors ${
-          checked ? 'border-primary-500 bg-primary-500 text-white' : 'border-background-300 hover:border-primary-400 hover:bg-primary-100'
-        }`}
+        className="flex h-11 w-11 shrink-0 items-center justify-center"
       >
-        {checked && '✓'}
+        <span
+          aria-hidden="true"
+          className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
+            checked ? 'border-primary-500 bg-primary-500 text-white' : 'border-background-300 hover:border-primary-400 hover:bg-primary-100'
+          }`}
+        >
+          {checked && '✓'}
+        </span>
       </button>
       <div className="flex-1">
         <p className={`text-sm font-semibold ${checked ? 'text-foreground-400 line-through' : 'text-foreground-900'}`}>

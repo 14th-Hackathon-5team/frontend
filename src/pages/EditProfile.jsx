@@ -82,7 +82,7 @@ function EditProfile() {
   return (
     <div className="min-h-screen bg-background-50 px-6 py-6">
       <div className="mb-6 flex items-center gap-3">
-        <button type="button" onClick={() => navigate(-1)} className="text-xl text-foreground-700">
+        <button type="button" onClick={() => navigate(-1)} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
         <h1 className="text-lg font-bold text-foreground-950">{t('editProfile.title')}</h1>

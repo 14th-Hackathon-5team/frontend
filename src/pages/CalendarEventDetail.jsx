@@ -23,7 +23,7 @@ function CalendarEventDetail() {
   if (notFound) {
     return (
       <div className="min-h-screen bg-background-50 p-6">
-        <button type="button" onClick={() => navigate(-1)} className="mb-4 text-xl text-foreground-700">
+        <button type="button" onClick={() => navigate(-1)} className="mb-4 flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
         <p className="text-foreground-600">{t('calendarDetail.notFound')}</p>
@@ -34,7 +34,7 @@ function CalendarEventDetail() {
   if (!event) {
     return (
       <div className="min-h-screen bg-background-50 p-6">
-        <button type="button" onClick={() => navigate(-1)} className="mb-4 text-xl text-foreground-700">
+        <button type="button" onClick={() => navigate(-1)} className="mb-4 flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
         <p className="text-foreground-400">{t('common.loading')}</p>
@@ -45,7 +45,7 @@ function CalendarEventDetail() {
   return (
     <div className="min-h-screen bg-background-50 pb-10">
       <div className="flex items-center gap-3 border-b border-background-200 px-6 py-4">
-        <button type="button" onClick={() => navigate(-1)} className="text-xl text-foreground-700">
+        <button type="button" onClick={() => navigate(-1)} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
         <h1 className="text-base font-bold text-foreground-950">{event.title}</h1>

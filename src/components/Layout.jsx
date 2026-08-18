@@ -6,7 +6,7 @@ import BottomNav from './BottomNav'
 function Layout() {
   return (
     <div className="min-h-screen bg-background-50 text-foreground-950">
-      <div className="pb-20">
+      <div style={{ paddingBottom: 'calc(60px + env(safe-area-inset-bottom) + 16px)' }}>
         <Outlet />
       </div>
       <BottomNav />

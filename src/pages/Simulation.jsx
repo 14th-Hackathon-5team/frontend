@@ -59,7 +59,7 @@ function Simulation() {
   return (
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
-        <button type="button" onClick={goBack} className="text-xl text-foreground-700">
+        <button type="button" onClick={goBack} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
         <div className="text-center">
