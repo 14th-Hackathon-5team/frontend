@@ -63,7 +63,9 @@ function CalendarEventDetail() {
           )}
           <h2 className="mt-3 text-xl font-bold text-foreground-950">{event.title}</h2>
           <p className="mt-2 text-sm text-foreground-700">
-            {event.startDate === event.endDate ? event.startDate : `${event.startDate} ~ ${event.endDate}`}
+            {!event.endDate || event.startDate === event.endDate
+              ? event.startDate
+              : `${event.startDate} ~ ${event.endDate}`}
           </p>
         </div>
 

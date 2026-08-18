@@ -22,7 +22,9 @@ function toChecklistItem(event) {
     id: event.eventId,
     eventId: event.eventId,
     title: event.title,
-    dueDate: event.startDate === event.endDate ? event.startDate : `${event.startDate} ~ ${event.endDate}`,
+    dueDate: !event.endDate || event.startDate === event.endDate
+      ? event.startDate
+      : `${event.startDate} ~ ${event.endDate}`,
     badge: diff >= 0 && diff <= 3 ? (diff === 0 ? 'D-day' : `D-${diff}`) : null,
   }
 }

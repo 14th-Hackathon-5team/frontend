@@ -3,13 +3,28 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getMonthlyEvents } from '../lib/calendarApi'
 
-// 백엔드 카테고리는 VISA / TOPIK_APPLICATION / TOPIK_EXAM / LEGAL / ACADEMIC 5종 (GET /api/calendar/events 응답 기준).
-const CATEGORY_COLOR = {
-  VISA: 'bg-primary-500',
-  TOPIK_APPLICATION: 'bg-accent-500',
-  TOPIK_EXAM: 'bg-accent-400',
-  LEGAL: 'bg-foreground-500',
-  ACADEMIC: 'bg-foreground-700',
+// 카테고리(VISA/TOPIK_APPLICATION/TOPIK_EXAM/LEGAL/ACADEMIC)만으로 색을 정하면 같은 카테고리 안의
+// 서로 다른 일정(예: TOPIK 108회 PBT vs 109회 PBT vs 16회 IBT)이 같은 색으로 겹쳐 보여서 혼동됨.
+// 그래서 카테고리 대신 일정 제목 기준으로 색을 순환 배정 — 같은 제목이면 항상 같은 색, 다른 제목이면 다른 색.
+const EVENT_COLOR_PALETTE = [
+  'bg-primary-500',
+  'bg-accent-500',
+  'bg-foreground-700',
+  'bg-accent-400',
+  'bg-primary-300',
+  'bg-foreground-500',
+]
+
+function hashString(value) {
+  let hash = 0
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) | 0
+  }
+  return Math.abs(hash)
+}
+
+function eventColor(event) {
+  return EVENT_COLOR_PALETTE[hashString(event.title ?? '') % EVENT_COLOR_PALETTE.length]
 }
 
 function buildMonthGrid(year, month) {
@@ -27,7 +42,8 @@ function buildMonthGrid(year, month) {
 function toDayRange(event, year, month) {
   const lastDate = new Date(year, month + 1, 0).getDate()
   const start = new Date(event.startDate)
-  const end = new Date(event.endDate)
+  // endDate는 하루짜리 일정(시험일 등)이면 null로 내려옴 — 이 경우 시작일과 동일하게 취급.
+  const end = new Date(event.endDate || event.startDate)
   const monthStart = new Date(year, month, 1)
   const monthEnd = new Date(year, month, lastDate)
 
@@ -42,7 +58,9 @@ function eventOnDay(events, date) {
 }
 
 function formatRange(event) {
-  return event.startDate === event.endDate ? event.startDate : `${event.startDate} ~ ${event.endDate}`
+  return !event.endDate || event.startDate === event.endDate
+    ? event.startDate
+    : `${event.startDate} ~ ${event.endDate}`
 }
 
 // 캘린더 화면 — 최종 디자인(tqwhyl.readdy.co/calendar) 반영. 일정은 GET /api/calendar/events 연동.
@@ -133,7 +151,7 @@ function Calendar() {
                 <span
                   className={`flex h-8 items-center justify-center text-sm ${roundedClass} ${
                     isRange ? 'w-full' : 'w-8'
-                  } ${event ? `${CATEGORY_COLOR[event.category]} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
+                  } ${event ? `${eventColor(event)} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
                 >
                   {date}
                 </span>
@@ -165,7 +183,7 @@ function Calendar() {
                   isNavigable ? 'hover:bg-primary-50' : 'cursor-default'
                 }`}
               >
-                <span className={`h-2 w-2 rounded-full ${CATEGORY_COLOR[event.category]}`} />
+                <span className={`h-2 w-2 rounded-full ${eventColor(event)}`} />
                 <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
                 <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
                 {isNavigable && <span className="text-foreground-400">›</span>}
