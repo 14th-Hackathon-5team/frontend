@@ -8,7 +8,6 @@ import {
   INCOME_FIELDS,
   MEAL_COST,
   MINIMUM_WAGE,
-  ONE_TIME_MONTHS,
   PART_TIME_FIELDS,
   PART_TIME_LIMIT_HOURS,
   TELECOM_COST,
@@ -53,15 +52,14 @@ function calculate(answers, costs) {
   let deposit = 0
 
   fields.forEach((field) => {
-    const value = toNumber(costs[field.key]) ?? fieldDefault(field, area)
-    if (field.refundable) {
-      deposit += value
-      return
-    }
+    // 처음 나가는 돈은 월 비용에 섞지 않고, 입력한 금액만 따로 합산한다(평균값 대체 없음).
     if (field.group === 'oneTime') {
-      oneTime += value / ONE_TIME_MONTHS
+      const entered = toNumber(costs[field.key]) ?? 0
+      if (field.refundable) deposit += entered
+      else oneTime += entered
       return
     }
+    const value = toNumber(costs[field.key]) ?? fieldDefault(field, area)
     if (UTILITY_KEYS.includes(field.key)) utilities += value
     else housing += value
   })
@@ -75,11 +73,9 @@ function calculate(answers, costs) {
   const breakdown = [
     { key: 'housing', amount: round(housing) },
     { key: 'utilities', amount: round(utilities) },
-    { key: 'oneTime', amount: round(oneTime) },
     { key: 'meals', amount: round(meals) },
     { key: 'transport', amount: round(transport) },
     { key: 'telecom', amount: round(telecom) },
-    { key: 'insurance', amount: HEALTH_INSURANCE },
     { key: 'visa', amount: round(visa) },
   ].filter((row) => row.amount > 0)
 
@@ -94,7 +90,22 @@ function calculate(answers, costs) {
   ].filter((row) => row.amount > 0)
   const income = incomeBreakdown.reduce((sum, row) => sum + row.amount, 0)
 
-  return { breakdown, total, incomeBreakdown, income, estimate: total - income, deposit }
+  // 건강보험료는 진행 중 상단 합계에는 넣지 않는다 — 아무것도 고르기 전부터 8만원이 떠서 혼란스럽기 때문.
+  // 결과 화면에서만 합산하고, 합산됐다는 안내 문구를 함께 띄운다.
+  const finalBreakdown = [...breakdown, { key: 'insurance', amount: HEALTH_INSURANCE }]
+  const finalTotal = total + HEALTH_INSURANCE
+
+  return {
+    breakdown: finalBreakdown,
+    total: finalTotal,
+    incomeBreakdown,
+    income,
+    estimate: total - income, // 진행 중 상단에 쓰는 값(건강보험료 제외)
+    finalEstimate: finalTotal - income,
+    insurance: HEALTH_INSURANCE,
+    oneTime,
+    deposit,
+  }
 }
 
 // 생활비 시뮬레이터 — 최종 디자인(tqwhyl.readdy.co/simulation) 반영.
@@ -147,7 +158,7 @@ function Simulation() {
   }
 
   const isResultStep = step > steps.length
-  const isSurplus = result.estimate < 0
+  const isSurplus = result.finalEstimate < 0
   const currentStep = isResultStep ? null : steps[step - 1]
   const STEP_FIELDS = { income: INCOME_FIELDS, partTime: PART_TIME_FIELDS }
   const stepFields = STEP_FIELDS[currentStep?.key] ?? HOUSING_FIELDS[answers.housing] ?? []
@@ -237,7 +248,6 @@ function Simulation() {
                 )}
                 {renderFieldGroup(monthlyGroupLabel, monthlyFields)}
                 {renderFieldGroup(t('simulation.oneTimeGroup'), oneTimeFields)}
-                {oneTimeFields.length > 0 && <p className="mt-3 text-xs text-foreground-500">{currentStep.oneTimeNote}</p>}
                 {currentStep.note && <p className="mt-3 text-xs text-foreground-500">{currentStep.note}</p>}
                 {currentStep.key === 'partTime' && overWorkLimit && (
                   <p className="mt-2 text-xs font-semibold text-red-500">⚠️ {currentStep.limitWarning}</p>
@@ -304,8 +314,11 @@ function Simulation() {
             <p className="text-xs text-foreground-500">
               {t(isSurplus ? 'simulation.surplusLabel' : 'simulation.resultLabel')}
             </p>
-            <p className="text-3xl font-extrabold text-primary-600">{formatMoney(Math.abs(result.estimate))}</p>
+            <p className="text-3xl font-extrabold text-primary-600">{formatMoney(Math.abs(result.finalEstimate))}</p>
             <p className="text-xs text-foreground-500">{t('simulation.perMonth')}</p>
+            <p className="mt-2 text-xs text-foreground-500">
+              {t('simulation.insuranceNote', { amount: formatMoney(result.insurance) })}
+            </p>
           </div>
 
           <div className="mt-4 space-y-2 text-sm">
@@ -338,6 +351,15 @@ function Simulation() {
               </div>
             )}
           </div>
+
+          {result.oneTime > 0 && (
+            <div className="mt-4 rounded-xl bg-white/70 p-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-foreground-700">{t('simulation.oneTimeGroup')}</span>
+                <span className="font-semibold text-foreground-900">{formatMoney(result.oneTime)}</span>
+              </div>
+            </div>
+          )}
 
           {result.deposit > 0 && (
             <p className="mt-4 text-xs text-foreground-500">{t('simulation.depositNote', { amount: formatMoney(result.deposit) })}</p>

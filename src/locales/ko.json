@@ -154,7 +154,7 @@
     "inputTitle": "금액을 입력해보세요",
     "inputHint": "모르는 항목은 비워두면 평균값으로 계산돼요",
     "monthlyGroup": "매달 나가는 주거비",
-    "oneTimeGroup": "처음 한 번 나가는 돈",
+    "oneTimeGroup": "처음 나가는 돈",
     "unit": "원",
     "confirm": "확인 후 다음",
     "skip": "건너뛰기",
@@ -194,8 +194,7 @@
           "deposit": "보증금",
           "monthlyFee": "월 이용료",
           "etc": "기타 비용"
-        },
-        "oneTimeNote": "처음 한 번 나가는 돈은 1년(12개월)으로 나눠 월 비용에 더했어요."
+        }
       },
       "area": {
         "title": "거주 지역",
@@ -268,7 +267,7 @@
     "breakdown": {
       "housing": "주거비",
       "utilities": "공과금",
-      "oneTime": "초기 비용(월 환산)",
+      "oneTime": "처음 나가는 돈",
       "meals": "식비",
       "transport": "교통비",
       "telecom": "통신비",
@@ -284,7 +283,8 @@
     "surplusLabel": "예상 월 여유 금액",
     "surplusTitle": "한 달 남는 금액",
     "hourUnit": "시간",
-    "selectHousingFirst": "먼저 앞 단계에서 주거 형태를 선택해주세요."
+    "selectHousingFirst": "먼저 앞 단계에서 주거 형태를 선택해주세요.",
+    "insuranceNote": "건강보험료 {{amount}}이 합산된 금액입니다."
   },
   "enums": {
     "boolean": {

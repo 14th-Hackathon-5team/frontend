@@ -194,8 +194,7 @@
           "deposit": "Deposit",
           "monthlyFee": "Monthly fee",
           "etc": "Other costs"
-        },
-        "oneTimeNote": "One-time costs are spread over 12 months and added to the monthly total."
+        }
       },
       "area": {
         "title": "Living Area",
@@ -268,7 +267,7 @@
     "breakdown": {
       "housing": "Housing",
       "utilities": "Utilities",
-      "oneTime": "One-time costs (monthly)",
+      "oneTime": "One-time costs",
       "meals": "Meals",
       "transport": "Transport",
       "telecom": "Mobile",
@@ -284,7 +283,8 @@
     "surplusLabel": "Estimated monthly surplus",
     "surplusTitle": "Money Left Each Month",
     "hourUnit": "hrs",
-    "selectHousingFirst": "Please choose a housing type in the previous step first."
+    "selectHousingFirst": "Please choose a housing type in the previous step first.",
+    "insuranceNote": "Includes the {{amount}} health insurance premium."
   },
   "enums": {
     "boolean": {

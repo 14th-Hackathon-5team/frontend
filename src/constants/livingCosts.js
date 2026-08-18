@@ -5,7 +5,6 @@
 export const MINIMUM_WAGE = 10320 // 2026년 최저임금 시급
 export const WEEKS_PER_MONTH = 4.345 // 365일 ÷ 7일 ÷ 12개월
 export const HEALTH_INSURANCE = 79320 // 유학생 건강보험료 (전원 동일)
-export const ONE_TIME_MONTHS = 12 // 초기 비용을 나눌 개월 수
 
 // 지역별 물가 계수 (주거·식비에 적용)
 // 근거: 서울 대학가 원룸 평균 월세 62.5만원(한국경제, 2026.08) vs 지방 대학가 40만원대.
