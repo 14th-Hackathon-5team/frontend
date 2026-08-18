@@ -87,7 +87,7 @@ function Calendar() {
         <select
           value={month}
           onChange={(event) => setMonth(Number(event.target.value))}
-          className="rounded-xl border border-background-200 bg-white px-3 py-2 text-sm font-semibold text-foreground-900"
+          className="rounded-xl border-2 border-background-200 bg-white px-3 py-2 text-sm font-semibold text-foreground-900"
         >
           {months.map((label, index) => (
             <option key={label} value={index}>
@@ -98,7 +98,7 @@ function Calendar() {
         <select
           value={year}
           onChange={(event) => setYear(Number(event.target.value))}
-          className="rounded-xl border border-background-200 bg-white px-3 py-2 text-sm font-semibold text-foreground-900"
+          className="rounded-xl border-2 border-background-200 bg-white px-3 py-2 text-sm font-semibold text-foreground-900"
         >
           {[year - 1, year, year + 1].map((y) => (
             <option key={y} value={y}>

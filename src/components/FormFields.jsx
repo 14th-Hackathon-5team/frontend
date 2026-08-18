@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 // Signup.jsx / EditProfile.jsx가 함께 쓰는 폼 프리미티브 (동일한 사용자 프로필 필드셋을 다룸).
 export const inputClass =
-  'w-full rounded-xl border border-background-200 bg-background-100 px-4 py-3 text-sm text-foreground-950 placeholder-foreground-400 focus:outline-none focus:ring-2 focus:ring-primary-500'
+  'w-full rounded-xl border-2 border-background-200 bg-background-100 px-4 py-3 text-sm text-foreground-950 placeholder-foreground-400 focus:outline-none focus:ring-2 focus:ring-primary-500'
 export const selectClass = `${inputClass} appearance-none pr-8`
 export const labelClass = 'mb-1 block text-sm text-foreground-600'
 
@@ -57,7 +57,7 @@ export function PillGroup({ label, value, onChange, options, columns = 2 }) {
               className={`rounded-xl py-3 text-sm font-medium ${
                 selected
                   ? 'bg-primary-500 text-white'
-                  : 'border border-background-200 bg-background-50 text-foreground-800'
+                  : 'border-2 border-background-200 bg-background-50 text-foreground-800'
               }`}
             >
               {option.label}

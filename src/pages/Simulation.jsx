@@ -88,7 +88,7 @@ function Simulation() {
 
       {!isResultStep && currentStep && (
         <>
-          <div className="rounded-2xl border border-background-200 bg-white p-5">
+          <div className="rounded-2xl border-2 border-background-200 bg-white p-5">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-500 text-2xl text-white">
               {currentStep.icon}
             </div>
@@ -96,7 +96,7 @@ function Simulation() {
             <p className="mt-2 text-sm text-foreground-600">{currentStep.description}</p>
           </div>
 
-          <div className="mt-4 rounded-2xl border border-background-200 bg-white p-4">
+          <div className="mt-4 rounded-2xl border-2 border-background-200 bg-white p-4">
             <p className="mb-1 text-sm font-semibold text-foreground-900">😊 {t('simulation.adjustTitle')}</p>
             <p className="mb-3 text-xs text-foreground-500">{t('simulation.adjustHint', { title: currentStep.title })}</p>
             <div className={`grid gap-2 ${currentStep.columns === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
@@ -108,7 +108,7 @@ function Simulation() {
                     type="button"
                     onClick={() => handleSelect(currentStep.key, option)}
                     className={`rounded-xl py-3 text-sm font-medium ${
-                      selected ? 'bg-primary-500 text-white' : 'border border-background-200 bg-background-50 text-foreground-800'
+                      selected ? 'bg-primary-500 text-white' : 'border-2 border-background-200 bg-background-50 text-foreground-800'
                     }`}
                   >
                     {option}
