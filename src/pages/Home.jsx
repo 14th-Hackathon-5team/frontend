@@ -63,7 +63,7 @@ function ChecklistItem({ item, checked, onToggle }) {
   return (
     <div
       onClick={handleRowClick}
-      className={`flex items-center gap-3 rounded-2xl border-2 border-background-200 bg-background-50 p-4 transition-colors ${
+      className={`glass-surface flex items-center gap-3 rounded-2xl p-4 transition-colors ${
         isNavigable ? 'cursor-pointer hover:border-primary-300 hover:bg-primary-50' : ''
       }`}
     >

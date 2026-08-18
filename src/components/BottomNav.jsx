@@ -49,7 +49,7 @@ const NAV_ITEMS = [
 function BottomNav() {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-10 mx-auto flex w-full max-w-[430px] items-stretch justify-around border-t border-background-200 bg-background-50"
+      className="glass-nav fixed inset-x-0 bottom-0 z-10 mx-auto flex w-full max-w-[430px] items-stretch justify-around"
       style={{ height: 'calc(60px + env(safe-area-inset-bottom))', paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       {NAV_ITEMS.map(({ to, label, icon }) => (
