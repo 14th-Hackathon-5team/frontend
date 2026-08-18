@@ -57,14 +57,14 @@ function BottomNav() {
           key={to}
           to={to}
           end={to === '/'}
+          aria-label={label}
           className={({ isActive }) =>
-            `flex flex-1 flex-col items-center justify-center gap-1 transition-colors ${
+            `flex flex-1 items-center justify-center transition-colors ${
               isActive ? 'text-primary-500' : 'text-foreground-400 hover:text-primary-400'
             }`
           }
         >
           {icon()}
-          <span className="text-[10px]">{label}</span>
         </NavLink>
       ))}
     </nav>
