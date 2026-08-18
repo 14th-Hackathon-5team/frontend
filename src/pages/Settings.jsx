@@ -30,6 +30,7 @@ function Settings() {
   }, [])
 
   const handleLogout = () => {
+    if (!window.confirm(t('settings.logoutConfirm'))) return
     logout()
     navigate('/login', { replace: true })
   }

@@ -71,6 +71,7 @@
     "notifications": "Notifications",
     "accountManagement": "ACCOUNT MANAGEMENT",
     "logout": "Log Out",
+    "logoutConfirm": "Are you sure you want to log out?",
     "deleteAccount": "Delete Account",
     "deleteConfirm": "Are you sure you want to delete your account? This cannot be undone.",
     "deleteError": "Something went wrong while deleting your account. Please try again."

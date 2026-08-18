@@ -71,6 +71,7 @@
     "notifications": "알림",
     "accountManagement": "계정 관리",
     "logout": "로그아웃",
+    "logoutConfirm": "로그아웃하시겠어요?",
     "deleteAccount": "회원 탈퇴",
     "deleteConfirm": "정말 탈퇴하시겠어요? 이 작업은 되돌릴 수 없습니다.",
     "deleteError": "탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
