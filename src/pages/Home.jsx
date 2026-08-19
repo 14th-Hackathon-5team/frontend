@@ -210,7 +210,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="mt-4 flex items-stretch justify-center gap-8 border-t border-background-300 pt-4">
+        <div className="mt-4 flex items-stretch justify-center gap-8 divide-x divide-background-300 border-t border-background-300 pt-4">
           <div className="text-left">
             <p className="text-xs font-normal text-foreground-600">{t('home.visa')}</p>
             <p className="text-sm font-semibold text-black">{adminInfo.visa}</p>
