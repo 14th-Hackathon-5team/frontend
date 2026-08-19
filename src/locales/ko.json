@@ -49,8 +49,9 @@
     "pending": "미완료",
     "simulatorTitle": "생활비 계산하기",
     "simulatorDescription": "이번 달 예산을 미리 계산해보세요.",
-    "commonChecklist": "공통 체크리스트",
-    "myChecklist": "내 체크리스트",
+    "checklist": "체크리스트",
+    "completedChecklist": "완료됨",
+    "common": "공통",
     "due": "{{date}}까지",
     "noUpcoming": "앞으로 7일 이내 예정된 일정이 없어요."
   },

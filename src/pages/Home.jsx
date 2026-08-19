@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next'
 import birdLogo from '../assets/bird_logo.png'
 import calendarIcon from '../assets/calendar_icon.png'
 import { getMyInfo } from '../lib/authApi'
-import { getUpcomingEvents } from '../lib/calendarApi'
+import { getUpcomingEvents, toggleEventCompleted } from '../lib/calendarApi'
 
-// 체크리스트 전용 API는 없음(스웨거 확인 완료). 대신 GET /api/calendar/events/upcoming(7일 이내 임박 일정)를
-// isGlobal 기준으로 공통/개인으로 나눠서 체크리스트처럼 보여줌 — docs/backend-notes-2026-08-13.md 참고.
-// 항목 클릭 시 해당 일정 상세(CalendarEventDetail)로 이동. 체크 상태는 저장되지 않고 새로고침하면 초기화됨(기존 더미 데이터도 동일했음).
+// 체크리스트 전용 API는 없음(스웨거 확인 완료). GET /api/calendar/events/upcoming(7일 이내 임박 일정)를
+// 하나의 목록으로 보여주고, isGlobal인 항목만 "공통" 배지로 구분함 — docs/backend-notes-2026-08-13.md 참고.
+// 완료 체크는 PATCH /api/calendar/events/{eventId}/complete로 서버에 저장되며, 완료된 항목은 목록 아래
+// 별도 섹션으로 옮겨서 보여줌. 항목 클릭 시 해당 일정 상세(CalendarEventDetail)로 이동.
 function daysUntil(dateString) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -23,6 +24,8 @@ function toChecklistItem(event) {
     id: event.eventId,
     eventId: event.eventId,
     title: event.title,
+    isGlobal: event.isGlobal,
+    completed: event.completed,
     dueDate: !event.endDate || event.startDate === event.endDate
       ? event.startDate
       : `${event.startDate} ~ ${event.endDate}`,
@@ -106,9 +109,16 @@ function ChecklistItem({ item, checked, onToggle }) {
         </span>
       </button>
       <div className="flex-1">
-        <p className={`text-sm font-semibold ${checked ? 'text-foreground-400 line-through' : 'text-foreground-900'}`}>
-          {item.title}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <p className={`text-sm font-semibold ${checked ? 'text-foreground-400 line-through' : 'text-foreground-900'}`}>
+            {item.title}
+          </p>
+          {item.isGlobal && (
+            <span className="rounded-full bg-background-200 px-1.5 py-0.5 text-[10px] font-semibold text-foreground-600">
+              {t('home.common')}
+            </span>
+          )}
+        </div>
         <p className="text-xs font-normal text-foreground-500">{t('home.due', { date: item.dueDate })}</p>
       </div>
       {item.badge && (
@@ -124,11 +134,9 @@ function ChecklistItem({ item, checked, onToggle }) {
 // 메인(홈) 화면 — 최종 디자인(tqwhyl.readdy.co/home) 반영.
 function Home() {
   const { t } = useTranslation()
-  const [checkedIds, setCheckedIds] = useState(new Set())
   const [userName, setUserName] = useState(null)
   const [adminInfo, setAdminInfo] = useState({ visa: '-', alienReg: '-', nextDue: '-', daysLeft: null, daysLeftRaw: null, stayStatus: '-' })
-  const [commonChecklist, setCommonChecklist] = useState([])
-  const [myChecklist, setMyChecklist] = useState([])
+  const [checklist, setChecklist] = useState([])
 
   useEffect(() => {
     getMyInfo()
@@ -151,23 +159,23 @@ function Home() {
     getUpcomingEvents()
       .then((response) => {
         const events = response.data.data
-        setCommonChecklist(events.filter((event) => event.isGlobal).map(toChecklistItem))
-        setMyChecklist(events.filter((event) => !event.isGlobal).map(toChecklistItem))
+        setChecklist(events.map(toChecklistItem))
       })
       .catch((error) => console.error('[Home] 임박 일정 조회 실패', error))
   }, [])
 
+  // 완료 체크는 서버에 저장됨(PATCH /complete) — 낙관적으로 먼저 화면을 바꾸고,
+  // 실패하면 되돌린다.
   const toggleChecked = (id) => {
-    setCheckedIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
+    setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)))
+    toggleEventCompleted(id).catch((error) => {
+      console.error('[Home] 완료 체크 실패', error)
+      setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)))
     })
   }
+
+  const incompleteChecklist = checklist.filter((item) => !item.completed)
+  const completedChecklist = checklist.filter((item) => item.completed)
 
   return (
     <div className="p-4 pt-14">
@@ -235,31 +243,34 @@ function Home() {
         <span className="text-foreground-400 text-3xl">›</span>
       </Link>
 
-      <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.commonChecklist')}</p>
+      <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.checklist')}</p>
       <div className="space-y-3">
-        {commonChecklist.length === 0 && <p className="text-sm text-foreground-400">{t('home.noUpcoming')}</p>}
-        {commonChecklist.map((item) => (
+        {checklist.length === 0 && <p className="text-sm text-foreground-400">{t('home.noUpcoming')}</p>}
+        {incompleteChecklist.map((item) => (
           <ChecklistItem
             key={item.id}
             item={item}
-            checked={checkedIds.has(item.id)}
+            checked={item.completed}
             onToggle={() => toggleChecked(item.id)}
           />
         ))}
       </div>
 
-      <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.myChecklist')}</p>
-      <div className="space-y-3">
-        {myChecklist.length === 0 && <p className="text-sm text-foreground-400">{t('home.noUpcoming')}</p>}
-        {myChecklist.map((item) => (
-          <ChecklistItem
-            key={item.id}
-            item={item}
-            checked={checkedIds.has(item.id)}
-            onToggle={() => toggleChecked(item.id)}
-          />
-        ))}
-      </div>
+      {completedChecklist.length > 0 && (
+        <>
+          <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.completedChecklist')}</p>
+          <div className="space-y-3">
+            {completedChecklist.map((item) => (
+              <ChecklistItem
+                key={item.id}
+                item={item}
+                checked={item.completed}
+                onToggle={() => toggleChecked(item.id)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

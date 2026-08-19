@@ -14,3 +14,8 @@ export function getUpcomingEvents() {
 export function getEventDetail(eventId) {
   return api.get(`/api/calendar/events/${eventId}`)
 }
+
+// 일정 완료 체크 토글 — PATCH /api/calendar/events/{eventId}/complete
+export function toggleEventCompleted(eventId) {
+  return api.patch(`/api/calendar/events/${eventId}/complete`)
+}
