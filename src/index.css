@@ -44,7 +44,7 @@
   border-top: 1px solid #e5e7eb;
 }
 
-/* 앱 전체 배경 — 맨 처음 크림색 단색으로 복귀 (그라데이션이 너무 진하다는 피드백). */
+/* 앱 전체 배경 — 토스/현대카드 스타일(흰색·연회색 배경 + 포인트 컬러는 버튼/강조 요소에만)로 전환. */
 .app-background {
-  background-color: #fffbf4;
+  background-color: #ffffff;
 }
