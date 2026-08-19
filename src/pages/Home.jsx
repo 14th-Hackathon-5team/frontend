@@ -212,16 +212,16 @@ function Home() {
 
         <div className="mt-4 flex items-stretch divide-x divide-background-300 border-t border-background-300 pt-4 text-center">
           <div className="flex-1 px-2">
-            <p className="text-xs font-semibold text-foreground-600">{t('home.visa')}</p>
-            <p className="text-sm font-semibold text-primary-600">{adminInfo.visa}</p>
+            <p className="text-xs font-light text-foreground-600">{t('home.visa')}</p>
+            <p className="text-sm font-semibold text-black">{adminInfo.visa}</p>
           </div>
           <div className="flex-1 px-2">
-            <p className="text-xs font-semibold text-foreground-600">{t('home.alienReg')}</p>
-            <p className="text-sm font-semibold text-primary-600">{adminInfo.alienReg}</p>
+            <p className="text-xs font-light text-foreground-600">{t('home.alienReg')}</p>
+            <p className="text-sm font-semibold text-[#B8860B]">{adminInfo.alienReg}</p>
           </div>
           <div className="flex-1 px-2">
-            <p className="text-xs font-semibold text-foreground-600">{t('home.stayStatus')}</p>
-            <p className="text-sm font-semibold text-primary-600">{adminInfo.stayStatus}</p>
+            <p className="text-xs font-light text-foreground-600">{t('home.stayStatus')}</p>
+            <p className="text-sm font-semibold text-black">{adminInfo.stayStatus}</p>
           </div>
         </div>
       </div>
