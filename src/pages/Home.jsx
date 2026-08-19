@@ -261,7 +261,11 @@ function Home() {
 
       <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.checklist')}</p>
       <div className="space-y-3">
-        {checklist.length === 0 && <p className="text-sm text-foreground-400">{t('home.noUpcoming')}</p>}
+        {incompleteChecklist.length === 0 && (
+          <p className="text-sm text-foreground-400">
+            {checklist.length === 0 ? t('home.noUpcoming') : t('home.allDone')}
+          </p>
+        )}
         {incompleteChecklist.map((item) => (
           <ChecklistItem
             key={item.id}

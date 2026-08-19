@@ -54,7 +54,8 @@
     "completedChecklist": "COMPLETED",
     "common": "Common",
     "due": "Due {{date}}",
-    "noUpcoming": "No upcoming items in the next 7 days."
+    "noUpcoming": "No upcoming items in the next 7 days.",
+    "allDone": "You've completed everything on your checklist!"
   },
   "calendar": {
     "title": "{{year}} Calendar",
