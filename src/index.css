@@ -25,10 +25,10 @@
 }
 
 /* 액센트(오렌지) 톤을 유지한 채로 유리 효과만 얹는 버전 — Home 상단 카드처럼 원래 색이 있던 요소용.
-   진한 베이지 대신 거의 흰색에 가까운 연한 크림톤(amber-50 계열)으로 톤다운. */
+   거의 흰색에 가까운 아주 옅은 크림(#FFFBF5 근처)으로 톤다운. */
 .glass-surface-accent {
-  background-image: linear-gradient(160deg, rgba(255, 251, 235, 0.65), rgba(255, 247, 220, 0.35));
-  background-color: rgba(255, 251, 235, 0.45);
+  background-image: linear-gradient(160deg, rgba(255, 251, 245, 0.7), rgba(254, 249, 240, 0.4));
+  background-color: rgba(255, 251, 245, 0.5);
   backdrop-filter: blur(18px) saturate(1.7) brightness(1.05);
   -webkit-backdrop-filter: blur(18px) saturate(1.7) brightness(1.05);
   border: 1px solid rgba(255, 255, 255, 0.65);

@@ -55,9 +55,10 @@ function formatStayStatus(t, dateString) {
 
 function CalendarIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="5" width="18" height="16" rx="2" />
-      <path d="M3 10h18M8 3v4M16 3v4" />
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="4" width="18" height="17" rx="3" fill="#FDF3E0" />
+      <rect x="3" y="4" width="18" height="5" rx="3" fill="#FBE8C6" />
+      <rect x="13" y="12" width="4" height="4" rx="1" fill="currentColor" />
     </svg>
   )
 }
@@ -204,21 +205,21 @@ function Home() {
               </span>
             )}
           </div>
-          <div className="shrink-0 text-accent-400">
+          <div className="shrink-0 text-accent-500">
             <CalendarIcon />
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-          <div className="rounded-xl bg-white/70 p-3">
+        <div className="mt-4 flex items-stretch divide-x divide-background-300 text-center">
+          <div className="flex-1 px-2">
             <p className="text-xs font-semibold text-foreground-600">{t('home.visa')}</p>
             <p className="text-sm font-semibold text-primary-600">{adminInfo.visa}</p>
           </div>
-          <div className="rounded-xl bg-white/70 p-3">
+          <div className="flex-1 px-2">
             <p className="text-xs font-semibold text-foreground-600">{t('home.alienReg')}</p>
             <p className="text-sm font-semibold text-primary-600">{adminInfo.alienReg}</p>
           </div>
-          <div className="rounded-xl bg-white/70 p-3">
+          <div className="flex-1 px-2">
             <p className="text-xs font-semibold text-foreground-600">{t('home.stayStatus')}</p>
             <p className="text-sm font-semibold text-primary-600">{adminInfo.stayStatus}</p>
           </div>
@@ -229,7 +230,7 @@ function Home() {
         to="/simulation"
         className="glass-surface-accent mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-accent-500">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FDF0DC] text-accent-500">
           <CalculatorIcon />
         </div>
         <div className="flex-1">
