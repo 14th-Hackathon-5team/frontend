@@ -189,8 +189,8 @@ function Home() {
       <div className="glass-surface-accent rounded-2xl p-5">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-[13px] font-semibold text-black">{t('home.nextStayPeriod')}</p>
-            <p className="mt-1 text-3xl font-extrabold text-foreground-950">{adminInfo.nextDue}</p>
+            <p className="text-[11px] font-semibold text-black">{t('home.nextStayPeriod')}</p>
+            <p className="mt-1 text-4xl font-extrabold text-foreground-950">{adminInfo.nextDue}</p>
             {adminInfo.daysLeft && (
               <span
                 className={`mt-2 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
