@@ -177,7 +177,7 @@ function Home() {
   return (
     <div className="p-4 pt-14">
       <div className="mb-4 flex items-center gap-3">
-        <img src={birdLogo} alt="" className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-accent-200 to-accent-100 object-contain" />
+        <img src={birdLogo} alt="" className="h-[53px] w-[53px] shrink-0 rounded-full bg-gradient-to-br from-accent-200 to-accent-100 object-contain" />
         <div>
           <p className="text-base font-bold text-foreground-950">
             {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
