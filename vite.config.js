@@ -13,7 +13,13 @@ export default defineConfig(({ mode }) => {
       proxy: {
         // 백엔드(EC2)에 CORS 설정이 없어 로컬 개발 중에는 프록시로 우회.
         // 실제 CORS 설정이 추가되면 이 프록시와 axios.js의 DEV 분기는 제거 가능.
+        // 알림 API(/notifications)는 다른 API들과 달리 /api 프리픽스가 없어서 별도로 등록해야 함
+        // — 안 그러면 Vite가 SPA 폴백으로 index.html을 돌려줘서 JSON 대신 HTML이 응답으로 옴.
         '/api': {
+          target: env.VITE_API_BASE_URL,
+          changeOrigin: true,
+        },
+        '/notifications': {
           target: env.VITE_API_BASE_URL,
           changeOrigin: true,
         },

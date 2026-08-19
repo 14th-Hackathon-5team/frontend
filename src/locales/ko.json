@@ -54,7 +54,8 @@
     "completedChecklist": "완료됨",
     "common": "공통",
     "due": "{{date}}까지",
-    "noUpcoming": "앞으로 7일 이내 예정된 일정이 없어요.",
+    "noUpcoming": "앞으로 30일 이내 예정된 일정이 없어요.",
+    "checklistSubtitle": "30일 이내 일정 · 완료하면 체크하세요",
     "allDone": "체크할 항목을 모두 완료했어요!"
   },
   "calendar": {
@@ -94,7 +95,97 @@
     "relatedLink": "관련 링크"
   },
   "details": {
-    "noGuides": "아직 등록된 가이드가 없습니다."
+    "noGuides": "아직 등록된 가이드가 없습니다.",
+    "empty": "아직 온 알림이 없어요."
+  },
+  "recommend": {
+    "title": "맞춤 정보",
+    "subtitle": "현재 상태를 기반으로 필요한 정보를 추천해드려요.",
+    "lawSection": "지금 확인하세요",
+    "universitySection": "진학 추천",
+    "generalSection": "기타 추천",
+    "viewMore": "자세히 보기",
+    "viewSchedule": "지원 일정 보기",
+    "priorityHigh": "중요",
+    "priorityMedium": "추천",
+    "priorityLow": "참고",
+    "empty": "아직 새로운 추천 정보가 없어요.",
+    "emptySubtitle": "프로필 정보가 업데이트되면 현재 상황에 맞는 정보를 추천해드릴게요.",
+    "errorTitle": "정보를 불러오지 못했어요.",
+    "errorSubtitle": "잠시 후 다시 시도해주세요.",
+    "retry": "다시 시도",
+    "notFound": "정보를 찾을 수 없어요.",
+    "backToList": "목록으로 돌아가기",
+    "reasonTitle": "왜 추천되었나요?",
+    "reasonTitleLaw": "왜 확인해야 하나요?",
+    "reasonTitleUniversity": "왜 추천되었나요?",
+    "lawNotice": "중요한 체류 정보예요.",
+    "applicationDeadline": "원서 접수",
+    "applicationClosed": "접수 마감",
+    "timeline": "전체 일정",
+    "feedTitle": "나에게 필요한 정보",
+    "quickFindTitle": "빠르게 찾아보기",
+    "guideSectionTitle": "추천 가이드",
+    "seeAll": "전체 보기",
+    "universityBadge": "맞춤 대학 추천",
+    "viewApplicationSchedule": "지원 일정 확인"
+  },
+  "category": {
+    "visa": {
+      "title": "비자 · 체류",
+      "subtitle": "체류, 연장, 등록",
+      "pageSubtitle": "한국 생활에 필요한 체류 정보를 확인하세요."
+    },
+    "university": {
+      "title": "대학 · 진학",
+      "subtitle": "지원 조건, 일정",
+      "pageSubtitle": "한국 대학 진학에 필요한 정보를 확인하세요.",
+      "recommended": "추천 대학"
+    },
+    "topik": {
+      "title": "TOPIK",
+      "subtitle": "접수, 시험 안내",
+      "pageSubtitle": "TOPIK 시험 준비와 일정을 확인하세요."
+    },
+    "prep": {
+      "title": "준비물",
+      "subtitle": "필요 서류 확인",
+      "pageSubtitle": "상황별 필요한 서류와 준비물을 확인하세요.",
+      "university": "대학 지원 준비물",
+      "visa": "비자 연장 준비물",
+      "registration": "외국인 등록 준비물",
+      "topik": "TOPIK 시험 준비물"
+    },
+    "empty": "아직 등록된 정보가 없어요."
+  },
+  "notificationDetail": {
+    "important": "중요",
+    "law": {
+      "target": "대상",
+      "situation": "상황",
+      "action": "조치",
+      "deadline": "기한",
+      "penalty": "위반 시",
+      "source": "출처"
+    },
+    "admission": {
+      "region": "지역",
+      "type": "대학 유형",
+      "applicationSchedule": "원서 접수",
+      "documentSubmission": "서류 제출",
+      "documentEvaluation": "서류 평가",
+      "interview": "면접",
+      "finalResult": "최종 발표",
+      "payment": "등록금 납부",
+      "eligibility": "지원 자격",
+      "documents": "제출 서류",
+      "evaluationRatio": "평가 비율",
+      "ratioDocument": "서류",
+      "ratioInterview": "면접",
+      "eligibilityNationality": "국적",
+      "eligibilityAcademic": "학력",
+      "eligibilityLanguage": "어학"
+    }
   },
   "guideDetail": {
     "notFound": "가이드를 찾을 수 없습니다.",

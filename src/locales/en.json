@@ -54,7 +54,8 @@
     "completedChecklist": "COMPLETED",
     "common": "Common",
     "due": "Due {{date}}",
-    "noUpcoming": "No upcoming items in the next 7 days.",
+    "noUpcoming": "No upcoming items in the next 30 days.",
+    "checklistSubtitle": "Within 30 days · Check off when done",
     "allDone": "You've completed everything on your checklist!"
   },
   "calendar": {
@@ -94,7 +95,97 @@
     "relatedLink": "Related Link"
   },
   "details": {
-    "noGuides": "No guides yet."
+    "noGuides": "No guides yet.",
+    "empty": "No notifications yet."
+  },
+  "recommend": {
+    "title": "For You",
+    "subtitle": "Recommendations based on your current status.",
+    "lawSection": "Check now",
+    "universitySection": "Admission picks",
+    "generalSection": "More for you",
+    "viewMore": "View details",
+    "viewSchedule": "View schedule",
+    "priorityHigh": "Important",
+    "priorityMedium": "Recommended",
+    "priorityLow": "For reference",
+    "empty": "No new recommendations yet.",
+    "emptySubtitle": "We'll recommend info tailored to your situation once your profile is updated.",
+    "errorTitle": "Couldn't load recommendations.",
+    "errorSubtitle": "Please try again in a moment.",
+    "retry": "Try again",
+    "notFound": "Couldn't find this item.",
+    "backToList": "Back to list",
+    "reasonTitle": "Why this was recommended",
+    "reasonTitleLaw": "Why you should check this",
+    "reasonTitleUniversity": "Why this was recommended",
+    "lawNotice": "This is an important stay-related notice.",
+    "applicationDeadline": "Application period",
+    "applicationClosed": "Closed",
+    "timeline": "Full schedule",
+    "feedTitle": "For You",
+    "quickFindTitle": "Quick Find",
+    "guideSectionTitle": "Recommended Guides",
+    "seeAll": "See all",
+    "universityBadge": "Matched University",
+    "viewApplicationSchedule": "View application schedule"
+  },
+  "category": {
+    "visa": {
+      "title": "Visa & Stay",
+      "subtitle": "Stay, extension, registration",
+      "pageSubtitle": "Everything you need for staying in Korea."
+    },
+    "university": {
+      "title": "University",
+      "subtitle": "Eligibility, schedule",
+      "pageSubtitle": "Everything you need for university admission in Korea.",
+      "recommended": "Recommended Universities"
+    },
+    "topik": {
+      "title": "TOPIK",
+      "subtitle": "Registration, exam info",
+      "pageSubtitle": "Prepare for the TOPIK exam and check the schedule."
+    },
+    "prep": {
+      "title": "Checklist Items",
+      "subtitle": "Required documents",
+      "pageSubtitle": "Check the documents and items you need for each situation.",
+      "university": "University application items",
+      "visa": "Visa extension items",
+      "registration": "Alien registration items",
+      "topik": "TOPIK exam items"
+    },
+    "empty": "No guides yet."
+  },
+  "notificationDetail": {
+    "important": "Important",
+    "law": {
+      "target": "Who this applies to",
+      "situation": "Situation",
+      "action": "Action required",
+      "deadline": "Deadline",
+      "penalty": "Penalty",
+      "source": "Source"
+    },
+    "admission": {
+      "region": "Region",
+      "type": "University type",
+      "applicationSchedule": "Application period",
+      "documentSubmission": "Document submission",
+      "documentEvaluation": "Document evaluation",
+      "interview": "Interview",
+      "finalResult": "Final result",
+      "payment": "Tuition payment",
+      "eligibility": "Eligibility",
+      "documents": "Required documents",
+      "evaluationRatio": "Evaluation ratio",
+      "ratioDocument": "Documents",
+      "ratioInterview": "Interview",
+      "eligibilityNationality": "Nationality",
+      "eligibilityAcademic": "Academic",
+      "eligibilityLanguage": "Language"
+    }
   },
   "guideDetail": {
     "notFound": "Guide not found.",

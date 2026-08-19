@@ -9,6 +9,8 @@ import Settings from '../pages/Settings'
 import EditProfile from '../pages/EditProfile'
 import Simulation from '../pages/Simulation'
 import GuideDetail from '../pages/GuideDetail'
+import NotificationDetail from '../pages/NotificationDetail'
+import CategoryGuides from '../pages/CategoryGuides'
 import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 import OAuthCallback from '../pages/OAuthCallback'
@@ -29,6 +31,8 @@ const router = createBrowserRouter([
         ],
       },
       { path: '/guide/:guideId', element: <GuideDetail /> },
+      { path: '/details/notification/:notificationId', element: <NotificationDetail /> },
+      { path: '/details/category/:slug', element: <CategoryGuides /> },
       { path: '/calendar/:eventId', element: <CalendarEventDetail /> },
       { path: '/settings/edit-profile', element: <EditProfile /> },
     ],
