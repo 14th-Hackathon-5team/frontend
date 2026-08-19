@@ -232,7 +232,7 @@ function Home() {
         to="/simulation"
         className="glass-surface mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FDF0DC] text-accent-500">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FDF6DC] text-accent-500">
           <CalculatorIcon />
         </div>
         <div className="flex-1">
