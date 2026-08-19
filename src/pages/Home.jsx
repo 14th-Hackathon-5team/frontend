@@ -55,7 +55,7 @@ function formatStayStatus(t, dateString) {
 
 function CalendarIcon() {
   return (
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
       <rect x="3" y="4" width="18" height="17" rx="3" fill="#FDF3E0" />
       <rect x="3" y="4" width="18" height="5" rx="3" fill="#FBE8C6" />
       <rect x="13" y="12" width="4" height="4" rx="1" fill="currentColor" />

@@ -38,7 +38,7 @@
     "visa": "Visa",
     "alienReg": "Alien Reg.",
     "nextDue": "Next Due",
-    "nextStayPeriod": "Next Stay Period",
+    "nextStayPeriod": "Stay Expiration Period",
     "daysLeft": "D-{{days}} left",
     "dDay": "D-day",
     "expired": "Expired",

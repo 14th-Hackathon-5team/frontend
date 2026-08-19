@@ -38,7 +38,7 @@
     "visa": "비자",
     "alienReg": "외국인등록",
     "nextDue": "다음 기한",
-    "nextStayPeriod": "다음 체류 기간",
+    "nextStayPeriod": "체류 만료 기간",
     "daysLeft": "D-{{days}} 남음",
     "dDay": "D-day",
     "expired": "만료됨",
