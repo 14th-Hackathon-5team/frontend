@@ -212,18 +212,18 @@ function Home() {
 
         <div className="mt-4 flex items-stretch justify-center gap-6 border-t border-background-300 pt-4">
           <div className="text-left">
-            <p className="text-[11px] font-normal text-foreground-600">{t('home.visa')}</p>
-            <p className="text-[13px] font-semibold text-black">{adminInfo.visa}</p>
+            <p className="text-[11px] font-medium text-foreground-600">{t('home.visa')}</p>
+            <p className="text-[13px] font-bold text-black">{adminInfo.visa}</p>
           </div>
           <div className="w-px shrink-0 bg-background-300" />
           <div className="text-left">
-            <p className="text-[11px] font-normal text-foreground-600">{t('home.alienReg')}</p>
-            <p className="text-[13px] font-semibold text-[#B8860B]">{adminInfo.alienReg}</p>
+            <p className="text-[11px] font-medium text-foreground-600">{t('home.alienReg')}</p>
+            <p className="text-[13px] font-bold text-[#B8860B]">{adminInfo.alienReg}</p>
           </div>
           <div className="w-px shrink-0 bg-background-300" />
           <div className="text-left">
-            <p className="text-[11px] font-normal text-foreground-600">{t('home.stayStatus')}</p>
-            <p className="text-[13px] font-semibold text-black">{adminInfo.stayStatus}</p>
+            <p className="text-[11px] font-medium text-foreground-600">{t('home.stayStatus')}</p>
+            <p className="text-[13px] font-bold text-black">{adminInfo.stayStatus}</p>
           </div>
         </div>
       </div>
