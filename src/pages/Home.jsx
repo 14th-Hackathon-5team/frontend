@@ -184,14 +184,22 @@ function Home() {
 
   return (
     <div className="p-4 pt-14">
-      <div className="mb-4 flex items-center gap-3">
-        <img src={birdLogo} alt="" className="h-[53px] w-[53px] shrink-0 rounded-full bg-gradient-to-br from-accent-200 to-accent-100 object-contain" />
-        <div>
-          <p className="text-base font-bold text-foreground-950">
-            {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
-          </p>
-          <p className="mt-1 text-[11px] font-normal text-foreground-600">{t('home.subtitle')}</p>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <img src={birdLogo} alt="" className="h-[53px] w-[53px] shrink-0 rounded-full bg-gradient-to-br from-accent-200 to-accent-100 object-contain" />
+          <div>
+            <p className="text-base font-bold text-foreground-950">
+              {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
+            </p>
+            <p className="mt-1 text-[11px] font-normal text-foreground-600">{t('home.subtitle')}</p>
+          </div>
         </div>
+        <Link
+          to="/settings/edit-profile"
+          className="glass-surface shrink-0 whitespace-nowrap rounded-2xl px-[10px] py-[6px] text-[10px] font-semibold text-foreground-900 transition-transform active:scale-[0.98]"
+        >
+          {t('home.editInfo')}
+        </Link>
       </div>
 
       <div className="glass-surface-accent rounded-2xl p-5">

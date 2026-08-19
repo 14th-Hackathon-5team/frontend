@@ -35,6 +35,7 @@
     "greeting": "Hello, {{name}}",
     "subtitle": "Check what you need today.",
     "greetingFallback": "there",
+    "editInfo": "Edit Info",
     "visa": "Visa",
     "topik": "TOPIK",
     "nextDue": "Next Due",
@@ -99,7 +100,7 @@
     "referenceLink": "Reference Link"
   },
   "settings": {
-    "editProfile": "Edit Profile",
+    "editProfile": "Edit Info",
     "account": "ACCOUNT",
     "language": "Language",
     "notifications": "Notifications",
@@ -132,10 +133,10 @@
     "error": "Sign-up failed. Please try again."
   },
   "editProfile": {
-    "title": "Edit Profile",
+    "title": "Edit Info",
     "save": "Save Changes",
     "saving": "Saving...",
-    "error": "Failed to update your profile. Please try again."
+    "error": "Failed to update your info. Please try again."
   },
   "profileFields": {
     "name": "Name",

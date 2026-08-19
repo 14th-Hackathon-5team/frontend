@@ -31,10 +31,7 @@
   background-color: rgba(253, 246, 220, 0.58);
   backdrop-filter: blur(18px) saturate(1.7) brightness(1.05);
   -webkit-backdrop-filter: blur(18px) saturate(1.7) brightness(1.05);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow:
-    0 4px 16px 0 rgba(31, 38, 135, 0.06),
-    inset 0 1px 1px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.06);
 }
 
 .glass-nav {
@@ -47,5 +44,5 @@
 
 /* 앱 전체 배경 — 토스/현대카드 스타일(흰색·연회색 배경 + 포인트 컬러는 버튼/강조 요소에만)로 전환. */
 .app-background {
-  background-color: #ffffff;
+  background-color: #fafafa;
 }
