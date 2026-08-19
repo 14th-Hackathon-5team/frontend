@@ -219,12 +219,12 @@ function Home() {
           <div className="w-px shrink-0 bg-background-300" />
           <div className="text-left">
             <p className="text-[11px] font-semibold text-foreground-600">{t('home.alienReg')}</p>
-            <p className="text-[13px] font-extrabold text-[#B8860B]">{adminInfo.alienReg}</p>
+            <p className="text-[13px] font-extrabold text-black">{adminInfo.alienReg}</p>
           </div>
           <div className="w-px shrink-0 bg-background-300" />
           <div className="text-left">
             <p className="text-[11px] font-semibold text-foreground-600">{t('home.stayStatus')}</p>
-            <p className="text-[13px] font-extrabold text-black">{adminInfo.stayStatus}</p>
+            <p className="text-[13px] font-extrabold text-[#B8860B]">{adminInfo.stayStatus}</p>
           </div>
         </div>
       </div>
