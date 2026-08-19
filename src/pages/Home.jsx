@@ -294,6 +294,7 @@ function Home() {
         </div>
       </div>
 
+      {/* 생활비 계산기 임시 비활성화 — 화면에서 숨김. 다시 켜려면 아래 주석을 해제.
       <Link
         to="/simulation"
         className="glass-surface mt-4 flex items-center gap-4 rounded-2xl p-4 transition-transform active:scale-[0.98]"
@@ -307,8 +308,12 @@ function Home() {
         </div>
         <span className="text-foreground-400 text-3xl">›</span>
       </Link>
+      */}
 
-      <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.checklist')}</p>
+      <div className="mb-2 mt-6">
+        <p className="text-[18px] font-semibold tracking-wide text-black">{t('home.checklist')}</p>
+        <p className="mt-1 text-[11px] text-foreground-400">{t('home.checklistSubtitle')}</p>
+      </div>
       <div className="space-y-3">
         {incompleteChecklist.length === 0 && (
           <p className="text-sm text-foreground-400">
