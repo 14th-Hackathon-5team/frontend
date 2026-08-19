@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import birdLogo from '../assets/bird_logo.png'
+import calendarIcon from '../assets/calendar_icon.png'
 import { getMyInfo } from '../lib/authApi'
 import { getUpcomingEvents } from '../lib/calendarApi'
 
@@ -36,8 +37,8 @@ function formatVisaType(t, visaType) {
 
 function formatDate(dateString) {
   if (!dateString) return '-'
-  const [year, month] = dateString.split('-')
-  return `${year}.${month}`
+  const [year, month, day] = dateString.split('-')
+  return `${year}.${month}.${day}`
 }
 
 function formatDaysLeft(t, dateString) {
@@ -51,16 +52,6 @@ function formatDaysLeft(t, dateString) {
 function formatStayStatus(t, dateString) {
   if (!dateString) return '-'
   return daysUntil(dateString) >= 0 ? t('home.stayStatusValid') : t('home.stayStatusExpired')
-}
-
-function CalendarIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="4" width="18" height="17" rx="3" fill="#FDF3E0" />
-      <rect x="3" y="4" width="18" height="5" rx="3" fill="#FBE8C6" />
-      <rect x="13" y="12" width="4" height="4" rx="1" fill="currentColor" />
-    </svg>
-  )
 }
 
 function CalculatorIcon() {
@@ -88,8 +79,8 @@ function ChecklistItem({ item, checked, onToggle }) {
   return (
     <div
       onClick={handleRowClick}
-      className={`glass-surface flex items-center gap-3 rounded-2xl p-4 transition-colors ${
-        isNavigable ? 'cursor-pointer hover:border-primary-300 hover:bg-primary-50' : ''
+      className={`glass-surface flex items-center gap-3 rounded-2xl p-4 transition-transform ${
+        isNavigable ? 'cursor-pointer active:scale-[0.98]' : ''
       }`}
     >
       <button
@@ -107,7 +98,11 @@ function ChecklistItem({ item, checked, onToggle }) {
             checked ? 'border-primary-500 bg-primary-500 text-white' : 'border-background-300 hover:border-primary-400 hover:bg-primary-100'
           }`}
         >
-          {checked && '✓'}
+          {checked && (
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
+              <path d="M3 8.5L6.5 12L13 4" />
+            </svg>
+          )}
         </span>
       </button>
       <div className="flex-1">
@@ -121,7 +116,7 @@ function ChecklistItem({ item, checked, onToggle }) {
           {item.badge}
         </span>
       )}
-      {isNavigable && <span className="text-foreground-400">›</span>}
+      {isNavigable && <span className="text-foreground-400 text-3xl">›</span>}
     </div>
   )
 }
@@ -190,24 +185,22 @@ function Home() {
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold text-black">{t('home.nextStayPeriod')}</p>
-            <p className="mt-1 text-4xl font-extrabold text-foreground-950">{adminInfo.nextDue}</p>
+            <p className="mt-1 text-3xl font-extrabold text-foreground-950">{adminInfo.nextDue}</p>
             {adminInfo.daysLeft && (
               <span
-                className={`mt-2 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
-                  adminInfo.daysLeftRaw !== null && adminInfo.daysLeftRaw <= 30
-                    ? 'bg-red-50 text-red-500'
-                    : adminInfo.daysLeftRaw !== null && adminInfo.daysLeftRaw >= 100
-                      ? 'text-foreground-500'
-                      : 'bg-white/70 text-primary-600'
+                className={`mt-2 inline-flex items-center gap-1 text-[13px] font-semibold ${
+                  adminInfo.daysLeftRaw !== null && adminInfo.daysLeftRaw < 0 ? 'text-red-500' : 'text-foreground-600'
                 }`}
               >
-                📅 {adminInfo.daysLeft}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M3 10h18M8 3v4M16 3v4" />
+                </svg>
+                {adminInfo.daysLeft}
               </span>
             )}
           </div>
-          <div className="shrink-0 text-accent-500">
-            <CalendarIcon />
-          </div>
+          <img src={calendarIcon} alt="" className="h-[102px] w-[102px] shrink-0 object-contain" />
         </div>
 
         <div className="mt-4 flex items-stretch justify-center gap-[26px] border-t border-background-300 pt-4">
@@ -230,7 +223,7 @@ function Home() {
 
       <Link
         to="/simulation"
-        className="glass-surface mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
+        className="glass-surface mt-4 flex items-center gap-4 rounded-2xl p-4 transition-transform active:scale-[0.98]"
       >
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FDF6DC] text-black">
           <CalculatorIcon />
@@ -239,7 +232,7 @@ function Home() {
           <p className="text-sm font-semibold text-foreground-900">{t('home.simulatorTitle')}</p>
           <p className="text-xs font-normal text-foreground-600">{t('home.simulatorDescription')}</p>
         </div>
-        <span className="text-foreground-400">›</span>
+        <span className="text-foreground-400 text-3xl">›</span>
       </Link>
 
       <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.commonChecklist')}</p>

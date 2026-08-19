@@ -202,8 +202,8 @@ function Calendar() {
               <button
                 type="button"
                 onClick={() => isNavigable && navigate(`/calendar/${event.eventId}`)}
-                className={`flex w-full items-center gap-2 py-3 text-left transition-colors ${
-                  isNavigable ? 'hover:bg-primary-50' : 'cursor-default'
+                className={`flex w-full items-center gap-2 py-3 text-left transition-transform ${
+                  isNavigable ? 'active:scale-[0.98]' : 'cursor-default'
                 }`}
               >
                 <span className={`h-2 w-2 rounded-full ${eventColor(event)}`} />

@@ -98,7 +98,7 @@ function Settings() {
           <button
             type="button"
             onClick={() => setLanguageModalOpen(true)}
-            className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+            className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-transform active:scale-[0.98]"
           >
             {t('settings.language')}
             <span className="flex items-center gap-2 text-foreground-400">
@@ -109,7 +109,7 @@ function Settings() {
           <button
             type="button"
             onClick={cycleAlarm}
-            className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+            className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-transform active:scale-[0.98]"
           >
             {t('settings.notifications')}
             <span className="flex items-center gap-2 text-foreground-400">
@@ -120,7 +120,7 @@ function Settings() {
           <button
             type="button"
             onClick={() => navigate('/settings/edit-profile')}
-            className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+            className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-transform active:scale-[0.98]"
           >
             {t('settings.editProfile')}
             <span className="text-foreground-400">›</span>
@@ -133,7 +133,7 @@ function Settings() {
         <button
           type="button"
           onClick={() => setConfirmType('logout')}
-          className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-colors hover:bg-primary-50"
+          className="flex w-full items-center justify-between py-3 text-left text-sm text-foreground-900 transition-transform active:scale-[0.98]"
         >
           {t('settings.logout')}
           <span className="text-foreground-400">›</span>
@@ -141,7 +141,7 @@ function Settings() {
         <button
           type="button"
           onClick={() => setConfirmType('delete')}
-          className="flex w-full items-center justify-between py-3 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
+          className="flex w-full items-center justify-between py-3 text-left text-sm text-red-500 transition-transform active:scale-[0.98]"
         >
           {t('settings.deleteAccount')}
           <span className="text-foreground-400">›</span>

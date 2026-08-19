@@ -62,13 +62,13 @@ function Details() {
                   <Link
                     key={guide.guideId}
                     to={`/guide/${guide.guideId}`}
-                    className="glass-surface flex items-center gap-3 rounded-2xl p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
+                    className="glass-surface flex items-center gap-3 rounded-2xl p-4 transition-transform active:scale-[0.98]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-100/50 text-xl">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FDF6DC] text-xl">
                       {category.icon}
                     </div>
                     <p className="flex-1 text-sm font-bold text-foreground-900">{guide.title}</p>
-                    <span className="text-foreground-400">›</span>
+                    <span className="text-foreground-400 text-3xl">›</span>
                   </Link>
                 ))}
               </div>
