@@ -196,8 +196,11 @@ function Home() {
         </div>
         <Link
           to="/settings/edit-profile"
-          className="glass-surface shrink-0 whitespace-nowrap rounded-2xl px-[10px] py-[6px] text-[10px] font-semibold text-foreground-900 transition-transform active:scale-[0.98]"
+          className="glass-surface mt-[26px] flex shrink-0 items-center gap-1 whitespace-nowrap rounded-2xl px-[10px] py-[6px] text-[10px] font-semibold text-foreground-900 transition-transform active:scale-[0.98]"
         >
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+          </svg>
           {t('home.editInfo')}
         </Link>
       </div>
