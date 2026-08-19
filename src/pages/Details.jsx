@@ -2,22 +2,18 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getNotifications } from '../lib/notificationsApi'
-import { getGuidesByCategory } from '../lib/guidesApi'
+import { getSeoulForeignerNews } from '../lib/seoulNewsApi'
 import { buildFeed, detectNotificationType, getPriorityTier } from '../lib/notificationHelpers'
 
-// "빠르게 찾아보기" 타일 4개 — /details/category/:slug로 이동(CategoryGuides.jsx).
+const SEOUL_GLOBAL_PORTAL_URL = 'https://global.seoul.go.kr/web/main.do'
+const SEOUL_NEWS_DISPLAY_COUNT = 6
+
+// "추천 가이드" 타일 4개 — /details/category/:slug로 이동(CategoryGuides.jsx).
 const QUICK_FIND = [
   { slug: 'visa', icon: '🛂' },
   { slug: 'university', icon: '🎓' },
   { slug: 'topik', icon: '📝' },
   { slug: 'prep', icon: '✓' },
-]
-
-// "추천 가이드" 섹션 — 카테고리별 대표 콘텐츠 1~2개만 보여주고 "전체 보기"는 CategoryGuides.jsx로 이동.
-const GUIDE_PREVIEW_SECTIONS = [
-  { slug: 'visa', icon: '🛂', guideCategories: ['VISA', 'LEGAL'] },
-  { slug: 'topik', icon: '📝', guideCategories: ['TOPIK_APPLICATION', 'TOPIK_EXAM'] },
-  { slug: 'university', icon: '🎓', guideCategories: ['ACADEMIC'] },
 ]
 
 const PRIORITY_STYLE = {
@@ -150,30 +146,57 @@ function QuickFindGrid({ t }) {
   )
 }
 
-function GuidePreviewSection({ t, section, guides }) {
-  if (guides.length === 0) return null
+// 서울외국인포털 서울시소식 카드 — TITL_NM/CONT/REG_DT 사용. 원문 URL 필드가 API에 없어서
+// (출력값: TITL_NM/CONT/WRIT_NM/LANG_GB/REG_DT/UPD_DT 뿐) 개별 기사 링크 대신 포털 홈으로 연결.
+function SeoulNewsCard({ item }) {
   return (
-    <div className="mb-5">
-      <div className="mb-2 flex items-center justify-between">
-        <p className="text-sm font-semibold text-foreground-700">{t(`category.${section.slug}.title`)}</p>
-        <Link to={`/details/category/${section.slug}`} className="text-xs font-semibold text-primary-600">
-          {t('recommend.seeAll')}
-        </Link>
-      </div>
-      <div className="space-y-3">
-        {guides.slice(0, 2).map((guide) => (
-          <Link
-            key={guide.guideId}
-            to={`/guide/${guide.guideId}`}
-            className="glass-surface flex items-center gap-3 rounded-2xl p-4 transition-transform active:scale-[0.98]"
-          >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FDF6DC] text-xl">{section.icon}</div>
-            <p className="flex-1 text-sm font-bold text-foreground-900">{guide.title}</p>
-            <span className="text-3xl text-foreground-400">›</span>
-          </Link>
-        ))}
-      </div>
+    <a
+      href={SEOUL_GLOBAL_PORTAL_URL}
+      target="_blank"
+      rel="noreferrer"
+      className="glass-surface w-[70%] shrink-0 snap-center rounded-2xl p-4 transition-transform active:scale-[0.98]"
+    >
+      {item.REG_DT && <p className="text-[10px] font-semibold text-foreground-400">{item.REG_DT}</p>}
+      <p className="mt-1 line-clamp-2 text-sm font-bold text-foreground-900">{item.TITL_NM}</p>
+      <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-foreground-600">{item.CONT}</p>
+    </a>
+  )
+}
+
+function SeoulNewsSkeleton() {
+  return (
+    <div className="flex gap-3 overflow-hidden">
+      <div className="h-32 w-[70%] shrink-0 animate-pulse rounded-2xl bg-background-100" />
+      <div className="h-32 w-[70%] shrink-0 animate-pulse rounded-2xl bg-background-100" />
     </div>
+  )
+}
+
+function SeoulNewsSection({ t, status, items, onRetry }) {
+  return (
+    <section className="mb-6">
+      <div className="mb-2 flex items-baseline justify-between">
+        <div>
+          <p className="text-sm font-semibold text-foreground-700">{t('recommend.seoulNewsTitle')}</p>
+          <p className="text-[11px] text-foreground-400">{t('recommend.seoulNewsSubtitle')}</p>
+        </div>
+        <a href={SEOUL_GLOBAL_PORTAL_URL} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-semibold text-primary-600">
+          {t('recommend.seoulNewsSourceLink')}
+        </a>
+      </div>
+      {status === 'loading' && <SeoulNewsSkeleton />}
+      {status === 'error' && <FeedError t={t} onRetry={onRetry} />}
+      {status === 'ready' && items.length === 0 && (
+        <div className="glass-surface rounded-2xl p-4 text-center text-sm text-foreground-400">{t('recommend.seoulNewsEmpty')}</div>
+      )}
+      {status === 'ready' && items.length > 0 && (
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
+          {items.map((item, index) => (
+            <SeoulNewsCard key={`${item.TITL_NM}-${index}`} item={item} />
+          ))}
+        </div>
+      )}
+    </section>
   )
 }
 
@@ -181,14 +204,17 @@ function GuidePreviewSection({ t, section, guides }) {
 // 1) 나에게 필요한 정보 — GET /notifications를 priority순 + 제목중복제거(buildFeed)해서 가로 카드뉴스로.
 //    LAW/UNIVERSITY는 details 모양(가변 JSON)으로 구분(notificationHelpers.detectNotificationType).
 //    카드 클릭 시 /details/notification/:id로 이동(상세는 NotificationDetail.jsx).
-// 2) 빠르게 찾아보기 — 비자·체류/대학·진학/TOPIK/준비물 4개 카테고리 진입점(CategoryGuides.jsx).
-// 3) 추천 가이드 — GET /api/guides?category=를 카테고리별로 묶어 대표 1~2개만 미리보기.
+// 2) 서울 생활 소식 — 서울 열린데이터광장 Open API(TBordCont5, 서울외국인포털 서울시소식)를
+//    REG_DT 최신순으로 정렬해 상위 몇 개만 별도 섹션으로 노출. AI 추천(LAW/UNIVERSITY)과는 성격이
+//    달라서 같은 리스트에 섞지 않음. 개별 기사 URL 필드가 없어 카드는 포털 홈으로 연결됨.
+// 3) 추천 가이드 — 비자·체류/대학·진학/TOPIK/준비물 4개 카테고리 진입점(CategoryGuides.jsx).
 function Details() {
   const { t } = useTranslation()
   const [notifications, setNotifications] = useState([])
   const [status, setStatus] = useState('loading') // loading | error | ready
 
-  const [guidesByCategory, setGuidesByCategory] = useState({})
+  const [seoulNews, setSeoulNews] = useState([])
+  const [seoulNewsStatus, setSeoulNewsStatus] = useState('loading')
 
   const fetchNotifications = useCallback(() => {
     setStatus('loading')
@@ -203,23 +229,28 @@ function Details() {
       })
   }, [])
 
+  const fetchSeoulNews = useCallback(() => {
+    setSeoulNewsStatus('loading')
+    getSeoulForeignerNews(1, 20)
+      .then((response) => {
+        const rows = response.data?.TBordCont5?.row ?? []
+        const sorted = [...rows].sort((a, b) => (b.REG_DT ?? '').localeCompare(a.REG_DT ?? ''))
+        setSeoulNews(sorted.slice(0, SEOUL_NEWS_DISPLAY_COUNT))
+        setSeoulNewsStatus('ready')
+      })
+      .catch((error) => {
+        console.error('[Details] 서울 생활 소식 조회 실패', error)
+        setSeoulNewsStatus('error')
+      })
+  }, [])
+
   useEffect(() => {
     fetchNotifications()
   }, [fetchNotifications])
 
   useEffect(() => {
-    const allCategories = [...new Set(GUIDE_PREVIEW_SECTIONS.flatMap((section) => section.guideCategories))]
-    Promise.all(
-      allCategories.map((category) =>
-        getGuidesByCategory(category)
-          .then((response) => [category, response.data.data])
-          .catch((error) => {
-            console.error(`[Details] ${category} 가이드 조회 실패`, error)
-            return [category, []]
-          }),
-      ),
-    ).then((entries) => setGuidesByCategory(Object.fromEntries(entries)))
-  }, [])
+    fetchSeoulNews()
+  }, [fetchSeoulNews])
 
   const feed = buildFeed(notifications)
 
@@ -231,24 +262,17 @@ function Details() {
       </div>
 
       <section className="mb-6">
-        <p className="mb-2 text-sm font-semibold text-foreground-700">{t('recommend.feedTitle')}</p>
         {status === 'loading' && <FeedSkeleton />}
         {status === 'error' && <FeedError t={t} onRetry={fetchNotifications} />}
         {status === 'ready' && feed.length === 0 && <FeedEmpty t={t} />}
         {status === 'ready' && feed.length > 0 && <FeedCarousel items={feed} />}
       </section>
 
-      <section className="mb-6">
-        <p className="mb-2 text-sm font-semibold text-foreground-700">{t('recommend.quickFindTitle')}</p>
-        <QuickFindGrid t={t} />
-      </section>
+      <SeoulNewsSection t={t} status={seoulNewsStatus} items={seoulNews} onRetry={fetchSeoulNews} />
 
       <section>
         <p className="mb-2 text-sm font-semibold text-foreground-700">{t('recommend.guideSectionTitle')}</p>
-        {GUIDE_PREVIEW_SECTIONS.map((section) => {
-          const guides = section.guideCategories.flatMap((category) => guidesByCategory[category] ?? [])
-          return <GuidePreviewSection key={section.slug} t={t} section={section} guides={guides} />
-        })}
+        <QuickFindGrid t={t} />
       </section>
     </div>
   )

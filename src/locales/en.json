@@ -128,7 +128,11 @@
     "guideSectionTitle": "Recommended Guides",
     "seeAll": "See all",
     "universityBadge": "Matched University",
-    "viewApplicationSchedule": "View application schedule"
+    "viewApplicationSchedule": "View application schedule",
+    "seoulNewsTitle": "Seoul Life News",
+    "seoulNewsSubtitle": "Latest updates from the Seoul Global Center portal.",
+    "seoulNewsEmpty": "No Seoul news to show yet.",
+    "seoulNewsSourceLink": "Visit Seoul Global Center"
   },
   "category": {
     "visa": {

@@ -100,7 +100,7 @@
   },
   "recommend": {
     "title": "맞춤 정보",
-    "subtitle": "현재 상태를 기반으로 필요한 정보를 추천해드려요.",
+    "subtitle": "내 현재 상태를 기반으로 필요한 정보를 추천해드려요.",
     "lawSection": "지금 확인하세요",
     "universitySection": "진학 추천",
     "generalSection": "기타 추천",
@@ -128,7 +128,11 @@
     "guideSectionTitle": "추천 가이드",
     "seeAll": "전체 보기",
     "universityBadge": "맞춤 대학 추천",
-    "viewApplicationSchedule": "지원 일정 확인"
+    "viewApplicationSchedule": "지원 일정 확인",
+    "seoulNewsTitle": "서울 생활 소식",
+    "seoulNewsSubtitle": "서울외국인포털에서 전하는 최신 소식이에요.",
+    "seoulNewsEmpty": "아직 표시할 서울 소식이 없어요.",
+    "seoulNewsSourceLink": "서울외국인포털 바로가기"
   },
   "category": {
     "visa": {
