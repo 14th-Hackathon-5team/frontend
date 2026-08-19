@@ -36,7 +36,7 @@
     "subtitle": "Check what you need today.",
     "greetingFallback": "there",
     "visa": "Visa",
-    "alienReg": "Alien Reg.",
+    "topik": "TOPIK",
     "nextDue": "Next Due",
     "nextStayPeriod": "Stay Expiration Period",
     "daysLeft": "D-{{days}} left",

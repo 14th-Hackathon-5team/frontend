@@ -36,7 +36,7 @@
     "subtitle": "오늘 필요한 정보를 확인해보세요.",
     "greetingFallback": "회원",
     "visa": "비자",
-    "alienReg": "외국인등록",
+    "topik": "토픽",
     "nextDue": "다음 기한",
     "nextStayPeriod": "체류 만료 기간",
     "daysLeft": "D-{{days}} 남음",

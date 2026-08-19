@@ -38,6 +38,11 @@ function formatVisaType(t, visaType) {
   return t(`enums.visaType.${visaType}`, { defaultValue: visaType })
 }
 
+function formatTopikLevel(t, topikLevel) {
+  if (!topikLevel) return '-'
+  return t(`enums.topikLevel.${topikLevel}`, { defaultValue: topikLevel })
+}
+
 function formatDate(dateString) {
   if (!dateString) return '-'
   const [year, month, day] = dateString.split('-')
@@ -135,7 +140,7 @@ function ChecklistItem({ item, checked, onToggle }) {
 function Home() {
   const { t } = useTranslation()
   const [userName, setUserName] = useState(null)
-  const [adminInfo, setAdminInfo] = useState({ visa: '-', alienReg: '-', nextDue: '-', daysLeft: null, daysLeftRaw: null, stayStatus: '-' })
+  const [adminInfo, setAdminInfo] = useState({ visa: '-', topik: '-', nextDue: '-', daysLeft: null, daysLeftRaw: null, stayStatus: '-' })
   const [checklist, setChecklist] = useState([])
 
   useEffect(() => {
@@ -145,7 +150,7 @@ function Home() {
         setUserName(user.name)
         setAdminInfo({
           visa: formatVisaType(t, user.visaType),
-          alienReg: user.hasAlienRegistration ? t('home.done') : t('home.pending'),
+          topik: formatTopikLevel(t, user.currentTopikLevel),
           nextDue: formatDate(user.stayExpirationDate),
           daysLeft: formatDaysLeft(t, user.stayExpirationDate),
           daysLeftRaw: user.stayExpirationDate ? daysUntil(user.stayExpirationDate) : null,
@@ -218,8 +223,8 @@ function Home() {
           </div>
           <div className="w-px shrink-0 bg-background-300" />
           <div className="text-left">
-            <p className="text-[11px] font-semibold text-foreground-600">{t('home.alienReg')}</p>
-            <p className="text-[13px] font-extrabold text-black">{adminInfo.alienReg}</p>
+            <p className="text-[11px] font-semibold text-foreground-600">{t('home.topik')}</p>
+            <p className="text-[13px] font-extrabold text-black">{adminInfo.topik}</p>
           </div>
           <div className="w-px shrink-0 bg-background-300" />
           <div className="text-left">
