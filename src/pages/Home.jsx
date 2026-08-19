@@ -189,7 +189,7 @@ function Home() {
       <div className="glass-surface-accent rounded-2xl p-5">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-medium text-black">{t('home.nextStayPeriod')}</p>
+            <p className="text-[11px] font-semibold text-black">{t('home.nextStayPeriod')}</p>
             <p className="mt-1 text-3xl font-extrabold text-foreground-950">{adminInfo.nextDue}</p>
             {adminInfo.daysLeft && (
               <span
