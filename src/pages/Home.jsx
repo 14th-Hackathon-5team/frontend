@@ -114,7 +114,7 @@ function ChecklistItem({ item, checked, onToggle }) {
         <p className={`text-sm font-semibold ${checked ? 'text-foreground-400 line-through' : 'text-foreground-900'}`}>
           {item.title}
         </p>
-        <p className="text-xs font-semibold text-foreground-500">{t('home.due', { date: item.dueDate })}</p>
+        <p className="text-xs font-light text-foreground-500">{t('home.due', { date: item.dueDate })}</p>
       </div>
       {item.badge && (
         <span className="rounded-full bg-accent-100 px-2 py-0.5 text-xs font-semibold text-accent-500">
@@ -235,7 +235,7 @@ function Home() {
         </div>
         <div className="flex-1">
           <p className="text-sm font-semibold text-foreground-900">{t('home.simulatorTitle')}</p>
-          <p className="text-xs font-semibold text-foreground-600">{t('home.simulatorDescription')}</p>
+          <p className="text-xs font-light text-foreground-600">{t('home.simulatorDescription')}</p>
         </div>
         <span className="text-foreground-400">›</span>
       </Link>
