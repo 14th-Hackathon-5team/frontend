@@ -4,12 +4,16 @@ import { useTranslation } from 'react-i18next'
 import birdLogo from '../assets/bird_logo.png'
 import calendarIcon from '../assets/calendar_icon.png'
 import { getMyInfo } from '../lib/authApi'
-import { getUpcomingEvents, toggleEventCompleted } from '../lib/calendarApi'
+import { getMonthlyEvents, toggleEventCompleted } from '../lib/calendarApi'
 
-// 체크리스트 전용 API는 없음(스웨거 확인 완료). GET /api/calendar/events/upcoming(7일 이내 임박 일정)를
-// 하나의 목록으로 보여주고, isGlobal인 항목만 "공통" 배지로 구분함 — docs/backend-notes-2026-08-13.md 참고.
+// 체크리스트 전용 API는 없음(스웨거 확인 완료). GET /api/calendar/events/upcoming는 7일 이내로 고정돼 있어서
+// (백엔드에 기간 파라미터 없음) 대신 월별 조회(GET /api/calendar/events?year=&month=)를 오늘부터 30일 뒤까지
+// 걸치는 달만큼 호출해서 프론트에서 "오늘부터 30일 이내" + "아직 끝나지 않은" 일정만 걸러 보여줌.
+// isGlobal인 항목만 "공통" 배지로 구분함 — docs/backend-notes-2026-08-13.md 참고.
 // 완료 체크는 PATCH /api/calendar/events/{eventId}/complete로 서버에 저장되며, 완료된 항목은 목록 아래
 // 별도 섹션으로 옮겨서 보여줌. 항목 클릭 시 해당 일정 상세(CalendarEventDetail)로 이동.
+const CHECKLIST_WINDOW_DAYS = 30
+
 function daysUntil(dateString) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -18,8 +22,42 @@ function daysUntil(dateString) {
   return Math.round((target - today) / 86400000)
 }
 
+// today~today+windowDays에 걸치는 연/월 목록(최대 2개월). 월별 조회 API를 몇 번 호출해야 하는지 계산.
+function monthsInWindow(windowDays) {
+  const today = new Date()
+  const rangeEnd = new Date(today)
+  rangeEnd.setDate(rangeEnd.getDate() + windowDays)
+
+  const months = []
+  const cursor = new Date(today.getFullYear(), today.getMonth(), 1)
+  const last = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth(), 1)
+  while (cursor <= last) {
+    months.push({ year: cursor.getFullYear(), month: cursor.getMonth() + 1 })
+    cursor.setMonth(cursor.getMonth() + 1)
+  }
+  return months
+}
+
+// 아직 끝나지 않았고(오늘 이후 종료), windowDays 이내에 시작하는 일정만 남김 — 이미 끝난 일정은 제외.
+function isWithinChecklistWindow(event, windowDays) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const rangeEnd = new Date(today)
+  rangeEnd.setDate(rangeEnd.getDate() + windowDays)
+
+  const start = new Date(event.startDate)
+  const end = new Date(event.endDate || event.startDate)
+  return end >= today && start <= rangeEnd
+}
+
+// 아직 시작 전이면 시작일까지, 이미 시작해서 진행 중(startDate~endDate 사이)이면 종료일까지 D-day를 센다.
 function toChecklistItem(event) {
-  const diff = daysUntil(event.startDate)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const start = new Date(event.startDate)
+  const end = new Date(event.endDate || event.startDate)
+  const target = today < start ? start : end
+  const diff = Math.round((target - today) / 86400000)
   return {
     id: event.eventId,
     eventId: event.eventId,
@@ -29,7 +67,8 @@ function toChecklistItem(event) {
     dueDate: !event.endDate || event.startDate === event.endDate
       ? event.startDate
       : `${event.startDate} ~ ${event.endDate}`,
-    badge: diff >= 0 && diff <= 3 ? (diff === 0 ? 'D-day' : `D-${diff}`) : null,
+    badge: diff === 0 ? 'D-day' : `D-${diff}`,
+    badgeUrgent: diff <= 3,
   }
 }
 
@@ -118,19 +157,18 @@ function ChecklistItem({ item, checked, onToggle }) {
           <p className={`text-sm font-semibold ${checked ? 'text-foreground-400 line-through' : 'text-foreground-900'}`}>
             {item.title}
           </p>
-          {item.isGlobal && (
-            <span className="rounded-full bg-background-200 px-1.5 py-0.5 text-[10px] font-semibold text-foreground-600">
-              {t('home.common')}
+          {item.badge && (
+            <span
+              className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${
+                item.badgeUrgent ? 'bg-accent-100 text-accent-500' : 'bg-[#FDF6DC] text-foreground-700'
+              }`}
+            >
+              {item.badge}
             </span>
           )}
         </div>
         <p className="text-xs font-normal text-foreground-500">{t('home.due', { date: item.dueDate })}</p>
       </div>
-      {item.badge && (
-        <span className="rounded-full bg-accent-100 px-2 py-0.5 text-xs font-semibold text-accent-500">
-          {item.badge}
-        </span>
-      )}
       {isNavigable && <span className="text-foreground-400 text-3xl">›</span>}
     </div>
   )
@@ -161,12 +199,23 @@ function Home() {
   }, [t])
 
   useEffect(() => {
-    getUpcomingEvents()
-      .then((response) => {
-        const events = response.data.data
+    const months = monthsInWindow(CHECKLIST_WINDOW_DAYS)
+    Promise.all(months.map(({ year, month }) => getMonthlyEvents(year, month)))
+      .then((responses) => {
+        const seen = new Set()
+        const events = []
+        responses.forEach((response) => {
+          response.data.data.forEach((event) => {
+            const key = `${event.eventId}-${event.startDate}`
+            if (seen.has(key) || !isWithinChecklistWindow(event, CHECKLIST_WINDOW_DAYS)) return
+            seen.add(key)
+            events.push(event)
+          })
+        })
+        events.sort((a, b) => a.startDate.localeCompare(b.startDate))
         setChecklist(events.map(toChecklistItem))
       })
-      .catch((error) => console.error('[Home] 임박 일정 조회 실패', error))
+      .catch((error) => console.error('[Home] 다가오는 일정 조회 실패', error))
   }, [])
 
   // 완료 체크는 서버에 저장됨(PATCH /complete) — 낙관적으로 먼저 화면을 바꾸고,
