@@ -129,10 +129,10 @@
     "seeAll": "전체 보기",
     "universityBadge": "맞춤 대학 추천",
     "viewApplicationSchedule": "지원 일정 확인",
-    "seoulNewsTitle": "서울 생활 소식",
-    "seoulNewsSubtitle": "서울외국인포털에서 전하는 최신 소식이에요.",
-    "seoulNewsEmpty": "아직 표시할 서울 소식이 없어요.",
-    "seoulNewsSourceLink": "서울외국인포털 바로가기"
+    "jobsTitle": "일자리 정보",
+    "jobsSubtitle": "서울외국인포털에 등록된 채용 공고예요.",
+    "jobsEmpty": "아직 등록된 채용 공고가 없어요.",
+    "jobsSourceLink": "서울외국인포털 바로가기"
   },
   "category": {
     "visa": {

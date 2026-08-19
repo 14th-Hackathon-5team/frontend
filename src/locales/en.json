@@ -129,10 +129,10 @@
     "seeAll": "See all",
     "universityBadge": "Matched University",
     "viewApplicationSchedule": "View application schedule",
-    "seoulNewsTitle": "Seoul Life News",
-    "seoulNewsSubtitle": "Latest updates from the Seoul Global Center portal.",
-    "seoulNewsEmpty": "No Seoul news to show yet.",
-    "seoulNewsSourceLink": "Visit Seoul Global Center"
+    "jobsTitle": "Job Postings",
+    "jobsSubtitle": "Job listings registered on the Seoul Foreigner Portal.",
+    "jobsEmpty": "No job postings to show yet.",
+    "jobsSourceLink": "Visit Seoul Foreigner Portal"
   },
   "category": {
     "visa": {

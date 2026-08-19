@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getNotifications } from '../lib/notificationsApi'
-import { getSeoulForeignerNews } from '../lib/seoulNewsApi'
+import { getSeoulForeignerJobs } from '../lib/seoulJobsApi'
 import { buildFeed, detectNotificationType, getPriorityTier } from '../lib/notificationHelpers'
 
 const SEOUL_GLOBAL_PORTAL_URL = 'https://global.seoul.go.kr/web/main.do'
-const SEOUL_NEWS_DISPLAY_COUNT = 6
+const SEOUL_JOBS_DISPLAY_COUNT = 6
 
 // "추천 가이드" 타일 4개 — /details/category/:slug로 이동(CategoryGuides.jsx).
 const QUICK_FIND = [
@@ -146,9 +146,9 @@ function QuickFindGrid({ t }) {
   )
 }
 
-// 서울외국인포털 서울시소식 카드 — TITL_NM/CONT/REG_DT 사용. 원문 URL 필드가 API에 없어서
-// (출력값: TITL_NM/CONT/WRIT_NM/LANG_GB/REG_DT/UPD_DT 뿐) 개별 기사 링크 대신 포털 홈으로 연결.
-function SeoulNewsCard({ item }) {
+// 서울외국인포털 채용공고 카드 — TITL_NM/CONT/WRIT_NM/REG_DT 사용. 원문 URL 필드가 API에 없어서
+// (출력값: TITL_NM/CONT/WRIT_NM/LANG_GB/REG_DT/UPD_DT 뿐) 개별 공고 링크 대신 포털 홈으로 연결.
+function SeoulJobCard({ item }) {
   return (
     <a
       href={SEOUL_GLOBAL_PORTAL_URL}
@@ -159,11 +159,12 @@ function SeoulNewsCard({ item }) {
       {item.REG_DT && <p className="text-[10px] font-semibold text-foreground-400">{item.REG_DT}</p>}
       <p className="mt-1 line-clamp-2 text-sm font-bold text-foreground-900">{item.TITL_NM}</p>
       <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-foreground-600">{item.CONT}</p>
+      {item.WRIT_NM && <p className="mt-2 text-[11px] font-semibold text-foreground-500">{item.WRIT_NM}</p>}
     </a>
   )
 }
 
-function SeoulNewsSkeleton() {
+function SeoulJobsSkeleton() {
   return (
     <div className="flex gap-3 overflow-hidden">
       <div className="h-32 w-[70%] shrink-0 animate-pulse rounded-2xl bg-background-100" />
@@ -172,27 +173,27 @@ function SeoulNewsSkeleton() {
   )
 }
 
-function SeoulNewsSection({ t, status, items, onRetry }) {
+function SeoulJobsSection({ t, status, items, onRetry }) {
   return (
     <section className="mb-6">
       <div className="mb-2 flex items-baseline justify-between">
         <div>
-          <p className="text-sm font-semibold text-foreground-700">{t('recommend.seoulNewsTitle')}</p>
-          <p className="text-[11px] text-foreground-400">{t('recommend.seoulNewsSubtitle')}</p>
+          <p className="text-sm font-semibold text-foreground-700">{t('recommend.jobsTitle')}</p>
+          <p className="text-[11px] text-foreground-400">{t('recommend.jobsSubtitle')}</p>
         </div>
         <a href={SEOUL_GLOBAL_PORTAL_URL} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-semibold text-primary-600">
-          {t('recommend.seoulNewsSourceLink')}
+          {t('recommend.jobsSourceLink')}
         </a>
       </div>
-      {status === 'loading' && <SeoulNewsSkeleton />}
+      {status === 'loading' && <SeoulJobsSkeleton />}
       {status === 'error' && <FeedError t={t} onRetry={onRetry} />}
       {status === 'ready' && items.length === 0 && (
-        <div className="glass-surface rounded-2xl p-4 text-center text-sm text-foreground-400">{t('recommend.seoulNewsEmpty')}</div>
+        <div className="glass-surface rounded-2xl p-4 text-center text-sm text-foreground-400">{t('recommend.jobsEmpty')}</div>
       )}
       {status === 'ready' && items.length > 0 && (
         <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
           {items.map((item, index) => (
-            <SeoulNewsCard key={`${item.TITL_NM}-${index}`} item={item} />
+            <SeoulJobCard key={`${item.TITL_NM}-${index}`} item={item} />
           ))}
         </div>
       )}
@@ -204,17 +205,17 @@ function SeoulNewsSection({ t, status, items, onRetry }) {
 // 1) 나에게 필요한 정보 — GET /notifications를 priority순 + 제목중복제거(buildFeed)해서 가로 카드뉴스로.
 //    LAW/UNIVERSITY는 details 모양(가변 JSON)으로 구분(notificationHelpers.detectNotificationType).
 //    카드 클릭 시 /details/notification/:id로 이동(상세는 NotificationDetail.jsx).
-// 2) 서울 생활 소식 — 서울 열린데이터광장 Open API(TBordCont5, 서울외국인포털 서울시소식)를
+// 2) 일자리 정보 — 서울 열린데이터광장 Open API(GlobalJobSearch, 서울외국인포털 채용공고)를
 //    REG_DT 최신순으로 정렬해 상위 몇 개만 별도 섹션으로 노출. AI 추천(LAW/UNIVERSITY)과는 성격이
-//    달라서 같은 리스트에 섞지 않음. 개별 기사 URL 필드가 없어 카드는 포털 홈으로 연결됨.
+//    달라서 같은 리스트에 섞지 않음. 개별 공고 URL 필드가 없어 카드는 포털 홈으로 연결됨.
 // 3) 추천 가이드 — 비자·체류/대학·진학/TOPIK/준비물 4개 카테고리 진입점(CategoryGuides.jsx).
 function Details() {
   const { t } = useTranslation()
   const [notifications, setNotifications] = useState([])
   const [status, setStatus] = useState('loading') // loading | error | ready
 
-  const [seoulNews, setSeoulNews] = useState([])
-  const [seoulNewsStatus, setSeoulNewsStatus] = useState('loading')
+  const [seoulJobs, setSeoulJobs] = useState([])
+  const [seoulJobsStatus, setSeoulJobsStatus] = useState('loading')
 
   const fetchNotifications = useCallback(() => {
     setStatus('loading')
@@ -229,18 +230,18 @@ function Details() {
       })
   }, [])
 
-  const fetchSeoulNews = useCallback(() => {
-    setSeoulNewsStatus('loading')
-    getSeoulForeignerNews(1, 20)
+  const fetchSeoulJobs = useCallback(() => {
+    setSeoulJobsStatus('loading')
+    getSeoulForeignerJobs(1, 20)
       .then((response) => {
-        const rows = response.data?.TBordCont5?.row ?? []
+        const rows = response.data?.GlobalJobSearch?.row ?? []
         const sorted = [...rows].sort((a, b) => (b.REG_DT ?? '').localeCompare(a.REG_DT ?? ''))
-        setSeoulNews(sorted.slice(0, SEOUL_NEWS_DISPLAY_COUNT))
-        setSeoulNewsStatus('ready')
+        setSeoulJobs(sorted.slice(0, SEOUL_JOBS_DISPLAY_COUNT))
+        setSeoulJobsStatus('ready')
       })
       .catch((error) => {
-        console.error('[Details] 서울 생활 소식 조회 실패', error)
-        setSeoulNewsStatus('error')
+        console.error('[Details] 일자리 정보 조회 실패', error)
+        setSeoulJobsStatus('error')
       })
   }, [])
 
@@ -249,8 +250,8 @@ function Details() {
   }, [fetchNotifications])
 
   useEffect(() => {
-    fetchSeoulNews()
-  }, [fetchSeoulNews])
+    fetchSeoulJobs()
+  }, [fetchSeoulJobs])
 
   const feed = buildFeed(notifications)
 
@@ -268,7 +269,7 @@ function Details() {
         {status === 'ready' && feed.length > 0 && <FeedCarousel items={feed} />}
       </section>
 
-      <SeoulNewsSection t={t} status={seoulNewsStatus} items={seoulNews} onRetry={fetchSeoulNews} />
+      <SeoulJobsSection t={t} status={seoulJobsStatus} items={seoulJobs} onRetry={fetchSeoulJobs} />
 
       <section>
         <p className="mb-2 text-sm font-semibold text-foreground-700">{t('recommend.guideSectionTitle')}</p>

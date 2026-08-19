@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
           target: env.VITE_API_BASE_URL,
           changeOrigin: true,
         },
-        // 서울 열린데이터광장 Open API(서울외국인포털 서울시소식) — 우리 백엔드와 무관한 외부 공공 API.
+        // 서울 열린데이터광장 Open API(서울외국인포털 채용공고) — 우리 백엔드와 무관한 외부 공공 API.
         // HTTP 평문 + CORS 미지원이라 로컬에서도 프록시가 필요함.
         '/seoul-api': {
           target: 'http://openapi.seoul.go.kr:8088',
