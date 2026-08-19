@@ -40,6 +40,28 @@ function formatDate(dateString) {
   return `${year}.${month}`
 }
 
+function formatDaysLeft(t, dateString) {
+  if (!dateString) return null
+  const diff = daysUntil(dateString)
+  if (diff > 0) return t('home.daysLeft', { days: diff })
+  if (diff === 0) return t('home.dDay')
+  return t('home.expired')
+}
+
+function formatStayStatus(t, dateString) {
+  if (!dateString) return '-'
+  return daysUntil(dateString) >= 0 ? t('home.stayStatusValid') : t('home.stayStatusExpired')
+}
+
+function CalendarIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" />
+    </svg>
+  )
+}
+
 function CalculatorIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -108,7 +130,7 @@ function Home() {
   const { t } = useTranslation()
   const [checkedIds, setCheckedIds] = useState(new Set())
   const [userName, setUserName] = useState(null)
-  const [adminInfo, setAdminInfo] = useState({ visa: '-', alienReg: '-', nextDue: '-' })
+  const [adminInfo, setAdminInfo] = useState({ visa: '-', alienReg: '-', nextDue: '-', daysLeft: null, daysLeftRaw: null, stayStatus: '-' })
   const [commonChecklist, setCommonChecklist] = useState([])
   const [myChecklist, setMyChecklist] = useState([])
 
@@ -121,6 +143,9 @@ function Home() {
           visa: formatVisaType(t, user.visaType),
           alienReg: user.hasAlienRegistration ? t('home.done') : t('home.pending'),
           nextDue: formatDate(user.stayExpirationDate),
+          daysLeft: formatDaysLeft(t, user.stayExpirationDate),
+          daysLeftRaw: user.stayExpirationDate ? daysUntil(user.stayExpirationDate) : null,
+          stayStatus: formatStayStatus(t, user.stayExpirationDate),
         })
       })
       .catch((error) => console.error('[Home] 내 정보 조회 실패', error))
@@ -150,19 +175,41 @@ function Home() {
 
   return (
     <div className="p-4 pt-14">
-      <div className="glass-surface-accent relative rounded-2xl p-5">
-        <div className="absolute -top-10 left-4 h-28 w-28 animate-float">
-          <div className="absolute left-0 top-[5px] h-28 w-28 rounded-full bg-gradient-to-br from-accent-200 to-accent-100" />
-          <img src={birdLogo} alt="" className="absolute left-[4px] top-[9px] h-[103px] w-[103px] object-contain" />
+      <div className="mb-4 flex items-center gap-3">
+        <img src={birdLogo} alt="" className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-accent-200 to-accent-100 object-contain" />
+        <div>
+          <p className="text-base font-bold text-foreground-950">
+            {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
+          </p>
+          <p className="text-xs text-foreground-500">{t('home.subtitle')}</p>
         </div>
-        <div className="mb-3 pl-32">
-          <p className="text-sm font-semibold tracking-wide text-foreground-700">{t('home.adminInfo')}</p>
+      </div>
+
+      <div className="glass-surface-accent rounded-2xl p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold text-foreground-600">{t('home.nextStayPeriod')}</p>
+            <p className="mt-1 text-3xl font-extrabold text-foreground-950">{adminInfo.nextDue}</p>
+            {adminInfo.daysLeft && (
+              <span
+                className={`mt-2 inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
+                  adminInfo.daysLeftRaw !== null && adminInfo.daysLeftRaw <= 30
+                    ? 'bg-red-50 text-red-500'
+                    : adminInfo.daysLeftRaw !== null && adminInfo.daysLeftRaw >= 100
+                      ? 'text-foreground-500'
+                      : 'bg-white/70 text-primary-600'
+                }`}
+              >
+                📅 {adminInfo.daysLeft}
+              </span>
+            )}
+          </div>
+          <div className="shrink-0 text-accent-400">
+            <CalendarIcon />
+          </div>
         </div>
-        <div className="relative mb-4 mt-[50px] rounded-xl bg-white/70 p-3 text-sm font-semibold text-foreground-800">
-          <span className="absolute -top-2 left-6 h-0 w-0 border-x-[9px] border-x-transparent border-b-[9px] border-b-white/70" />
-          {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
-        </div>
-        <div className="grid grid-cols-3 gap-2 text-center">
+
+        <div className="mt-4 grid grid-cols-3 gap-2 text-center">
           <div className="rounded-xl bg-white/70 p-3">
             <p className="text-xs font-semibold text-foreground-600">{t('home.visa')}</p>
             <p className="text-sm font-semibold text-primary-600">{adminInfo.visa}</p>
@@ -172,8 +219,8 @@ function Home() {
             <p className="text-sm font-semibold text-primary-600">{adminInfo.alienReg}</p>
           </div>
           <div className="rounded-xl bg-white/70 p-3">
-            <p className="text-xs font-semibold text-foreground-600">{t('home.nextDue')}</p>
-            <p className="text-sm font-semibold text-primary-600">{adminInfo.nextDue}</p>
+            <p className="text-xs font-semibold text-foreground-600">{t('home.stayStatus')}</p>
+            <p className="text-sm font-semibold text-primary-600">{adminInfo.stayStatus}</p>
           </div>
         </div>
       </div>
@@ -182,7 +229,7 @@ function Home() {
         to="/simulation"
         className="glass-surface-accent mt-4 flex items-center gap-4 rounded-2xl p-4 transition-colors hover:border-primary-300 hover:bg-primary-50"
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-500 text-white">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-accent-500">
           <CalculatorIcon />
         </div>
         <div className="flex-1">
