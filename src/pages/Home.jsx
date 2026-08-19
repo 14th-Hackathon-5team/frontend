@@ -182,7 +182,7 @@ function Home() {
           <p className="text-base font-bold text-foreground-950">
             {t('home.greeting', { name: userName ?? t('home.greetingFallback') })}
           </p>
-          <p className="text-xs text-foreground-500">{t('home.subtitle')}</p>
+          <p className="mt-1 text-[11px] font-normal text-foreground-600">{t('home.subtitle')}</p>
         </div>
       </div>
 
