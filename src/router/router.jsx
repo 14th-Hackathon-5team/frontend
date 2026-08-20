@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import Layout from '../components/Layout'
 import ProtectedRoute from '../components/ProtectedRoute'
 import Home from '../pages/Home'
+import CompletedChecklist from '../pages/CompletedChecklist'
 import Calendar from '../pages/Calendar'
 import CalendarEventDetail from '../pages/CalendarEventDetail'
 import Details from '../pages/Details'
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       { path: '/details/news/:index', element: <NewsDetail /> },
       { path: '/details/category/:slug', element: <CategoryGuides /> },
       { path: '/calendar/:eventId', element: <CalendarEventDetail /> },
+      { path: '/checklist/completed', element: <CompletedChecklist /> },
       { path: '/settings/edit-profile', element: <EditProfile /> },
     ],
   },

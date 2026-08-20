@@ -96,6 +96,9 @@
     "common": "Common",
     "relatedLink": "Related Link"
   },
+  "completedChecklist": {
+    "empty": "No completed items yet."
+  },
   "details": {
     "noGuides": "No guides yet.",
     "empty": "No notifications yet."

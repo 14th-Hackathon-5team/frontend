@@ -96,6 +96,9 @@
     "common": "공통",
     "relatedLink": "관련 링크"
   },
+  "completedChecklist": {
+    "empty": "완료한 항목이 없어요."
+  },
   "details": {
     "noGuides": "아직 등록된 가이드가 없습니다.",
     "empty": "아직 온 알림이 없어요."

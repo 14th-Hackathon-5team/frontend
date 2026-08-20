@@ -10,8 +10,10 @@ import { getMonthlyEvents, toggleEventCompleted } from '../lib/calendarApi'
 // (백엔드에 기간 파라미터 없음) 대신 월별 조회(GET /api/calendar/events?year=&month=)를 오늘부터 30일 뒤까지
 // 걸치는 달만큼 호출해서 프론트에서 "오늘부터 30일 이내" + "아직 끝나지 않은" 일정만 걸러 보여줌.
 // isGlobal인 항목만 "공통" 배지로 구분함 — docs/backend-notes-2026-08-13.md 참고.
-// 완료 체크는 PATCH /api/calendar/events/{eventId}/complete로 서버에 저장되며, 완료된 항목은 목록 아래
-// 별도 섹션으로 옮겨서 보여줌. 항목 클릭 시 해당 일정 상세(CalendarEventDetail)로 이동.
+// 완료 체크는 PATCH /api/calendar/events/{eventId}/complete로 서버에 저장되며, 완료된 항목은 이 화면에서는
+// 안 보이고 "완료됨 (N)" 버튼으로만 노출 — 눌러서 들어가면 CompletedChecklist.jsx에서 관리(체크 해제 포함).
+// 완료 여부와 캘린더(Calendar.jsx) 표시는 무관 — 완료된 일정도 캘린더에는 계속 남아있음. 항목 클릭 시
+// 해당 일정 상세(CalendarEventDetail)로 이동.
 const CHECKLIST_WINDOW_DAYS = 30
 
 function daysUntil(dateString) {
@@ -117,7 +119,7 @@ function CalculatorIcon() {
   )
 }
 
-function ChecklistItem({ item, checked, onToggle }) {
+export function ChecklistItem({ item, checked, onToggle }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   // eventId가 음수면 실제 저장된 일정이 아니라 백엔드가 조회 시점에 계산해서 내려주는 가상 일정
@@ -338,19 +340,16 @@ function Home() {
       </div>
 
       {completedChecklist.length > 0 && (
-        <>
-          <p className="mb-2 mt-6 text-xs font-semibold tracking-wide text-foreground-500">{t('home.completedChecklist')}</p>
-          <div className="space-y-2">
-            {completedChecklist.map((item) => (
-              <ChecklistItem
-                key={item.id}
-                item={item}
-                checked={item.completed}
-                onToggle={() => toggleChecked(item.id)}
-              />
-            ))}
-          </div>
-        </>
+        <Link
+          to="/checklist/completed"
+          state={{ items: completedChecklist }}
+          className="glass-surface mt-4 flex items-center justify-between rounded-2xl p-3 transition-transform active:scale-[0.98]"
+        >
+          <span className="text-sm font-semibold text-foreground-700">
+            {t('home.completedChecklist')} ({completedChecklist.length})
+          </span>
+          <span className="text-foreground-400 text-2xl">›</span>
+        </Link>
       )}
     </div>
   )
