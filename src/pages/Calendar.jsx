@@ -200,28 +200,20 @@ function Calendar() {
         <p className="py-4 text-center text-sm text-foreground-400">{t('calendar.noEvents')}</p>
       )}
       <ul className="divide-y divide-background-200">
-        {events.map((event) => {
-          // eventId가 음수면 실제 저장된 일정이 아니라 백엔드가 조회 시점에 계산해서 내려주는 가상 일정
-          // (체류기간 만료 D-30 안내: eventId=-1, 체류기간 만료 당일: eventId=-2)
-          // — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
-          const isNavigable = event.eventId >= 0
-          return (
-            <li key={event.eventId}>
-              <button
-                type="button"
-                onClick={() => isNavigable && navigate(`/calendar/${event.eventId}`)}
-                className={`flex w-full items-center gap-2 py-3 text-left transition-transform ${
-                  isNavigable ? 'active:scale-[0.98]' : 'cursor-default'
-                }`}
-              >
-                <span className={`h-2 w-2 rounded-full ${eventColor(event)}`} />
-                <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
-                <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
-                {isNavigable && <span className="text-foreground-400">›</span>}
-              </button>
-            </li>
-          )
-        })}
+        {events.map((event) => (
+          <li key={event.eventId}>
+            <button
+              type="button"
+              onClick={() => navigate(`/calendar/${event.eventId}`)}
+              className="flex w-full items-center gap-2 py-3 text-left transition-transform active:scale-[0.98]"
+            >
+              <span className={`h-2 w-2 rounded-full ${eventColor(event)}`} />
+              <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
+              <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
+              <span className="text-foreground-400">›</span>
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   )

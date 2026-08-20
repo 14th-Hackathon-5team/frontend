@@ -1,15 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getEventDetail } from '../lib/calendarApi'
+import { parseGuideContent } from '../lib/parseGuideContent'
+import { getCalendarEventContentOverride } from '../lib/calendarEventContent'
+import { InfoSummary, InfoImportant, InfoSteps, InfoCaution } from '../components/InfoSections'
 
 // 일정 상세 화면 — GuideDetail.jsx와 같은 톤(하단 탭 없이 단독 화면). GET /api/calendar/events/{eventId} 연동.
+// description이 태그 구조로 오면(가이드와 동일한 [SUMMARY]/[STEP] 규칙) 섹션별 UI로, 아니면(지금은 전부
+// 이 상태) calendarEventContent.js의 카테고리별 override로, 그마저 없으면 평문으로 대체.
 function CalendarEventDetail() {
   const { t } = useTranslation()
   const { eventId } = useParams()
   const navigate = useNavigate()
   const [event, setEvent] = useState(null)
   const [notFound, setNotFound] = useState(false)
+  const parsed = useMemo(() => {
+    if (!event) return null
+    return parseGuideContent(event.description) ?? parseGuideContent(getCalendarEventContentOverride(event.category))
+  }, [event])
 
   useEffect(() => {
     getEventDetail(eventId)
@@ -69,8 +78,15 @@ function CalendarEventDetail() {
           </p>
         </div>
 
-        {event.description && (
-          <p className="mt-6 text-sm leading-relaxed text-foreground-800">{event.description}</p>
+        {parsed ? (
+          <div className="mt-6 space-y-4">
+            {parsed.summary && <InfoSummary title={t('guideDetail.summaryTitle')} text={parsed.summary} />}
+            {parsed.important && <InfoImportant title={t('guideDetail.importantTitle')} text={parsed.important} />}
+            {parsed.steps.length > 0 && <InfoSteps title={t('guideDetail.stepsTitle')} steps={parsed.steps} />}
+            {parsed.caution && <InfoCaution title={t('guideDetail.cautionTitle')} text={parsed.caution} />}
+          </div>
+        ) : (
+          event.description && <p className="mt-6 text-sm leading-relaxed text-foreground-800">{event.description}</p>
         )}
 
         {event.relatedLink && (

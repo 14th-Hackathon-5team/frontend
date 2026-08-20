@@ -121,22 +121,15 @@ function ChecklistItem({ item, checked, onToggle }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   // eventId가 음수면 실제 저장된 일정이 아니라 백엔드가 조회 시점에 계산해서 내려주는 가상 일정
-  // (체류기간 만료 D-30 안내: eventId=-1, 체류기간 만료 당일: eventId=-2)
-  // — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
-  const isNavigable = item.eventId >= 0
-
+  // (체류기간 만료 D-30 안내: eventId=-1, 체류기간 만료 당일: eventId=-2) — 상세 조회도 정상 지원함
+  // (2026-08-20 재확인: GET /api/calendar/events/-1, -2 모두 200. CalendarEventDetail.jsx가
+  // calendarEventContent.js의 VISA override로 상세 내용을 채워서 보여준다.
   const handleRowClick = () => {
-    if (!isNavigable) return
     navigate(`/calendar/${item.eventId}`)
   }
 
   return (
-    <div
-      onClick={handleRowClick}
-      className={`glass-surface flex items-center gap-3 rounded-2xl p-3 transition-transform ${
-        isNavigable ? 'cursor-pointer active:scale-[0.98]' : ''
-      }`}
-    >
+    <div onClick={handleRowClick} className="glass-surface flex cursor-pointer items-center gap-3 rounded-2xl p-3 transition-transform active:scale-[0.98]">
       <button
         type="button"
         onClick={(event) => {
@@ -176,7 +169,7 @@ function ChecklistItem({ item, checked, onToggle }) {
         </div>
         <p className="text-xs font-normal text-foreground-500">{item.dueLabel ?? t('home.due', { date: item.dueDate })}</p>
       </div>
-      {isNavigable && <span className="text-foreground-400 text-3xl">›</span>}
+      <span className="text-foreground-400 text-3xl">›</span>
     </div>
   )
 }

@@ -133,7 +133,11 @@
     "viewApplicationSchedule": "지원 일정 확인",
     "jobsTitle": "일자리 정보",
     "jobsSubtitle": "서울외국인포털에 등록된 채용 공고예요.",
-    "jobsEmpty": "아직 등록된 채용 공고가 없어요."
+    "jobsEmpty": "아직 등록된 채용 공고가 없어요.",
+    "newsTitle": "유학생 뉴스",
+    "newsSubtitle": "유학생에게 도움될 만한 소식을 모았어요.",
+    "newsEmpty": "아직 표시할 뉴스가 없어요.",
+    "newsViewOriginal": "원문 보기"
   },
   "category": {
     "visa": {
@@ -152,24 +156,58 @@
       "subtitle": "접수, 시험 안내",
       "pageSubtitle": "TOPIK 시험 준비와 일정을 확인하세요."
     },
-    "prep": {
-      "title": "준비물",
-      "subtitle": "필요 서류 확인",
-      "pageSubtitle": "상황별 필요한 서류와 준비물을 확인하세요.",
-      "university": "대학 지원 준비물",
-      "visa": "비자 연장 준비물",
-      "registration": "외국인 등록 준비물",
-      "topik": "TOPIK 시험 준비물"
+    "job": {
+      "title": "일자리",
+      "subtitle": "근로 조건, 채용",
+      "pageSubtitle": "체류자격에 맞는 근로 조건을 확인하세요.",
+      "myStatusTitle": "내 상황에서 확인하기",
+      "checklistTitle": "지금 확인할 것",
+      "statusBadge": {
+        "WORKING": "현재 아르바이트 중",
+        "SEARCHING": "일자리 찾는 중",
+        "NOT_PLANNED": "근무 계획 없음",
+        "DEFAULT": "근무 상태 확인 필요"
+      },
+      "visaLabel": {
+        "D2": "D-2 유학",
+        "D4": "D-4 어학연수",
+        "H1": "H-1 워킹홀리데이",
+        "F2": "F-2 거주",
+        "F5": "F-5 영주",
+        "F6": "F-6 결혼이민",
+        "DEFAULT": "현재 체류자격 확인"
+      },
+      "partTimeConditionTitle": "시간제취업 조건",
+      "partTimeConditionDesc": {
+        "D2": "유학생은 사전에 시간제취업 허가를 받아야 하고, 학기 중과 방학 중 허용되는 근무 범위가 다르게 적용돼요. 정확한 조건은 학교 국제처나 관할 출입국·외국인청에서 확인해보세요.",
+        "D4": "어학연수생은 일정 수준의 출석률과 한국어 능력 등 요건을 갖춘 뒤 사전 허가를 받아야 시간제취업이 가능해요. 정확한 조건은 학교 국제처나 관할 출입국·외국인청에서 확인해보세요.",
+        "H1": "워킹홀리데이는 상대적으로 근무 범위가 넓은 편이지만 업종에 따라 제한이 있을 수 있어요. 정확한 범위는 하이코리아(HiKorea)에서 확인해보세요.",
+        "F2": "거주 자격은 다른 체류자격보다 근무 제약이 적은 편이지만, 세부 조건은 개인 상황에 따라 달라질 수 있어요. 정확한 내용은 하이코리아에서 확인해보세요.",
+        "F5": "영주 자격은 근무 제약이 거의 없는 편이지만, 업종에 따라 별도 자격 요건이 있을 수 있어요. 정확한 내용은 하이코리아에서 확인해보세요.",
+        "F6": "결혼이민 자격은 근무 제약이 적은 편이지만, 세부 조건은 개인 상황에 따라 달라질 수 있어요. 정확한 내용은 하이코리아에서 확인해보세요.",
+        "DEFAULT": "체류자격에 따라 시간제취업 허가 필요 여부와 근무 범위가 크게 달라져요. 정확한 조건은 관할 출입국·외국인청이나 하이코리아에서 확인해보세요."
+      },
+      "stayExpirationTitle": "체류 만료일",
+      "stayExpirationDays": "만료일까지 {{days}}일 남았어요. 체류기간 연장 시기를 미리 계획해두면 근무 계획을 세우기에도 도움이 돼요.",
+      "stayExpirationClose": "체류기간 만료일이 가까워요. 연장 여부와 함께 시간제취업 허가도 다시 확인해보는 게 좋아요.",
+      "stayExpirationExpired": "체류 관련 정보를 먼저 확인해보세요. 체류자격이 정리되지 않으면 근무 조건 확인이 의미가 없을 수 있어요.",
+      "stayExpirationUnknown": "체류 만료일 정보가 없어요. 내 정보 수정에서 체류 만료일을 등록하면 더 정확한 안내를 받을 수 있어요.",
+      "howToCheckTitle": "확인 방법",
+      "howToCheckDesc": "학교 국제처·유학생지원센터, 하이코리아(HiKorea), 관할 출입국·외국인청, 워크넷(고용노동부)에서 체류자격별 정확한 근무 조건과 절차를 확인할 수 있어요."
     },
     "empty": "아직 등록된 정보가 없어요."
   },
   "notificationDetail": {
     "important": "중요",
     "law": {
+      "summaryTitle": "요약",
+      "checklistTitle": "확인 사항",
+      "cautionTitle": "주의사항",
       "target": "대상",
       "situation": "상황",
       "action": "조치",
       "deadline": "기한",
+      "moreDetail": "상세 설명",
       "penalty": "위반 시",
       "source": "출처"
     },
@@ -194,7 +232,11 @@
   },
   "guideDetail": {
     "notFound": "가이드를 찾을 수 없습니다.",
-    "referenceLink": "참고 링크"
+    "referenceLink": "참고 링크",
+    "summaryTitle": "요약",
+    "importantTitle": "핵심 주의사항",
+    "stepsTitle": "단계별 방법",
+    "cautionTitle": "주의사항"
   },
   "settings": {
     "editProfile": "내 정보 수정",

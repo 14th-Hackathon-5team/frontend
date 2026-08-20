@@ -10,6 +10,7 @@ import EditProfile from '../pages/EditProfile'
 import Simulation from '../pages/Simulation'
 import GuideDetail from '../pages/GuideDetail'
 import NotificationDetail from '../pages/NotificationDetail'
+import NewsDetail from '../pages/NewsDetail'
 import CategoryGuides from '../pages/CategoryGuides'
 import Login from '../pages/Login'
 import Signup from '../pages/Signup'
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       },
       { path: '/guide/:guideId', element: <GuideDetail /> },
       { path: '/details/notification/:notificationId', element: <NotificationDetail /> },
+      { path: '/details/news/:index', element: <NewsDetail /> },
       { path: '/details/category/:slug', element: <CategoryGuides /> },
       { path: '/calendar/:eventId', element: <CalendarEventDetail /> },
       { path: '/settings/edit-profile', element: <EditProfile /> },

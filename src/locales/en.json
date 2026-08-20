@@ -133,7 +133,11 @@
     "viewApplicationSchedule": "View application schedule",
     "jobsTitle": "Job Postings",
     "jobsSubtitle": "Job listings registered on the Seoul Foreigner Portal.",
-    "jobsEmpty": "No job postings to show yet."
+    "jobsEmpty": "No job postings to show yet.",
+    "newsTitle": "Student News",
+    "newsSubtitle": "News that may be useful for international students.",
+    "newsEmpty": "No news to show yet.",
+    "newsViewOriginal": "View original article"
   },
   "category": {
     "visa": {
@@ -152,24 +156,58 @@
       "subtitle": "Registration, exam info",
       "pageSubtitle": "Prepare for the TOPIK exam and check the schedule."
     },
-    "prep": {
-      "title": "Checklist Items",
-      "subtitle": "Required documents",
-      "pageSubtitle": "Check the documents and items you need for each situation.",
-      "university": "University application items",
-      "visa": "Visa extension items",
-      "registration": "Alien registration items",
-      "topik": "TOPIK exam items"
+    "job": {
+      "title": "Jobs",
+      "subtitle": "Work conditions, hiring",
+      "pageSubtitle": "Check the work conditions for your visa status.",
+      "myStatusTitle": "Check based on my situation",
+      "checklistTitle": "What to check now",
+      "statusBadge": {
+        "WORKING": "Currently working part-time",
+        "SEARCHING": "Looking for a job",
+        "NOT_PLANNED": "No work plans",
+        "DEFAULT": "Work status unknown"
+      },
+      "visaLabel": {
+        "D2": "D-2 Student",
+        "D4": "D-4 Language Student",
+        "H1": "H-1 Working Holiday",
+        "F2": "F-2 Residence",
+        "F5": "F-5 Permanent Residence",
+        "F6": "F-6 Marriage Migrant",
+        "DEFAULT": "Check current visa status"
+      },
+      "partTimeConditionTitle": "Part-time work conditions",
+      "partTimeConditionDesc": {
+        "D2": "Students need a part-time work permit in advance, and the allowed hours differ between semester and vacation periods. Check the exact conditions with your school's international office or your local immigration office.",
+        "D4": "Language students need to meet requirements like attendance rate and Korean proficiency before getting a part-time work permit. Check the exact conditions with your school's international office or your local immigration office.",
+        "H1": "Working Holiday status generally allows a wider range of work, but some industries may be restricted. Check the exact scope on HiKorea.",
+        "F2": "Residence status generally has fewer work restrictions than other visa types, but the details can vary by individual case. Check with HiKorea for specifics.",
+        "F5": "Permanent Residence status has very few work restrictions, though some industries may require separate qualifications. Check with HiKorea for specifics.",
+        "F6": "Marriage Migrant status generally has fewer work restrictions, but the details can vary by individual case. Check with HiKorea for specifics.",
+        "DEFAULT": "Whether a part-time work permit is required, and the allowed scope of work, varies significantly by visa status. Check with your local immigration office or HiKorea for the exact conditions."
+      },
+      "stayExpirationTitle": "Stay expiration date",
+      "stayExpirationDays": "{{days}} days until expiration. Planning your extension timing in advance also helps with planning your work schedule.",
+      "stayExpirationClose": "Your stay period is expiring soon. It's a good idea to recheck your extension status along with your part-time work permit.",
+      "stayExpirationExpired": "Check your stay status first — sorting that out matters more than checking work conditions right now.",
+      "stayExpirationUnknown": "No stay expiration date on file. Add it in Edit Profile for more accurate guidance.",
+      "howToCheckTitle": "How to check",
+      "howToCheckDesc": "You can check the exact work conditions and procedures for your visa status at your school's international office or student support center, HiKorea, your local immigration office, or Worknet (Ministry of Employment and Labor)."
     },
     "empty": "No guides yet."
   },
   "notificationDetail": {
     "important": "Important",
     "law": {
+      "summaryTitle": "Summary",
+      "checklistTitle": "Things to check",
+      "cautionTitle": "Caution",
       "target": "Who this applies to",
       "situation": "Situation",
       "action": "Action required",
       "deadline": "Deadline",
+      "moreDetail": "More detail",
       "penalty": "Penalty",
       "source": "Source"
     },
@@ -194,7 +232,11 @@
   },
   "guideDetail": {
     "notFound": "Guide not found.",
-    "referenceLink": "Reference Link"
+    "referenceLink": "Reference Link",
+    "summaryTitle": "Summary",
+    "importantTitle": "Key things to note",
+    "stepsTitle": "Steps",
+    "cautionTitle": "Caution"
   },
   "settings": {
     "editProfile": "Edit Info",

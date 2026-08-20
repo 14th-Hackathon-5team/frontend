@@ -1,3 +1,9 @@
+// 상세 정보 필드명이 항목마다 details(복수, 실제 라이브 응답)/detail(단수, AI 파트가 준 일부 샘플)로 갈려서
+// 들어와 방어적으로 둘 다 받는다.
+export function getNotificationDetails(notification) {
+  return notification.details ?? notification.detail ?? {}
+}
+
 // GET /notifications의 details는 카테고리별로 모양이 다른 가변 JSON이라(스웨거 설명: "상세 정보(가변 JSON)"),
 // 명시적 type 필드 없이 필드 존재 여부로 LAW/UNIVERSITY를 구분한다.
 export function detectNotificationType(details) {

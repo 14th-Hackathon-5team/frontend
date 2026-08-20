@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { markNotificationRead } from '../lib/notificationsApi'
-import { daysUntil, detectNotificationType, formatRange } from '../lib/notificationHelpers'
+import { daysUntil, detectNotificationType, formatRange, getNotificationDetails } from '../lib/notificationHelpers'
+import { InfoSummary, InfoImportant, InfoCaution, InfoTimeline } from '../components/InfoSections'
 
 function Section({ title, children }) {
   return (
@@ -13,26 +14,34 @@ function Section({ title, children }) {
   )
 }
 
+// notification.summary(있으면 AI가 매일 프로필 기반으로 새로 쓰는 개인화 요약)는 실제 응답에 있었는데도
+// 지금까지 화면에 안 쓰이고 있었음 — 요약 박스로 노출. details.details(대상/상황/조치보다 더 긴 법령
+// 보충 설명)도 마찬가지로 방치돼 있어서 타임라인 마지막 줄로 살림. details.trigger는 AI 내부 판단
+// 근거(개발자용 문구)라 사용자에게 보여주지 않는다.
 function LawDetail({ t, notification }) {
-  const details = notification.details ?? {}
-  return (
-    <>
-      <p className="mt-2 text-xs font-semibold text-primary-600">{t('recommend.lawNotice')}</p>
+  const details = getNotificationDetails(notification)
+  const timelineRows = [
+    [t('notificationDetail.law.target'), details.target],
+    [t('notificationDetail.law.situation'), details.situation],
+    [t('notificationDetail.law.action'), details.action],
+    [t('notificationDetail.law.deadline'), details.deadline],
+    [t('notificationDetail.law.moreDetail'), details.details],
+  ]
+  const source = [details.sourceName, [details.lawName, details.article].filter(Boolean).join(' ')].filter(Boolean).join(' · ')
+  const cautionText = [
+    details.penalty && `${t('notificationDetail.law.penalty')}: ${details.penalty}`,
+    source && `${t('notificationDetail.law.source')}: ${source}`,
+  ]
+    .filter(Boolean)
+    .join('\n\n')
 
-      <Section title={t('recommend.reasonTitleLaw')}>{notification.reason}</Section>
-      {details.target && <Section title={t('notificationDetail.law.target')}>{details.target}</Section>}
-      {details.situation && <Section title={t('notificationDetail.law.situation')}>{details.situation}</Section>}
-      {details.action && <Section title={t('notificationDetail.law.action')}>{details.action}</Section>}
-      {details.deadline && <Section title={t('notificationDetail.law.deadline')}>{details.deadline}</Section>}
-      {details.penalty && <Section title={t('notificationDetail.law.penalty')}>{details.penalty}</Section>}
-      {(details.sourceName || details.lawName || details.article) && (
-        <Section title={t('notificationDetail.law.source')}>
-          {details.sourceName}
-          {details.sourceName && (details.lawName || details.article) && <br />}
-          {[details.lawName, details.article].filter(Boolean).join(' ')}
-        </Section>
-      )}
-    </>
+  return (
+    <div className="mt-4 space-y-4">
+      {notification.summary && <InfoSummary title={t('notificationDetail.law.summaryTitle')} text={notification.summary} />}
+      {notification.reason && <InfoImportant title={t('recommend.reasonTitleLaw')} text={notification.reason} />}
+      <InfoTimeline title={t('notificationDetail.law.checklistTitle')} rows={timelineRows} />
+      {cautionText && <InfoCaution title={t('notificationDetail.law.cautionTitle')} text={cautionText} />}
+    </div>
   )
 }
 
@@ -47,46 +56,31 @@ function ApplicationDeadlineBadge({ t, range }) {
   )
 }
 
-function TimelineRow({ label, value, first }) {
-  if (!value) return null
-  return (
-    <div className="flex gap-3">
-      <div className="flex flex-col items-center">
-        <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${first ? 'bg-primary-500' : 'border border-foreground-300 bg-white'}`} />
-        <span className="mt-1 w-px flex-1 bg-background-200" />
-      </div>
-      <div className="pb-4">
-        <p className="text-xs font-semibold text-foreground-700">{label}</p>
-        <p className="mt-0.5 text-xs text-foreground-500">{value}</p>
-      </div>
-    </div>
-  )
-}
-
 function UniversityDetail({ t, notification }) {
-  const details = notification.details ?? {}
+  const details = getNotificationDetails(notification)
   const eligibilityRows = [
     [t('notificationDetail.admission.eligibilityNationality'), details.admission_eligibility?.nationality],
     [t('notificationDetail.admission.eligibilityAcademic'), details.admission_eligibility?.academic],
     [t('notificationDetail.admission.eligibilityLanguage'), details.admission_eligibility?.language],
   ]
   const interview = details.interview?.yn ? `${details.interview.date ?? ''} ${details.interview.type ?? ''}`.trim() : null
-  const timeline = [
-    [t('notificationDetail.admission.applicationSchedule'), formatRange(details.application_schedule), true],
-    [t('notificationDetail.admission.documentSubmission'), formatRange(details.document_submission_schedule), false],
-    [t('notificationDetail.admission.documentEvaluation'), formatRange(details.document_evaluation_schedule), false],
-    [t('notificationDetail.admission.interview'), interview, false],
-    [t('notificationDetail.admission.finalResult'), details.final_result_date, false],
-    [t('notificationDetail.admission.payment'), formatRange(details.payment_schedule), false],
-  ].filter(([, value]) => value)
+  const timelineRows = [
+    [t('notificationDetail.admission.applicationSchedule'), formatRange(details.application_schedule)],
+    [t('notificationDetail.admission.documentSubmission'), formatRange(details.document_submission_schedule)],
+    [t('notificationDetail.admission.documentEvaluation'), formatRange(details.document_evaluation_schedule)],
+    [t('notificationDetail.admission.interview'), interview],
+    [t('notificationDetail.admission.finalResult'), details.final_result_date],
+    [t('notificationDetail.admission.payment'), formatRange(details.payment_schedule)],
+  ]
 
   return (
-    <>
+    <div className="mt-4 space-y-4">
       {(details.region || details.university_type) && (
-        <p className="mt-1 text-xs text-foreground-500">{[details.region, details.university_type].filter(Boolean).join(' · ')}</p>
+        <p className="text-xs text-foreground-500">{[details.region, details.university_type].filter(Boolean).join(' · ')}</p>
       )}
 
-      <Section title={t('recommend.reasonTitleUniversity')}>{notification.reason}</Section>
+      {notification.summary && <InfoSummary title={t('notificationDetail.law.summaryTitle')} text={notification.summary} />}
+      {notification.reason && <InfoImportant title={t('recommend.reasonTitleUniversity')} text={notification.reason} />}
 
       {details.application_schedule && (
         <Section title={t('recommend.applicationDeadline')}>
@@ -97,15 +91,7 @@ function UniversityDetail({ t, notification }) {
         </Section>
       )}
 
-      {timeline.length > 0 && (
-        <Section title={t('recommend.timeline')}>
-          <div>
-            {timeline.map(([label, value, first], index) => (
-              <TimelineRow key={label} label={label} value={value} first={first && index === 0} />
-            ))}
-          </div>
-        </Section>
-      )}
+      <InfoTimeline title={t('recommend.timeline')} rows={timelineRows} />
 
       {eligibilityRows.some(([, value]) => value) && (
         <Section title={t('notificationDetail.admission.eligibility')}>
@@ -161,7 +147,7 @@ function UniversityDetail({ t, notification }) {
           </ul>
         </Section>
       )}
-    </>
+    </div>
   )
 }
 
@@ -200,7 +186,7 @@ function NotificationDetail() {
     )
   }
 
-  const type = detectNotificationType(notification.details)
+  const type = detectNotificationType(getNotificationDetails(notification))
 
   return (
     <div className="min-h-screen pb-10">
