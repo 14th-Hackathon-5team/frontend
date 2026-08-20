@@ -72,6 +72,26 @@ function toChecklistItem(event) {
   }
 }
 
+// 체류기간 만료는 다른 일정과 성격이 달라서 toChecklistItem을 그대로 못 씀 — 다른 일정은
+// 기한이 지나면(끝나면) 더 볼 필요가 없어서 체크리스트에서 사라지는 게 맞지만, 체류기간 만료는
+// 지난 뒤가 오히려 더 급한 문제(불법체류)라 만료 후에도 계속 보여주고, 배지/문구만 경고 톤으로 바꾼다.
+function buildStayExpirationItem(t, stayExpirationDate, completed) {
+  const diff = daysUntil(stayExpirationDate)
+  if (diff > CHECKLIST_WINDOW_DAYS) return null
+  const overdue = diff < 0
+  return {
+    id: -2,
+    eventId: -2,
+    title: t('home.stayExpirationChecklistTitle'),
+    isGlobal: false,
+    completed,
+    dueDate: stayExpirationDate,
+    dueLabel: overdue ? t('home.stayExpirationOverdueNotice') : undefined,
+    badge: overdue ? t('home.expired') : diff === 0 ? 'D-day' : `D-${diff}`,
+    badgeUrgent: overdue || diff <= 3,
+  }
+}
+
 function formatVisaType(t, visaType) {
   if (!visaType) return '-'
   return t(`enums.visaType.${visaType}`, { defaultValue: visaType })
@@ -114,9 +134,10 @@ function CalculatorIcon() {
 function ChecklistItem({ item, checked, onToggle }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  // eventId === -1은 실제 저장된 일정이 아니라 조회 시점에 계산해서 끼워 넣는 가상 일정(예: 체류기간 만료 D-30 안내)
+  // eventId가 음수면 실제 저장된 일정이 아니라 조회 시점에 계산해서 끼워 넣는 가상 일정
+  // (백엔드가 내려주는 체류기간 만료 D-30 안내: eventId=-1, 프론트가 만드는 체류기간 만료 당일: eventId=-2)
   // — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
-  const isNavigable = item.eventId !== -1
+  const isNavigable = item.eventId >= 0
 
   const handleRowClick = () => {
     if (!isNavigable) return
@@ -167,7 +188,7 @@ function ChecklistItem({ item, checked, onToggle }) {
             </span>
           )}
         </div>
-        <p className="text-xs font-normal text-foreground-500">{t('home.due', { date: item.dueDate })}</p>
+        <p className="text-xs font-normal text-foreground-500">{item.dueLabel ?? t('home.due', { date: item.dueDate })}</p>
       </div>
       {isNavigable && <span className="text-foreground-400 text-3xl">›</span>}
     </div>
@@ -178,8 +199,17 @@ function ChecklistItem({ item, checked, onToggle }) {
 function Home() {
   const { t } = useTranslation()
   const [userName, setUserName] = useState(null)
-  const [adminInfo, setAdminInfo] = useState({ visa: '-', topik: '-', nextDue: '-', daysLeft: null, daysLeftRaw: null, stayStatus: '-' })
+  const [adminInfo, setAdminInfo] = useState({
+    visa: '-',
+    topik: '-',
+    nextDue: '-',
+    daysLeft: null,
+    daysLeftRaw: null,
+    stayStatus: '-',
+    stayExpirationDateRaw: null,
+  })
   const [checklist, setChecklist] = useState([])
+  const [stayItemCompleted, setStayItemCompleted] = useState(false)
 
   useEffect(() => {
     getMyInfo()
@@ -193,6 +223,7 @@ function Home() {
           daysLeft: formatDaysLeft(t, user.stayExpirationDate),
           daysLeftRaw: user.stayExpirationDate ? daysUntil(user.stayExpirationDate) : null,
           stayStatus: formatStayStatus(t, user.stayExpirationDate),
+          stayExpirationDateRaw: user.stayExpirationDate,
         })
       })
       .catch((error) => console.error('[Home] 내 정보 조회 실패', error))
@@ -219,8 +250,13 @@ function Home() {
   }, [])
 
   // 완료 체크는 서버에 저장됨(PATCH /complete) — 낙관적으로 먼저 화면을 바꾸고,
-  // 실패하면 되돌린다.
+  // 실패하면 되돌린다. 체류기간 만료 당일 항목(eventId=-2, 프론트에서 만든 가상 일정)은 서버에
+  // 완료 상태를 저장할 곳이 없어서 이 세션 동안만 유지되는 로컬 상태로 토글한다.
   const toggleChecked = (id) => {
+    if (id === -2) {
+      setStayItemCompleted((prev) => !prev)
+      return
+    }
     setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)))
     toggleEventCompleted(id).catch((error) => {
       console.error('[Home] 완료 체크 실패', error)
@@ -228,8 +264,19 @@ function Home() {
     })
   }
 
-  const incompleteChecklist = checklist.filter((item) => !item.completed)
-  const completedChecklist = checklist.filter((item) => item.completed)
+  // 체류기간 만료 당일은 캘린더 이벤트 테이블이 아니라 유저 프로필 필드(stayExpirationDate)라서
+  // getMonthlyEvents 응답에는 없다 — 여기서 가상 일정을 만들어 끼워 넣는다. eventId=-2를 씀
+  // (백엔드가 이미 D-30 안내용으로 eventId=-1을 쓰고 있어서 겹치면 안 됨 — Calendar.jsx도 동일한 -2를 씀).
+  const stayExpirationChecklistItem = adminInfo.stayExpirationDateRaw
+    ? buildStayExpirationItem(t, adminInfo.stayExpirationDateRaw, stayItemCompleted)
+    : null
+
+  const fullChecklist = stayExpirationChecklistItem
+    ? [...checklist, stayExpirationChecklistItem].sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+    : checklist
+
+  const incompleteChecklist = fullChecklist.filter((item) => !item.completed)
+  const completedChecklist = fullChecklist.filter((item) => item.completed)
 
   return (
     <div className="p-4 pt-14">
@@ -317,7 +364,7 @@ function Home() {
       <div className="space-y-3">
         {incompleteChecklist.length === 0 && (
           <p className="text-sm text-foreground-400">
-            {checklist.length === 0 ? t('home.noUpcoming') : t('home.allDone')}
+            {fullChecklist.length === 0 ? t('home.noUpcoming') : t('home.allDone')}
           </p>
         )}
         {incompleteChecklist.map((item) => (

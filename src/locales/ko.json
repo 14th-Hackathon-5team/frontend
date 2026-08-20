@@ -56,7 +56,9 @@
     "due": "{{date}}까지",
     "noUpcoming": "앞으로 30일 이내 예정된 일정이 없어요.",
     "checklistSubtitle": "30일 이내 일정 · 완료하면 체크하세요",
-    "allDone": "체크할 항목을 모두 완료했어요!"
+    "allDone": "체크할 항목을 모두 완료했어요!",
+    "stayExpirationChecklistTitle": "체류기간 만료",
+    "stayExpirationOverdueNotice": "체류기간이 지났어요. 범칙금 등 행정상 제재로 이어질 수 있으니 출입국·외국인관서에 바로 확인하세요."
   },
   "calendar": {
     "title": "{{year}}년 캘린더",

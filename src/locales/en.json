@@ -56,7 +56,9 @@
     "due": "Due {{date}}",
     "noUpcoming": "No upcoming items in the next 30 days.",
     "checklistSubtitle": "Within 30 days · Check off when done",
-    "allDone": "You've completed everything on your checklist!"
+    "allDone": "You've completed everything on your checklist!",
+    "stayExpirationChecklistTitle": "Stay period expiration",
+    "stayExpirationOverdueNotice": "Your stay period has expired. This can lead to fines or other administrative penalties — check with immigration right away."
   },
   "calendar": {
     "title": "{{year}} Calendar",
