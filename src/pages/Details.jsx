@@ -150,8 +150,9 @@ function QuickFindGrid({ t }) {
   )
 }
 
-// 서울외국인포털 채용공고 카드 — TITL_NM/CONT/WRIT_NM/REG_DT 사용. 원문 URL 필드가 API에 없어서
-// (출력값: TITL_NM/CONT/WRIT_NM/LANG_GB/REG_DT/UPD_DT 뿐) 개별 공고 링크 대신 채용공고 게시판 목록으로 연결.
+// 서울외국인포털 채용공고 카드 — 백엔드 프록시(GET /api/external/seoul-jobs) 응답 필드
+// (title/content/writerName/registeredAt) 사용. 원문 URL 필드가 없어서 개별 공고 링크 대신
+// 채용공고 게시판 목록으로 연결.
 function SeoulJobCard({ item }) {
   return (
     <a
@@ -160,10 +161,10 @@ function SeoulJobCard({ item }) {
       rel="noreferrer"
       className="glass-surface w-[70%] shrink-0 snap-center rounded-2xl p-4 transition-transform active:scale-[0.98]"
     >
-      {item.REG_DT && <p className="text-[10px] font-semibold text-foreground-400">{item.REG_DT}</p>}
-      <p className="mt-1 line-clamp-2 text-sm font-bold text-foreground-900">{item.TITL_NM}</p>
-      <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-foreground-600">{item.CONT}</p>
-      {item.WRIT_NM && <p className="mt-2 text-[11px] font-semibold text-foreground-500">{item.WRIT_NM}</p>}
+      {item.registeredAt && <p className="text-[10px] font-semibold text-foreground-400">{item.registeredAt}</p>}
+      <p className="mt-1 line-clamp-2 text-sm font-bold text-foreground-900">{item.title}</p>
+      <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-foreground-600">{item.content}</p>
+      {item.writerName && <p className="mt-2 text-[11px] font-semibold text-foreground-500">{item.writerName}</p>}
     </a>
   )
 }
@@ -192,7 +193,7 @@ function SeoulJobsSection({ t, status, items, onRetry }) {
       {status === 'ready' && items.length > 0 && (
         <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
           {items.map((item, index) => (
-            <SeoulJobCard key={`${item.TITL_NM}-${index}`} item={item} />
+            <SeoulJobCard key={`${item.title}-${index}`} item={item} />
           ))}
         </div>
       )}
@@ -233,8 +234,8 @@ function Details() {
     setSeoulJobsStatus('loading')
     getSeoulForeignerJobs(1, 20)
       .then((response) => {
-        const rows = response.data?.GlobalJobSearch?.row ?? []
-        const sorted = [...rows].sort((a, b) => (b.REG_DT ?? '').localeCompare(a.REG_DT ?? ''))
+        const rows = response.data?.data ?? []
+        const sorted = [...rows].sort((a, b) => (b.registeredAt ?? '').localeCompare(a.registeredAt ?? ''))
         setSeoulJobs(sorted.slice(0, SEOUL_JOBS_DISPLAY_COUNT))
         setSeoulJobsStatus('ready')
       })
