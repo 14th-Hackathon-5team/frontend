@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getMonthlyEvents } from '../lib/calendarApi'
-import { getMyInfo } from '../lib/authApi'
 
 // 카테고리(VISA/TOPIK_APPLICATION/TOPIK_EXAM/LEGAL/ACADEMIC)만으로 색을 정하면 같은 카테고리 안의
 // 서로 다른 일정(예: TOPIK 108회 PBT vs 109회 PBT vs 16회 IBT)이 같은 색으로 겹쳐 보여서 혼동됨.
@@ -89,15 +88,8 @@ function Calendar() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [stayExpirationDate, setStayExpirationDate] = useState(null)
 
   const cells = useMemo(() => buildMonthGrid(year, month), [year, month])
-
-  useEffect(() => {
-    getMyInfo()
-      .then((response) => setStayExpirationDate(response.data.data.stayExpirationDate))
-      .catch((error) => console.error('[Calendar] 내 정보 조회 실패', error))
-  }, [])
 
   useEffect(() => {
     setLoading(true)
@@ -117,18 +109,6 @@ function Calendar() {
       })
       .finally(() => setLoading(false))
   }, [year, month, t])
-
-  // 체류기간 만료 당일은 캘린더 이벤트 테이블이 아니라 유저 프로필 필드(stayExpirationDate)라서
-  // getMonthlyEvents 응답에는 없다 — 지금 보고 있는 달에 해당할 때만 가상 일정을 만들어 끼워 넣는다.
-  // eventId=-2를 씀(백엔드가 이미 D-30 안내용으로 eventId=-1을 쓰고 있어서 겹치면 안 됨
-  // — 실제로 겹쳤을 때 React key 중복 경고가 떴었음. Home.jsx 체크리스트도 동일한 -2를 씀).
-  const displayEvents = useMemo(() => {
-    if (!stayExpirationDate) return events
-    const expDate = new Date(stayExpirationDate)
-    if (expDate.getFullYear() !== year || expDate.getMonth() !== month) return events
-    const virtualEvent = { eventId: -2, title: t('home.stayExpirationChecklistTitle'), startDate: stayExpirationDate, endDate: null }
-    return [...events, { ...virtualEvent, ...toDayRange(virtualEvent, year, month) }]
-  }, [events, stayExpirationDate, year, month, t])
 
   const goPrevMonth = () => {
     if (month === 0) {
@@ -180,10 +160,11 @@ function Calendar() {
             </div>
           ))}
           {cells.map((date, index) => {
-            const event = date ? eventOnDay(displayEvents, date) : null
+            const event = date ? eventOnDay(events, date) : null
             const isRange = event && event.day !== event.endDay
             const isStart = event && date === event.day
             const isEnd = event && date === event.endDay
+            const isToday = date === today.getDate() && year === today.getFullYear() && month === today.getMonth()
 
             let roundedClass = 'rounded-xl'
             if (isRange) {
@@ -196,11 +177,12 @@ function Calendar() {
               <div key={index} className="flex h-9 items-center justify-center">
                 {date && (
                   <span
-                    className={`flex h-8 items-center justify-center text-sm ${roundedClass} ${
+                    className={`relative flex h-8 items-center justify-center text-sm ${roundedClass} ${
                       isRange ? 'w-full' : 'w-8'
-                    } ${event ? `${eventColor(event)} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
+                    } ${event ? `${eventColor(event)} font-semibold text-white` : isToday ? 'font-semibold text-white' : 'font-semibold text-foreground-800'}`}
                   >
-                    {date}
+                    {isToday && <span className="absolute inset-0 m-auto h-[1.5rem] w-[1.5rem] rounded-full bg-black" aria-hidden="true" />}
+                    <span className="relative z-10">{date}</span>
                   </span>
                 )}
               </div>
@@ -214,14 +196,14 @@ function Calendar() {
       </p>
       {loading && <p className="py-4 text-center text-sm text-foreground-400">{t('common.loading')}</p>}
       {errorMessage && <p className="py-4 text-center text-sm text-red-500">{errorMessage}</p>}
-      {!loading && !errorMessage && displayEvents.length === 0 && (
+      {!loading && !errorMessage && events.length === 0 && (
         <p className="py-4 text-center text-sm text-foreground-400">{t('calendar.noEvents')}</p>
       )}
       <ul className="divide-y divide-background-200">
-        {displayEvents.map((event) => {
-          // eventId가 음수면 실제 저장된 일정이 아니라 조회 시점에 계산해서 끼워 넣는 가상 일정
-          // (백엔드가 내려주는 체류기간 만료 D-30 안내: eventId=-1, 프론트가 만드는 체류기간 만료
-          // 당일: eventId=-2) — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
+        {events.map((event) => {
+          // eventId가 음수면 실제 저장된 일정이 아니라 백엔드가 조회 시점에 계산해서 내려주는 가상 일정
+          // (체류기간 만료 D-30 안내: eventId=-1, 체류기간 만료 당일: eventId=-2)
+          // — 상세 조회 API가 404를 내므로 상세 화면으로 이동시키지 않음.
           const isNavigable = event.eventId >= 0
           return (
             <li key={event.eventId}>

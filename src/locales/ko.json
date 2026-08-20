@@ -133,8 +133,7 @@
     "viewApplicationSchedule": "지원 일정 확인",
     "jobsTitle": "일자리 정보",
     "jobsSubtitle": "서울외국인포털에 등록된 채용 공고예요.",
-    "jobsEmpty": "아직 등록된 채용 공고가 없어요.",
-    "jobsSourceLink": "서울외국인포털 바로가기"
+    "jobsEmpty": "아직 등록된 채용 공고가 없어요."
   },
   "category": {
     "visa": {

@@ -5,7 +5,11 @@ import { getNotifications } from '../lib/notificationsApi'
 import { getSeoulForeignerJobs } from '../lib/seoulJobsApi'
 import { buildFeed, detectNotificationType, getPriorityTier } from '../lib/notificationHelpers'
 
-const SEOUL_GLOBAL_PORTAL_URL = 'https://global.seoul.go.kr/web/main.do'
+// 서울외국인포털 "채용공고" 게시판(GlobalJobSearch API의 실제 출처) 목록 페이지.
+// brd_no=10 — data.seoul.go.kr에서 확인한 GlobalJobSearch 샘플 URL과 실제 사이트 메뉴("알림 > 채용공고")를
+// 대조해서 찾음. 개별 게시물 상세 URL(bordContDetail.do?...&post_no=<opaque id>)은 API 응답에 없는
+// post_no 값이 필요해서 개별 링크는 못 만들고, 최소한 이 게시판 목록으로는 바로 연결할 수 있음.
+const SEOUL_JOBS_BOARD_URL = 'https://global.seoul.go.kr/web/news/jobo/bordContListPage.do?brd_no=10'
 const SEOUL_JOBS_DISPLAY_COUNT = 6
 
 // "추천 가이드" 타일 4개 — /details/category/:slug로 이동(CategoryGuides.jsx).
@@ -107,7 +111,7 @@ function FeedCarousel({ items }) {
 
   return (
     <div>
-      <div ref={trackRef} onScroll={handleScroll} className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
+      <div ref={trackRef} onScroll={handleScroll} className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
         {items.map((notification) => (
           <FeedCard key={notification.notificationId} notification={notification} />
         ))}
@@ -147,11 +151,11 @@ function QuickFindGrid({ t }) {
 }
 
 // 서울외국인포털 채용공고 카드 — TITL_NM/CONT/WRIT_NM/REG_DT 사용. 원문 URL 필드가 API에 없어서
-// (출력값: TITL_NM/CONT/WRIT_NM/LANG_GB/REG_DT/UPD_DT 뿐) 개별 공고 링크 대신 포털 홈으로 연결.
+// (출력값: TITL_NM/CONT/WRIT_NM/LANG_GB/REG_DT/UPD_DT 뿐) 개별 공고 링크 대신 채용공고 게시판 목록으로 연결.
 function SeoulJobCard({ item }) {
   return (
     <a
-      href={SEOUL_GLOBAL_PORTAL_URL}
+      href={SEOUL_JOBS_BOARD_URL}
       target="_blank"
       rel="noreferrer"
       className="glass-surface w-[70%] shrink-0 snap-center rounded-2xl p-4 transition-transform active:scale-[0.98]"
@@ -176,14 +180,9 @@ function SeoulJobsSkeleton() {
 function SeoulJobsSection({ t, status, items, onRetry }) {
   return (
     <section className="mb-6">
-      <div className="mb-2 flex items-baseline justify-between">
-        <div>
-          <p className="text-sm font-semibold text-foreground-700">{t('recommend.jobsTitle')}</p>
-          <p className="text-[11px] text-foreground-400">{t('recommend.jobsSubtitle')}</p>
-        </div>
-        <a href={SEOUL_GLOBAL_PORTAL_URL} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-semibold text-primary-600">
-          {t('recommend.jobsSourceLink')}
-        </a>
+      <div className="mb-2">
+        <p className="text-sm font-semibold text-foreground-700">{t('recommend.jobsTitle')}</p>
+        <p className="text-[11px] text-foreground-400">{t('recommend.jobsSubtitle')}</p>
       </div>
       {status === 'loading' && <SeoulJobsSkeleton />}
       {status === 'error' && <FeedError t={t} onRetry={onRetry} />}
@@ -191,7 +190,7 @@ function SeoulJobsSection({ t, status, items, onRetry }) {
         <div className="glass-surface rounded-2xl p-4 text-center text-sm text-foreground-400">{t('recommend.jobsEmpty')}</div>
       )}
       {status === 'ready' && items.length > 0 && (
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
+        <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
           {items.map((item, index) => (
             <SeoulJobCard key={`${item.TITL_NM}-${index}`} item={item} />
           ))}
@@ -269,12 +268,12 @@ function Details() {
         {status === 'ready' && feed.length > 0 && <FeedCarousel items={feed} />}
       </section>
 
-      <SeoulJobsSection t={t} status={seoulJobsStatus} items={seoulJobs} onRetry={fetchSeoulJobs} />
-
-      <section>
+      <section className="mb-6">
         <p className="mb-2 text-sm font-semibold text-foreground-700">{t('recommend.guideSectionTitle')}</p>
         <QuickFindGrid t={t} />
       </section>
+
+      <SeoulJobsSection t={t} status={seoulJobsStatus} items={seoulJobs} onRetry={fetchSeoulJobs} />
     </div>
   )
 }
