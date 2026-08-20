@@ -57,8 +57,48 @@ function toDayRange(event, year, month) {
   return { day: clampedStart.getDate(), endDay: clampedEnd.getDate() }
 }
 
-function eventOnDay(events, date) {
-  return events.find((event) => date >= event.day && date <= event.endDay)
+// 하루에 일정이 여러 개 겹치면(예: TOPIK 접수기간과 체류기간 만료) 하나만 find로 골라서 나머지가
+// 화면에서 완전히 사라지는 문제가 있었음 — filter로 그날의 일정을 전부 가져와서 전부 표시한다.
+function eventsOnDay(events, date) {
+  return events.filter((event) => date >= event.day && date <= event.endDay)
+}
+
+// 맨 아래(가장 오래된/첫 일정)는 셀 전체를 채우는 배경으로 두고, 그 위로 겹치는 일정은 이 목록에서
+// 순서대로 크기를 골라 셀 중앙에 점점 작게 겹쳐 쌓는다(케이크 층처럼). 겹치는 일정 수만큼 자동으로
+// 처리되도록 크기값을 미리 배열로 정의해둠 — 4개 이상 겹치면 이후는 가장 작은 크기를 그대로 재사용.
+// 모서리 둥글기(rounded-*)도 크기에 비례하게 미리 정해둠 — 8/31 같은 단독 일정(h-10, rounded-xl,
+// 반지름/높이 ≈ 0.3)과 같은 비율이 되도록 각 크기별로 계산한 값. 같은 비율값 없이 전부 rounded-lg를
+// 쓰면 작은 뱃지일수록 상대적으로 더 둥글어 보여서(반지름은 그대로인데 크기만 작아지니까) 다른
+// 일정들과 이질감이 생김.
+// h-7/h-4/h-2.5(1.75rem/1rem/0.625rem)에서 10% 키운 값 — Tailwind 기본 스케일에 없어서 임의값으로 지정.
+const OVERLAY_SIZES = [
+  { badge: 'h-[1.925rem] w-[1.925rem]', badgeRounded: 'rounded-lg', bar: 'h-[1.925rem]', barStart: 'rounded-l-lg rounded-r-none', barEnd: 'rounded-r-lg rounded-l-none', barMid: 'rounded-none' },
+  { badge: 'h-[1.4641rem] w-[1.4641rem]', badgeRounded: 'rounded', bar: 'h-[1.4641rem]', barStart: 'rounded-l rounded-r-none', barEnd: 'rounded-r rounded-l-none', barMid: 'rounded-none' },
+  { badge: 'h-[0.9150625rem] w-[0.9150625rem]', badgeRounded: 'rounded-sm', bar: 'h-[0.9150625rem]', barStart: 'rounded-l-sm rounded-r-none', barEnd: 'rounded-r-sm rounded-l-none', barMid: 'rounded-none' },
+]
+
+function overlaySizeFor(index) {
+  return OVERLAY_SIZES[Math.min(index, OVERLAY_SIZES.length - 1)]
+}
+
+function overlayBarRoundedClass(size, event, date) {
+  const isStart = date === event.day
+  const isEnd = date === event.endDay
+  if (isStart && !isEnd) return size.barStart
+  if (isEnd && !isStart) return size.barEnd
+  return size.barMid
+}
+
+// 여러 날짜에 걸친 일정(TOPIK 접수기간 등)은 시작일만 왼쪽, 종료일만 오른쪽을 둥글게 해서 그 사이
+// 날짜들끼리 이어진 띠처럼 보이게 한다. 겹치는 일정이 있어도 이 로직은 일정별로 독립적으로 적용됨.
+function bandRoundedClass(event, date) {
+  if (event.day === event.endDay) return 'rounded-xl'
+  const isStart = date === event.day
+  const isEnd = date === event.endDay
+  if (isStart && !isEnd) return 'rounded-l-xl rounded-r-none'
+  if (isEnd && !isStart) return 'rounded-r-xl rounded-l-none'
+  if (!isStart && !isEnd) return 'rounded-none'
+  return 'rounded-xl'
 }
 
 function ChevronIcon({ direction }) {
@@ -153,36 +193,54 @@ function Calendar() {
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
+        <div className="grid grid-cols-7 gap-y-2 text-center text-xs">
           {weekdays.map((day) => (
             <div key={day} className="font-semibold text-foreground-400">
               {day}
             </div>
           ))}
           {cells.map((date, index) => {
-            const event = date ? eventOnDay(events, date) : null
-            const isRange = event && event.day !== event.endDay
-            const isStart = event && date === event.day
-            const isEnd = event && date === event.endDay
+            const dayEvents = date ? eventsOnDay(events, date) : []
+            const primaryEvent = dayEvents[0] ?? null
+            const overlayEvents = dayEvents.slice(1)
+            const isRange = primaryEvent && primaryEvent.day !== primaryEvent.endDay
+            const hasRangeOverlay = overlayEvents.some((event) => event.day !== event.endDay)
             const isToday = date === today.getDate() && year === today.getFullYear() && month === today.getMonth()
-
-            let roundedClass = 'rounded-xl'
-            if (isRange) {
-              if (isStart && !isEnd) roundedClass = 'rounded-l-xl rounded-r-none'
-              else if (isEnd && !isStart) roundedClass = 'rounded-r-xl rounded-l-none'
-              else if (!isStart && !isEnd) roundedClass = 'rounded-none'
-            }
+            // 겹치는 일정이 있어도 전부 하루짜리면 셀 폭을 늘릴 필요가 없음(예: 31일 "체류기간 만료" +
+            // 겹친 하루짜리 일정들) — 실제로 여러 날짜에 걸친 일정이 하나라도 있을 때만 폭을 늘려서
+            // 그 이어진 막대를 제대로 보여준다.
+            const widthClass = isRange || hasRangeOverlay ? 'w-full' : 'w-10'
+            const roundedClass = primaryEvent ? bandRoundedClass(primaryEvent, date) : 'rounded-xl'
+            const textColorClass = dayEvents.length > 0 ? 'text-white' : 'text-foreground-800'
+            const primaryBgClass = primaryEvent ? eventColor(primaryEvent) : ''
 
             return (
-              <div key={index} className="flex h-9 items-center justify-center">
+              <div key={index} className="flex h-11 items-center justify-center">
                 {date && (
                   <span
-                    className={`relative flex h-8 items-center justify-center text-sm ${roundedClass} ${
-                      isRange ? 'w-full' : 'w-8'
-                    } ${event ? `${eventColor(event)} font-semibold text-white` : isToday ? 'font-semibold text-white' : 'font-semibold text-foreground-800'}`}
+                    className={`relative flex h-10 items-center justify-center text-sm font-semibold ${widthClass} ${roundedClass} ${primaryBgClass} ${textColorClass}`}
                   >
-                    {isToday && <span className="absolute inset-0 m-auto h-[1.5rem] w-[1.5rem] rounded-full bg-black" aria-hidden="true" />}
-                    <span className="relative z-10">{date}</span>
+                    {/* 맨 아래(배경) 위로 겹치는 일정마다 OVERLAY_SIZES에서 순서대로 크기를 골라 셀 중앙에
+                        점점 작게 겹쳐 쌓는다 — 몇 개가 겹치든 같은 로직으로 처리됨. 여러 날짜짜리 일정은
+                        날마다 따로 찍힌 도형이 아니라 셀 폭 전체를 채우는 얇은 막대로 이어지게 표시. */}
+                    {overlayEvents.map((overlayEvent, overlayIndex) => {
+                      const overlayIsRange = overlayEvent.day !== overlayEvent.endDay
+                      const size = overlaySizeFor(overlayIndex)
+                      return overlayIsRange ? (
+                        <span
+                          key={overlayEvent.eventId}
+                          className={`absolute inset-x-0 top-1/2 -translate-y-1/2 ${size.bar} ${eventColor(overlayEvent)} ${overlayBarRoundedClass(size, overlayEvent, date)}`}
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <span
+                          key={overlayEvent.eventId}
+                          className={`absolute inset-0 m-auto ${size.badge} ${size.badgeRounded} ${eventColor(overlayEvent)}`}
+                          aria-hidden="true"
+                        />
+                      )
+                    })}
+                    <span className={`relative z-10 ${isToday ? 'text-red-500' : ''}`}>{date}</span>
                   </span>
                 )}
               </div>
