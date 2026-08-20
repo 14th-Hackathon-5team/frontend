@@ -5,6 +5,7 @@ import birdLogo from '../assets/bird_logo.png'
 import calendarIcon from '../assets/calendar_icon.png'
 import { getMyInfo } from '../lib/authApi'
 import { getMonthlyEvents, toggleEventCompleted } from '../lib/calendarApi'
+import { translateEventTitle } from '../lib/calendarEventTitle'
 
 // 체크리스트 전용 API는 없음(스웨거 확인 완료). GET /api/calendar/events/upcoming는 7일 이내로 고정돼 있어서
 // (백엔드에 기간 파라미터 없음) 대신 월별 조회(GET /api/calendar/events?year=&month=)를 오늘부터 30일 뒤까지
@@ -57,7 +58,7 @@ function isWithinChecklistWindow(event, windowDays) {
 
 // 아직 시작 전이면 시작일까지, 이미 시작해서 진행 중(startDate~endDate 사이)이면 종료일까지 D-day를 센다.
 // 체류기간 만료(eventId=-2)가 이미 지났으면 배지/문구를 경고 톤으로 바꾼다.
-function toChecklistItem(t, event) {
+function toChecklistItem(t, locale, event) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const start = new Date(event.startDate)
@@ -68,7 +69,7 @@ function toChecklistItem(t, event) {
   return {
     id: event.eventId,
     eventId: event.eventId,
-    title: event.title,
+    title: translateEventTitle(event.title, { eventId: event.eventId, locale, t }),
     isGlobal: event.isGlobal,
     completed: event.completed,
     dueDate: !event.endDate || event.startDate === event.endDate
@@ -178,7 +179,8 @@ export function ChecklistItem({ item, checked, onToggle }) {
 
 // 메인(홈) 화면 — 최종 디자인(tqwhyl.readdy.co/home) 반영.
 function Home() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language
   const [userName, setUserName] = useState(null)
   const [adminInfo, setAdminInfo] = useState({
     visa: '-',
@@ -222,10 +224,10 @@ function Home() {
           })
         })
         events.sort((a, b) => a.startDate.localeCompare(b.startDate))
-        setChecklist(events.map((event) => toChecklistItem(t, event)))
+        setChecklist(events.map((event) => toChecklistItem(t, locale, event)))
       })
       .catch((error) => console.error('[Home] 다가오는 일정 조회 실패', error))
-  }, [t])
+  }, [t, locale])
 
   // 완료 체크는 서버에 저장됨(PATCH /complete) — 낙관적으로 먼저 화면을 바꾸고, 실패하면 되돌린다.
   // 체류기간 만료 관련 가상 일정(eventId=-1, -2)도 백엔드가 완료 상태를 저장해주므로 동일하게 처리한다.

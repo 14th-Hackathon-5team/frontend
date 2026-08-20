@@ -2,18 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getNotifications } from '../lib/notificationsApi'
-import { getSeoulForeignerJobs } from '../lib/seoulJobsApi'
 import { getNews } from '../lib/newsApi'
 import { getMyInfo } from '../lib/authApi'
 import { getClientRecommendations } from '../lib/clientRecommendations'
 import { buildFeed, detectNotificationType, getNotificationDetails, getPriorityTier } from '../lib/notificationHelpers'
-
-// 서울외국인포털 "채용공고" 게시판(GlobalJobSearch API의 실제 출처) 목록 페이지.
-// brd_no=10 — data.seoul.go.kr에서 확인한 GlobalJobSearch 샘플 URL과 실제 사이트 메뉴("알림 > 채용공고")를
-// 대조해서 찾음. 개별 게시물 상세 URL(bordContDetail.do?...&post_no=<opaque id>)은 API 응답에 없는
-// post_no 값이 필요해서 개별 링크는 못 만들고, 최소한 이 게시판 목록으로는 바로 연결할 수 있음.
-const SEOUL_JOBS_BOARD_URL = 'https://global.seoul.go.kr/web/news/jobo/bordContListPage.do?brd_no=10'
-const SEOUL_JOBS_DISPLAY_COUNT = 6
 
 // "추천 가이드" 타일 4개 — /details/category/:slug로 이동(CategoryGuides.jsx).
 const QUICK_FIND = [
@@ -153,56 +145,6 @@ function QuickFindGrid({ t }) {
   )
 }
 
-// 서울외국인포털 채용공고 카드 — 백엔드 프록시(GET /api/external/seoul-jobs) 응답 필드
-// (title/content/writerName/registeredAt) 사용. 원문 URL 필드가 없어서 개별 공고 링크 대신
-// 채용공고 게시판 목록으로 연결.
-function SeoulJobCard({ item }) {
-  return (
-    <a
-      href={SEOUL_JOBS_BOARD_URL}
-      target="_blank"
-      rel="noreferrer"
-      className="glass-surface w-[70%] shrink-0 snap-center rounded-2xl p-4 transition-transform active:scale-[0.98]"
-    >
-      {item.registeredAt && <p className="text-[10px] font-semibold text-foreground-400">{item.registeredAt}</p>}
-      <p className="mt-1 line-clamp-2 text-sm font-bold text-foreground-900">{item.title}</p>
-      <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-foreground-600">{item.content}</p>
-      {item.writerName && <p className="mt-2 text-[11px] font-semibold text-foreground-500">{item.writerName}</p>}
-    </a>
-  )
-}
-
-function SeoulJobsSkeleton() {
-  return (
-    <div className="flex gap-3 overflow-hidden">
-      <div className="h-32 w-[70%] shrink-0 animate-pulse rounded-2xl bg-background-100" />
-      <div className="h-32 w-[70%] shrink-0 animate-pulse rounded-2xl bg-background-100" />
-    </div>
-  )
-}
-
-function SeoulJobsSection({ t, status, items, onRetry }) {
-  return (
-    <section>
-      <div className="mb-2">
-        <p className="text-lg font-bold text-foreground-950">{t('recommend.jobsTitle')}</p>
-        <p className="mt-1 text-xs text-foreground-500">{t('recommend.jobsSubtitle')}</p>
-      </div>
-      {status === 'loading' && <SeoulJobsSkeleton />}
-      {status === 'error' && <FeedError t={t} onRetry={onRetry} />}
-      {status === 'ready' && items.length === 0 && (
-        <div className="glass-surface rounded-2xl p-4 text-center text-sm text-foreground-400">{t('recommend.jobsEmpty')}</div>
-      )}
-      {status === 'ready' && items.length > 0 && (
-        <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
-          {items.map((item, index) => (
-            <SeoulJobCard key={`${item.title}-${index}`} item={item} />
-          ))}
-        </div>
-      )}
-    </section>
-  )
-}
 
 // 유학생 뉴스 카드 — GET /api/news(백엔드가 AI 서버 대신 호출: 네이버 뉴스 검색 + AI 요약).
 // 개별 뉴스에 ID가 없어서 목록 인덱스를 라우트 파라미터로 쓰고, 전체 news 객체는 router state로 넘김
@@ -265,18 +207,12 @@ function NewsSection({ t, status, items, onRetry }) {
 //    (notificationHelpers.detectNotificationType). 카드 클릭 시 /details/notification/:id로 이동(상세는
 //    NotificationDetail.jsx).
 // 2) 추천 가이드 — 비자·체류/대학·진학/TOPIK/일자리 4개 카테고리 진입점(CategoryGuides.jsx).
-// 3) 일자리 정보 — 서울 열린데이터광장 Open API(GlobalJobSearch, 서울외국인포털 채용공고) 백엔드 프록시를
-//    등록일 최신순으로 정렬해 상위 몇 개만 별도 섹션으로 노출. 개별 공고 URL 필드가 없어 카드는
-//    채용공고 게시판 목록으로 연결됨.
-// 4) 유학생 뉴스 — GET /api/news(백엔드가 AI 서버의 네이버 뉴스 검색+요약을 대신 호출). 개별 뉴스에
+// 3) 유학생 뉴스 — GET /api/news(백엔드가 AI 서버의 네이버 뉴스 검색+요약을 대신 호출). 개별 뉴스에
 //    ID가 없어 목록 인덱스 + router state로 상세(NewsDetail.jsx)에 데이터를 넘김.
 function Details() {
   const { t } = useTranslation()
   const [notifications, setNotifications] = useState([])
   const [status, setStatus] = useState('loading') // loading | error | ready
-
-  const [seoulJobs, setSeoulJobs] = useState([])
-  const [seoulJobsStatus, setSeoulJobsStatus] = useState('loading')
 
   const [news, setNews] = useState([])
   const [newsStatus, setNewsStatus] = useState('loading')
@@ -297,21 +233,6 @@ function Details() {
       })
   }, [t])
 
-  const fetchSeoulJobs = useCallback(() => {
-    setSeoulJobsStatus('loading')
-    getSeoulForeignerJobs(1, 20)
-      .then((response) => {
-        const rows = response.data?.data ?? []
-        const sorted = [...rows].sort((a, b) => (b.registeredAt ?? '').localeCompare(a.registeredAt ?? ''))
-        setSeoulJobs(sorted.slice(0, SEOUL_JOBS_DISPLAY_COUNT))
-        setSeoulJobsStatus('ready')
-      })
-      .catch((error) => {
-        console.error('[Details] 일자리 정보 조회 실패', error)
-        setSeoulJobsStatus('error')
-      })
-  }, [])
-
   const fetchNews = useCallback(() => {
     setNewsStatus('loading')
     getNews()
@@ -328,10 +249,6 @@ function Details() {
   useEffect(() => {
     fetchNotifications()
   }, [fetchNotifications])
-
-  useEffect(() => {
-    fetchSeoulJobs()
-  }, [fetchSeoulJobs])
 
   useEffect(() => {
     fetchNews()
@@ -359,10 +276,6 @@ function Details() {
         <p className="mb-2 text-lg font-bold text-foreground-950">{t('recommend.guideSectionTitle')}</p>
         <QuickFindGrid t={t} />
       </section>
-
-      <hr className="my-6 border-t border-background-200" />
-
-      <SeoulJobsSection t={t} status={seoulJobsStatus} items={seoulJobs} onRetry={fetchSeoulJobs} />
 
       <hr className="my-6 border-t border-background-200" />
 

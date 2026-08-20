@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { getEventDetail } from '../lib/calendarApi'
 import { parseGuideContent } from '../lib/parseGuideContent'
 import { getCalendarEventContentOverride } from '../lib/calendarEventContent'
+import { translateEventTitle } from '../lib/calendarEventTitle'
 import { InfoSummary, InfoImportant, InfoSteps, InfoCaution } from '../components/InfoSections'
 
 // 일정 상세 화면 — GuideDetail.jsx와 같은 톤(하단 탭 없이 단독 화면). GET /api/calendar/events/{eventId} 연동.
@@ -16,6 +17,7 @@ function CalendarEventDetail() {
   const navigate = useNavigate()
   const [event, setEvent] = useState(null)
   const [notFound, setNotFound] = useState(false)
+  const title = event ? translateEventTitle(event.title, { eventId: event.eventId, locale, t }) : ''
   const parsed = useMemo(() => {
     if (!event) return null
     const override = parseGuideContent(getCalendarEventContentOverride(event.category, locale))
@@ -60,7 +62,7 @@ function CalendarEventDetail() {
         <button type="button" onClick={() => navigate(-1)} className="flex h-11 w-11 items-center justify-center text-xl text-foreground-700">
           ‹
         </button>
-        <h1 className="text-base font-bold text-foreground-950">{event.title}</h1>
+        <h1 className="text-base font-bold text-foreground-950">{title}</h1>
       </div>
 
       <div className="px-6 py-6">
@@ -73,7 +75,7 @@ function CalendarEventDetail() {
               {t('calendarDetail.common')}
             </span>
           )}
-          <h2 className="mt-3 text-xl font-bold text-foreground-950">{event.title}</h2>
+          <h2 className="mt-3 text-xl font-bold text-foreground-950">{title}</h2>
           <p className="mt-2 text-sm text-foreground-700">
             {!event.endDate || event.startDate === event.endDate
               ? event.startDate

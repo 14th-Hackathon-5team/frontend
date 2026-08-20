@@ -23,4 +23,13 @@ i18n.use(initReactI18next).init({
   returnObjects: true,
 })
 
+// <html lang>도 UI 언어에 맞춰준다 — 스크린리더 발음, 브라우저 번역/자동완성 판단 기준이 되는 값이라
+// 영어 모드에서 한국어로 남아 있으면 안 됨.
+function syncDocumentLang(locale) {
+  if (typeof document !== 'undefined') document.documentElement.lang = locale
+}
+
+syncDocumentLang(i18n.language)
+i18n.on('languageChanged', syncDocumentLang)
+
 export default i18n

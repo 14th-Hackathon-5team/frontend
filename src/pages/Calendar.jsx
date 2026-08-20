@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { getMonthlyEvents } from '../lib/calendarApi'
+import { translateEventTitle } from '../lib/calendarEventTitle'
 
 // 카테고리(VISA/TOPIK_APPLICATION/TOPIK_EXAM/LEGAL/ACADEMIC)만으로 색을 정하면 같은 카테고리 안의
 // 서로 다른 일정(예: TOPIK 108회 PBT vs 109회 PBT vs 16회 IBT)이 같은 색으로 겹쳐 보여서 혼동됨.
@@ -118,7 +119,7 @@ function formatRange(event) {
 
 // 캘린더 화면 — 최종 디자인(tqwhyl.readdy.co/calendar) 반영. 일정은 GET /api/calendar/events 연동.
 function Calendar() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const weekdays = t('calendar.weekdays', { returnObjects: true })
   const months = t('calendar.months', { returnObjects: true })
@@ -266,7 +267,7 @@ function Calendar() {
               className="flex w-full items-center gap-2 py-3 text-left transition-transform active:scale-[0.98]"
             >
               <span className={`h-2 w-2 rounded-full ${eventColor(event)}`} />
-              <span className="flex-1 text-sm font-semibold text-foreground-900">{event.title}</span>
+              <span className="flex-1 text-sm font-semibold text-foreground-900">{translateEventTitle(event.title, { eventId: event.eventId, locale: i18n.language, t })}</span>
               <span className="text-sm font-semibold text-foreground-500">{formatRange(event)}</span>
               <span className="text-foreground-400">›</span>
             </button>
