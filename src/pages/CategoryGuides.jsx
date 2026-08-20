@@ -5,6 +5,7 @@ import { getGuidesByCategory } from '../lib/guidesApi'
 import { getMyInfo } from '../lib/authApi'
 import { getNotifications } from '../lib/notificationsApi'
 import { detectNotificationType, getNotificationDetails, getPriorityTier, sortByPriority } from '../lib/notificationHelpers'
+import { getGuideTitleOverride } from '../lib/guideContent'
 
 // "빠르게 찾아보기" 4개 타일과 같은 슬러그를 씀. guideCategories는 GET /api/guides?category=에 실제 존재하는
 // enum(VISA/TOPIK_APPLICATION/TOPIK_EXAM/LEGAL/ACADEMIC)만 매핑 가능 — "일자리"는 대응 카테고리가 없어서
@@ -178,7 +179,7 @@ function UniversityRecommendationCard({ notification }) {
 
 // 디테일 탭 "빠르게 찾아보기" 타일에서 진입하는 카테고리별 정보 탐색 화면.
 function CategoryGuides() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { slug } = useParams()
   const navigate = useNavigate()
   const config = CATEGORY_CONFIG[slug]
@@ -256,8 +257,9 @@ function CategoryGuides() {
                   className="glass-surface flex items-center gap-3 rounded-2xl p-4 transition-transform active:scale-[0.98]"
                 >
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FDF6DC] text-xl">{config.icon}</div>
-                  <p className="flex-1 text-sm font-bold text-foreground-900">{guide.title}</p>
-                  <span className="text-3xl text-foreground-400">›</span>
+                  <p className="flex-1 text-sm font-bold text-foreground-900">
+                    {getGuideTitleOverride(guide.guideId, i18n.language) ?? guide.title}
+                  </p>
                 </Link>
               ))
             )}

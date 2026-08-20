@@ -15,8 +15,10 @@ export function getClientRecommendations(profile, translate) {
   const t = translate ?? i18n.t.bind(i18n)
   const items = []
 
-  if (profile.hasAlienRegistration === false && profile.entryDate) {
-    const daysSinceEntry = -daysUntil(profile.entryDate)
+    const daysSinceEntry = profile.entryDate ? -daysUntil(profile.entryDate) : null
+  const hasValidEntryDate = Number.isFinite(daysSinceEntry) && daysSinceEntry >= 0 && daysSinceEntry <= 3650
+
+  if (profile.hasAlienRegistration === false && hasValidEntryDate) {
     const daysLeft = 90 - daysSinceEntry
     items.push({
       notificationId: 'client-alien-registration',
