@@ -133,7 +133,11 @@
     "viewApplicationSchedule": "View application schedule",
     "jobsTitle": "Job Postings",
     "jobsSubtitle": "Job listings registered on the Seoul Foreigner Portal.",
-    "jobsEmpty": "No job postings to show yet."
+    "jobsEmpty": "No job postings to show yet.",
+    "newsTitle": "Personalized News",
+    "newsSubtitle": "Latest news related to international students.",
+    "newsEmpty": "No news to show right now.",
+    "viewArticle": "View Article"
   },
   "category": {
     "visa": {
