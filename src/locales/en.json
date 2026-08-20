@@ -554,5 +554,31 @@
       "VN": "Vietnam",
       "ZA": "South Africa"
     }
+  },
+    "clientRecommendations": {
+    "alienRegistration": {
+      "title": "Alien Registration",
+      "reasonRemaining": "You need to complete your alien registration within 90 days of entering Korea. You have {{days}} days left.",
+      "reasonOverdue": "The alien registration deadline (90 days from your entry date) has already passed. Please register as soon as possible.",
+      "lawName": "Immigration Act",
+      "target": "Foreign nationals who intend to stay in Korea for more than 90 days from the date of entry",
+      "situation": "You entered Korea and intend to stay for more than 90 days",
+      "action": "Register as a foreign resident at the regional immigration office that covers your place of residence.",
+      "details": "You can check the required documents, the application procedure and your local office on HiKorea.",
+      "deadline": "Within 90 days of your entry date",
+      "sourceName": "HiKorea"
+    },
+    "partTimePermit": {
+      "title": "Part-Time Work Permit",
+      "reasonWorking": "Your profile says you are currently working part-time. Please double-check that you have received a part-time work permit.",
+      "reasonSearching": "If you are looking for a part-time job, you must obtain a part-time work permit before you start working.",
+      "lawName": "Immigration Act",
+      "target": "International students who want to work part-time on a {{visaType}} status",
+      "situation": "A holder of a study-purpose status wants to engage in work outside their designated activity",
+      "action": "Apply in advance for a part-time work activity permit at your local immigration office.",
+      "details": "Permitted hours differ during the semester and during vacation, and some industries are restricted. Check the exact conditions with your university's international office or on HiKorea.",
+      "sourceName": "HiKorea"
+    }
   }
 }
+

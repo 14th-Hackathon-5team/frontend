@@ -10,15 +10,18 @@ import { InfoSummary, InfoImportant, InfoSteps, InfoCaution } from '../component
 // description이 태그 구조로 오면(가이드와 동일한 [SUMMARY]/[STEP] 규칙) 섹션별 UI로, 아니면(지금은 전부
 // 이 상태) calendarEventContent.js의 카테고리별 override로, 그마저 없으면 평문으로 대체.
 function CalendarEventDetail() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language
   const { eventId } = useParams()
   const navigate = useNavigate()
   const [event, setEvent] = useState(null)
   const [notFound, setNotFound] = useState(false)
   const parsed = useMemo(() => {
     if (!event) return null
-    return parseGuideContent(event.description) ?? parseGuideContent(getCalendarEventContentOverride(event.category))
-  }, [event])
+    const override = parseGuideContent(getCalendarEventContentOverride(event.category, locale))
+    if (locale !== 'ko' && override) return override
+    return parseGuideContent(event.description) ?? override
+  }, [event, locale])
 
   useEffect(() => {
     getEventDetail(eventId)
@@ -89,13 +92,8 @@ function CalendarEventDetail() {
           event.description && <p className="mt-6 text-sm leading-relaxed text-foreground-800">{event.description}</p>
         )}
 
-        {event.relatedLink && (
-          <a
-            href={event.relatedLink}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 flex items-center justify-center rounded-xl bg-primary-500 py-3 text-sm font-semibold text-white"
-          >
+          {event.relatedLink && (
+          <a href={event.relatedLink} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center rounded-xl bg-primary-500 py-3 text-sm font-semibold text-white">
             {t('calendarDetail.relatedLink')}
           </a>
         )}

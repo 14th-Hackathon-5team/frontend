@@ -9,14 +9,14 @@
 // 이동 안 시킴"이라는 코멘트는 더 이상 사실이 아님), 내용 자체는 여전히 1문장짜리 평문이라 여기서
 // 상세 콘텐츠를 채운다. 대상/상황/조치/기한/위반시/출처는 디테일 탭의 "체류기간 만료/연장" 알림
 // (실제 국가법령정보센터 출처, notificationId 16 등에서 2026-08-20 확인)과 동일한 사실을 재사용한다.
-import { GUIDE_CONTENT_OVERRIDES } from './guideContent'
+import { getGuideContentOverride } from './guideContent'
 
 const CATEGORY_TO_GUIDE_ID = {
   TOPIK_APPLICATION: 3,
   TOPIK_EXAM: 4,
 }
 
-const VISA_CONTENT = `[SUMMARY]
+const VISA_CONTENT_KO = `[SUMMARY]
 D-2·D-4 등 학업 목적 체류자격은 정해진 체류기간이 있어요. 계속 한국에 머무를 계획이라면 만료일 전에 체류기간 연장허가를 받아야 해요.
 
 [IMPORTANT]
@@ -39,11 +39,36 @@ D-2·D-4 등 학업 목적 체류자격은 정해진 체류기간이 있어요. 
 
 출처: 국가법령정보센터 · 출입국관리법 제25조, 제94조제17호`
 
+const VISA_CONTENT_EN = `[SUMMARY]
+Study-purpose statuses such as D-2 and D-4 come with a fixed period of stay. If you plan to keep living in Korea, you must get an extension of your period of stay before it expires.
+
+[IMPORTANT]
+Staying past your expiration date without an extension permit can put you into illegal-stay status. Prepare your documents and apply in advance as the expiration date approaches.
+
+[STEP 1]
+Check whether this applies to you
+It applies to any foreign national who wants to stay in Korea beyond the period of stay that was granted.
+
+[STEP 2]
+Check when to apply
+You must apply for the extension before your currently permitted period of stay ends.
+
+[STEP 3]
+Apply for an extension at your local immigration office
+You need an extension of your period of stay from the Minister of Justice (your local Immigration Office). Check the exact required documents on HiKorea.
+
+[CAUTION]
+Penalty: staying beyond your permitted period without an extension permit is punishable by imprisonment of up to 3 years or a fine of up to 30 million KRW.
+
+Source: Korean Law Information Center · Immigration Act Article 25, Article 94(17)`
+
 const CATEGORY_CONTENT = {
-  VISA: VISA_CONTENT,
+  ko: { VISA: VISA_CONTENT_KO },
+  en: { VISA: VISA_CONTENT_EN },
 }
 
-export function getCalendarEventContentOverride(category) {
+export function getCalendarEventContentOverride(category, locale = 'ko') {
+  const table = CATEGORY_CONTENT[locale] ?? CATEGORY_CONTENT.ko
   const guideId = CATEGORY_TO_GUIDE_ID[category]
-  return CATEGORY_CONTENT[category] ?? (guideId ? GUIDE_CONTENT_OVERRIDES[guideId] : undefined)
+  return table[category] ?? CATEGORY_CONTENT.ko[category] ?? (guideId ? getGuideContentOverride(guideId, locale) : undefined)
 }

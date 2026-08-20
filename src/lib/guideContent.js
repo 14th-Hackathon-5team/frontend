@@ -5,7 +5,8 @@
 // 법적 사실관계는 이미 앱에 노출된 실제 AI 알림 데이터(details.sourceName: 국가법령정보센터 — 체류기간
 // 만료/연장, 외국인등록)를 기준으로 작성했고, 벌금 액수처럼 민감하거나 변동 가능한 수치는 명시하지 않고
 // 공식 채널(하이코리아 등) 확인을 안내한다.
-export const GUIDE_CONTENT_OVERRIDES = {
+// 폴백 콘텐츠도 UI 언어를 따라가야 하므로 ko/en 두 벌을 두고 getGuideContentOverride()로 골라 쓴다.
+const KO = {
   // VISA — D-2/D-4 비자 안내
   1: `[SUMMARY]
 D-2는 대학(원) 정규 학위과정에 재학 중인 유학생, D-4는 어학연수·교환학생 등 비학위과정에 재학 중인 유학생에게 부여되는 체류자격이에요. 두 자격 모두 학업을 위한 체류를 전제로 하기 때문에 시간제취업이나 자격 변경 시 별도 절차가 필요해요.
@@ -188,3 +189,204 @@ TOPIK 성적 준비하기
 [CAUTION]
 대학마다 세부 요건과 제출 서류가 달라요. 반드시 지원하려는 대학의 최신 모집요강을 직접 확인하세요.`,
 }
+
+const EN = {
+  1: `[SUMMARY]
+D-2 is the status of stay granted to students enrolled in a degree program at a university or graduate school, while D-4 is for students in non-degree programs such as language training or exchange programs. Both assume you are staying in Korea to study, so part-time work or changing your status requires a separate procedure.
+
+[IMPORTANT]
+D-2 and D-4 differ in how long you may stay, how much part-time work is allowed, and whether you need to change your status when you enter a degree program. Check which status you hold on your Alien Registration Card first.
+
+[STEP 1]
+Check your visa type
+Confirm whether your current status of stay is D-2 or D-4 on your Alien Registration Card or on the HiKorea website.
+
+[STEP 2]
+Check your period of stay expiry date
+Your period of stay is usually granted per semester or per program. As the expiry date approaches, prepare documents such as a certificate of enrolment and apply for an extension at your local immigration office.
+
+[STEP 3]
+Review your part-time work plan
+You must obtain permission for part-time work before you start. The allowed hours differ between semester and vacation periods, so ask your school's international office or your local immigration office.
+
+[STEP 4]
+Consider a status change when entering a degree program
+If you are on D-4 for language training and are admitted to a regular degree program, you need to apply to change your status to D-2. Prepare documents such as your letter of admission in advance.
+
+[CAUTION]
+Engaging in activities outside your status of stay (for example, working part-time without permission) may lead to penalties. Check the exact conditions on HiKorea or with your local immigration office.`,
+
+  2: `[SUMMARY]
+Foreign nationals who plan to stay in Korea for more than 90 days from the date of entry must complete alien registration. Once registered, you receive an Alien Registration Card, which serves as your ID for most everyday procedures such as opening a bank account, getting a mobile phone plan, and enrolling in health insurance.
+
+[IMPORTANT]
+Alien registration must be completed within 90 days of your entry date. Missing the deadline may lead to penalties, so we recommend applying as soon as possible after arrival.
+
+[STEP 1]
+Check whether you need to apply
+This applies to foreign nationals planning to stay more than 90 days. You must apply at the immigration office that covers your place of residence.
+
+[STEP 2]
+Prepare your documents
+Prepare basic documents such as your passport, photo, and visa, plus any additional documents required for your status of stay (for example, a certificate of enrolment). Check the exact list on HiKorea.
+
+[STEP 3]
+Book a visit and apply
+Make a reservation on the HiKorea website or app, then visit your local immigration office to apply.
+
+[STEP 4]
+Receive your card
+Your card is issued after the processing period. You can choose between postal delivery and picking it up in person.
+
+[CAUTION]
+Failing to register within the deadline may lead to penalties. Double-check the exact procedure and documents on HiKorea.`,
+
+  3: `[SUMMARY]
+TOPIK (Test of Proficiency in Korean) can only be applied for at topik.go.kr during the fixed application period for each round. Each test centre has limited capacity, so popular locations often fill up on the first day of applications.
+
+[IMPORTANT]
+If you are not quick on the opening day, you may miss the test centre you want. We recommend adding the application dates to your calendar in advance.
+
+[STEP 1]
+Check the round and application period
+Find the next test date and application period at topik.go.kr.
+
+[STEP 2]
+Sign up and upload your photo
+Creating your account and uploading a compliant ID photo before applications open saves time on the day.
+
+[STEP 3]
+Choose a test centre and level, then apply
+When applications open, select your preferred test centre and level (TOPIK I / II) and submit your application.
+
+[STEP 4]
+Pay the fee and confirm your application
+After payment, save your application confirmation, and print your admission ticket during the announced printing period.
+
+[CAUTION]
+Late applications are generally not accepted once the period closes. Centres and levels can fill up early, so log in right when applications open.`,
+
+  4: `[SUMMARY]
+On TOPIK test day you must bring your ID and admission ticket, and you cannot sit the test if you arrive after the entry deadline. Checking the test centre location and the rules on personal belongings in advance will save you stress on the day.
+
+[IMPORTANT]
+If you miss the entry deadline you cannot take the test. Plan your journey to arrive at least 30 minutes to an hour before the test starts.
+
+[STEP 1]
+Pack what you need
+Bring your ID (Alien Registration Card or passport) and your admission ticket. Without ID you may be refused entry.
+
+[STEP 2]
+Check the test centre location and entry time
+Check the address and entry deadline printed on your admission ticket and plan your route in advance.
+
+[STEP 3]
+Check the rules on personal belongings
+Electronic devices such as mobile phones and smartwatches are not allowed during the test. Store them where the invigilator directs.
+
+[STEP 4]
+Understand the test order
+The test runs in the order of listening, writing, and reading, with a set time for each section. Check the latest guidelines on the official TOPIK website before the test.
+
+[CAUTION]
+Cheating or breaking the rules may invalidate your result. Re-check the latest guidelines on the official TOPIK website shortly before the test.`,
+
+  5: `[SUMMARY]
+Under the Immigration Act, foreign nationals who intend to stay in Korea for more than 90 days from their entry date are required to complete alien registration. This is not just an administrative step — it is a legal obligation.
+
+[IMPORTANT]
+Staying more than 90 days without registering may make you subject to illegal-stay status and administrative penalties. Be sure to register within the deadline.
+
+[STEP 1]
+Check whether this applies to you
+If you plan to stay more than 90 days from your entry date, you are required to register.
+
+[STEP 2]
+Find the office in charge
+You must apply to the head of the local immigration office that covers your place of residence. You can look up the responsible office by address on HiKorea.
+
+[STEP 3]
+Prepare documents and apply
+Prepare your passport, photo, and the supporting documents required for your status of stay, then book a visit and apply.
+
+[STEP 4]
+Receive your card and keep your details current
+Even after receiving your card, you have a separate obligation to report changes such as your address or affiliation. Keep this in mind.
+
+[CAUTION]
+Failing to meet the registration obligation may lead to administrative penalties or affect your status of stay. Check the exact legal requirements on the Korean Law Information Center or HiKorea.`,
+
+  6: `[SUMMARY]
+Foreign nationals whose place of residence has changed — for example after moving house — must report the change to the immigration office covering their new address within 15 days of the change.
+
+[IMPORTANT]
+Missing the 15-day reporting deadline may lead to penalties. Once your moving date is set, add it to your schedule in advance.
+
+[STEP 1]
+Confirm the move and the date
+Count the 15-day deadline from the day you actually began living at the new address.
+
+[STEP 2]
+Find the office covering your new address
+Look up the local immigration office responsible for your new address on HiKorea.
+
+[STEP 3]
+Prepare the documents
+Prepare your Alien Registration Card and proof of your new address (such as a lease agreement).
+
+[STEP 4]
+Report in person or online
+Check whether you can report online via Government24 or HiKorea, or visit the responsible office in person.
+
+[CAUTION]
+Failing to report may lead to penalties. Re-check the exact procedure and whether online reporting is available on HiKorea.`,
+
+  7: `[SUMMARY]
+The special admission track for foreign students is an admission route where Korean universities select international students under a separate quota. Unlike the general track, it does not require the Korean CSAT and is assessed mainly on documents and an interview.
+
+[IMPORTANT]
+You must meet the nationality, education, and Korean proficiency (TOPIK) requirements. If even one is not met, your application may be rejected at the document stage, so check in advance.
+
+[STEP 1]
+Check your eligibility
+Both you and your parents must hold foreign nationality, and you must have completed 12 or more years of formal education in your home country.
+
+[STEP 2]
+Prepare your TOPIK score
+Many universities require TOPIK level 3 or above. Check that your score is still within its validity period.
+
+[STEP 3]
+Submit your documents
+Submit your application form, graduation certificate, academic transcript, TOPIK score report, and proof of financial capability within the given period.
+
+[STEP 4]
+Attend the interview
+Interviews are often held online by video. Be ready to answer questions about your motivation and study plan in Korean.
+
+[CAUTION]
+Requirements and required documents differ by university. Always check the latest admission guidelines of the university you are applying to.`,
+}
+
+const BY_LOCALE = { ko: KO, en: EN }
+
+const TITLES_EN = {
+  1: 'D-2 / D-4 Student Visa Guide',
+  2: 'Getting Your Alien Registration Card',
+  3: 'How to Apply for TOPIK',
+  4: 'TOPIK Exam Day Guide',
+  5: 'Alien Registration',
+  6: 'Reporting a Change of Residence',
+  7: 'Special Admission for International Students',
+}
+
+export function getGuideContentOverride(guideId, locale = 'ko') {
+  const table = BY_LOCALE[locale] ?? KO
+  return table[guideId] ?? KO[guideId]
+}
+
+export function getGuideTitleOverride(guideId, locale = 'ko') {
+  if (locale !== 'en') return undefined
+  return TITLES_EN[guideId]
+}
+
+export const GUIDE_CONTENT_OVERRIDES = KO

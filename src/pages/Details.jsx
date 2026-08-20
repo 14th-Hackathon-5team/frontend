@@ -287,7 +287,7 @@ function Details() {
     Promise.all([getNotifications(), getMyInfo().catch(() => null)])
       .then(([notificationsResponse, profileResponse]) => {
         const serverNotifications = notificationsResponse.data.data ?? []
-        const clientRecommendations = getClientRecommendations(profileResponse?.data?.data)
+        const clientRecommendations = getClientRecommendations(profileResponse?.data?.data, t)
         setNotifications([...serverNotifications, ...clientRecommendations])
         setStatus('ready')
       })
@@ -295,7 +295,7 @@ function Details() {
         console.error('[Details] 알림 목록 조회 실패', error)
         setStatus('error')
       })
-  }, [])
+  }, [t])
 
   const fetchSeoulJobs = useCallback(() => {
     setSeoulJobsStatus('loading')
