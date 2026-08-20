@@ -12,22 +12,24 @@ import { getMyInfo } from '../lib/authApi'
 // 서로 다른 달에서 각각 계산되다 보니 우연히 같은 색을 받는 문제가 있었음(실사용에서 확인됨).
 // 지금은 eventId 기준 고정 색 — 어떤 달을 보고 있든 같은 일정은 항상 같은 색이고,
 // eventId가 순차 발급되는 한 인접한 일정끼리도 대부분 다른 색이 나옴.
-// 빨주노초파남보 — 채도 높은 색만 써서 팔레트 안에서 서로 비슷한 색끼리(예전엔 회색 계열 3개가
-// 다 비슷해 보였음) 헷갈리는 일이 없게 함.
+// 코랄→오렌지→옐로우→그린→민트→블루→퍼플 — K-Buddy 톤에 맞춘 따뜻한 파스텔 팔레트(디자인 지정 값).
 const EVENT_COLOR_PALETTE = [
-  'bg-red-500',
-  'bg-orange-500',
-  'bg-yellow-600',
-  'bg-green-500',
-  'bg-blue-500',
-  'bg-indigo-600',
-  'bg-purple-500',
+  'bg-[#E88B8B]',
+  'bg-[#E9A66F]',
+  'bg-[#D9BE63]',
+  'bg-[#91B89A]',
+  'bg-[#79B8B0]',
+  'bg-[#7FAFD1]',
+  'bg-[#A68FC2]',
 ]
 
 function eventColor(event) {
-  // eventId가 음수인 가상 일정(백엔드의 체류기간 만료 D-30 안내: -1, 프론트가 만드는 체류기간
-  // 만료 당일: -2)도 안전하게 처리.
-  return EVENT_COLOR_PALETTE[Math.abs(event.eventId) % EVENT_COLOR_PALETTE.length]
+  // Math.abs(eventId) % N을 쓰면 eventId가 2인 실제 일정과 -2인 가상 일정(체류기간 만료 등)이
+  // 절댓값이 같아서 항상 같은 색으로 충돌한다 — 실사용에서 TOPIK 접수기간(eventId=2)과 체류기간
+  // 만료(eventId=-2)가 겹치는 걸로 확인됨. 부호를 보존하는 floored modulo로 교체해 이 충돌을 없앤다.
+  const length = EVENT_COLOR_PALETTE.length
+  const index = ((event.eventId % length) + length) % length
+  return EVENT_COLOR_PALETTE[index]
 }
 
 function buildMonthGrid(year, month) {
@@ -147,62 +149,64 @@ function Calendar() {
   }
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex items-center justify-center gap-6">
-        <button
-          type="button"
-          onClick={goPrevMonth}
-          aria-label={t('calendar.prevMonth')}
-          className="flex h-11 w-11 items-center justify-center text-foreground-600"
-        >
-          <ChevronIcon direction="left" />
-        </button>
-        <p className="w-32 text-center text-lg font-bold text-foreground-950">
-          {t('calendar.monthLabel', { month: months[month], year })}
-        </p>
-        <button
-          type="button"
-          onClick={goNextMonth}
-          aria-label={t('calendar.nextMonth')}
-          className="flex h-11 w-11 items-center justify-center text-foreground-600"
-        >
-          <ChevronIcon direction="right" />
-        </button>
-      </div>
+    <div className="p-4 pt-8">
+      <div className="glass-surface rounded-2xl p-4">
+        <div className="mb-4 flex items-center justify-center gap-6">
+          <button
+            type="button"
+            onClick={goPrevMonth}
+            aria-label={t('calendar.prevMonth')}
+            className="flex h-11 w-11 items-center justify-center text-foreground-600"
+          >
+            <ChevronIcon direction="left" />
+          </button>
+          <p className="w-32 text-center text-lg font-bold text-foreground-950">
+            {t('calendar.monthLabel', { month: months[month], year })}
+          </p>
+          <button
+            type="button"
+            onClick={goNextMonth}
+            aria-label={t('calendar.nextMonth')}
+            className="flex h-11 w-11 items-center justify-center text-foreground-600"
+          >
+            <ChevronIcon direction="right" />
+          </button>
+        </div>
 
-      <div className="grid grid-cols-7 gap-y-2 text-center text-xs">
-        {weekdays.map((day) => (
-          <div key={day} className="font-semibold text-foreground-400">
-            {day}
-          </div>
-        ))}
-        {cells.map((date, index) => {
-          const event = date ? eventOnDay(displayEvents, date) : null
-          const isRange = event && event.day !== event.endDay
-          const isStart = event && date === event.day
-          const isEnd = event && date === event.endDay
-
-          let roundedClass = 'rounded-xl'
-          if (isRange) {
-            if (isStart && !isEnd) roundedClass = 'rounded-l-xl rounded-r-none'
-            else if (isEnd && !isStart) roundedClass = 'rounded-r-xl rounded-l-none'
-            else if (!isStart && !isEnd) roundedClass = 'rounded-none'
-          }
-
-          return (
-            <div key={index} className="flex h-9 items-center justify-center">
-              {date && (
-                <span
-                  className={`flex h-8 items-center justify-center text-sm ${roundedClass} ${
-                    isRange ? 'w-full' : 'w-8'
-                  } ${event ? `${eventColor(event)} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
-                >
-                  {date}
-                </span>
-              )}
+        <div className="grid grid-cols-7 gap-y-1 text-center text-xs">
+          {weekdays.map((day) => (
+            <div key={day} className="font-semibold text-foreground-400">
+              {day}
             </div>
-          )
-        })}
+          ))}
+          {cells.map((date, index) => {
+            const event = date ? eventOnDay(displayEvents, date) : null
+            const isRange = event && event.day !== event.endDay
+            const isStart = event && date === event.day
+            const isEnd = event && date === event.endDay
+
+            let roundedClass = 'rounded-xl'
+            if (isRange) {
+              if (isStart && !isEnd) roundedClass = 'rounded-l-xl rounded-r-none'
+              else if (isEnd && !isStart) roundedClass = 'rounded-r-xl rounded-l-none'
+              else if (!isStart && !isEnd) roundedClass = 'rounded-none'
+            }
+
+            return (
+              <div key={index} className="flex h-9 items-center justify-center">
+                {date && (
+                  <span
+                    className={`flex h-8 items-center justify-center text-sm ${roundedClass} ${
+                      isRange ? 'w-full' : 'w-8'
+                    } ${event ? `${eventColor(event)} font-semibold text-white` : 'font-semibold text-foreground-800'}`}
+                  >
+                    {date}
+                  </span>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       <p className="mb-2 mt-6 text-sm font-semibold text-foreground-900">
